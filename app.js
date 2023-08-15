@@ -9,6 +9,8 @@ dotenv.config();
 
 import playlistManagementRoutes from "./source/playlist-management/routes.js";
 import authRoutes from "./source/auth/routes.js";
+import eventsRoutes from "./source/events/routes.js";
+import quoteManagementRoutes from "./source/quote-management/routes.js";
 
 const app = express();
 
@@ -22,9 +24,11 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(spotifyAuth);
+// app.use(spotifyAuth);
 app.use("/", playlistManagementRoutes);
 app.use("/", authRoutes);
+app.use("/", eventsRoutes);
+app.use("/", quoteManagementRoutes);
 app.use(handleError);
 
 const port = 8000;
