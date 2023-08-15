@@ -8,6 +8,7 @@ import handleError from "./source/common/middlewares/handleError.js";
 dotenv.config();
 
 import playlistManagementRoutes from "./source/playlist-management/routes.js";
+import authRoutes from "./source/auth/routes.js";
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(spotifyAuth);
 app.use("/", playlistManagementRoutes);
+app.use("/", authRoutes);
 app.use(handleError);
 
 const port = 8000;
