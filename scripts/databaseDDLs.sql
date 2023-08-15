@@ -44,6 +44,7 @@ CREATE TABLE `accounts` (
     `email` VARCHAR(256) DEFAULT NULL COMMENT 'Account email',
     `password` VARCHAR(2048) DEFAULT NULL COMMENT 'Account password',
     `active` BOOLEAN DEFAULT NULL COMMENT 'Account has/has not an active partnership with Musicology',
+    `marketing_type` VARCHAR(512) DEFAULT NULL COMMENT 'Describes how the Client found Musicology',
     `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Account''s creation date and time',
     `updated_at` DATETIME DEFAULT NULL COMMENT 'Account''s update date and time',
     `updated_by` INT DEFAULT NULL COMMENT 'Foreign key; references accounts table',
@@ -73,24 +74,29 @@ CREATE TABLE `event_types` (
 
 CREATE TABLE `events` (
     `id` INT NOT NULL AUTO_INCREMENT COMMENT 'Unique record identifier (incremental)',
+    `event_type_id` INT NULL COMMENT 'Foreign key; references event_types table',
     `date` DATE DEFAULT NULL COMMENT 'Event date',
     `time` TIME DEFAULT NULL COMMENT 'Event time',
     `guest_count` INT DEFAULT NULL COMMENT 'Estimated guest count',
     `location` VARCHAR(128) DEFAULT NULL COMMENT 'Event location (venue)',
     `venue_name` VARCHAR(128) DEFAULT NULL COMMENT 'Event location''s venue name',
     `venue_contact` VARCHAR(256) DEFAULT NULL COMMENT 'Event location''s venue contact (person name, phone or email)',
-    `duration` INT DEFAULT NULL COMMENT 'Event''s duration in hours (<3, <6, other)',
+    `duration` VARCHAR(12) DEFAULT NULL COMMENT 'Event''s duration in hours. Can be one of (3hours, 6hours, other)',
     `preferred_dj_id` INT DEFAULT NULL COMMENT 'Foreign key; references accounts (DJ) table (this is the Client''s preference, official DJ assignment takes place in the event_accounts table)',
     `additional_artists` VARCHAR(512) DEFAULT NULL COMMENT 'Additional artists; Client''s preference',
     `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Event''s creation date and time',
     `updated_at` DATETIME DEFAULT NULL COMMENT 'Event''s update date and time',
     `updated_by` INT DEFAULT NULL COMMENT 'Foreign key; references accounts table',
     PRIMARY KEY (`id`),
+    KEY `events__event_types_FK` (`event_type_id`),
     KEY `events__preferred_dj_FK` (`preferred_dj_id`),
+    KEY `events__updated_by_FK` (`updated_by`),
+    CONSTRAINT `events__event_types_FK` FOREIGN KEY (`event_type_id`)
+        REFERENCES `event_types` (`id`)
+        ON DELETE SET NULL ON UPDATE CASCADE,
     CONSTRAINT `events__preferred_dj_FK` FOREIGN KEY (`preferred_dj_id`)
         REFERENCES `accounts` (`id`)
         ON DELETE SET NULL ON UPDATE CASCADE,
-    KEY `events__updated_by_FK` (`updated_by`),
     CONSTRAINT `events__updated_by_FK` FOREIGN KEY (`updated_by`)
         REFERENCES `accounts` (`id`)
         ON DELETE SET NULL ON UPDATE CASCADE
@@ -104,6 +110,7 @@ CREATE TABLE `event_accounts` (
     `account_client_id` INT DEFAULT NULL COMMENT 'Foreign key; references accounts table (Client)',
     `account_dj_id` INT DEFAULT NULL COMMENT 'Foreign key; references accounts table (DJ)',
     `event_id` INT DEFAULT NULL COMMENT 'Foreign key; references events table',
+    `budget` VARCHAR(12) NOT NULL COMMENT 'Prefferable budget defined by a Client. Can be one of (cheapest, 2-3, 3-6, 6-more)',
     `package_booked` BOOLEAN DEFAULT NULL COMMENT 'Event is/is not booked by the Client and confirmed by the DJ',
     PRIMARY KEY (`id`),
     KEY `event_accounts__accounts_client_FK` (`account_client_id`),
