@@ -55,8 +55,6 @@ const login = async (request, response, next) => {
     return;
   }
 
-  console.log(user)
-
   const passwordMatches = await bcrypt.compare(password, user.password);
   if (!passwordMatches) {
     response.status(400).json({ message: "The provided password is invalid" });
