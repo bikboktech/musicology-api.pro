@@ -1,5 +1,9 @@
 import * as dotenv from "dotenv";
 import express from "express";
+import cors from "cors";
+
+import spotifyAuth from "./source/common/middlewares/spotifyAuth.js";
+import handleError from "./source/common/middlewares/handleError.js";
 
 dotenv.config();
 
@@ -8,14 +12,22 @@ import spotifyRoutes from "./source/spotify/routes.js";
 
 const app = express();
 
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    exposedHeaders: ["Content-Disposition"],
+  })
+);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use(spotifyAuth);
 app.use("/", playlistManagementRoutes);
 app.use("/", spotifyRoutes);
 app.use(handleError);
 
-const port = 3000;
+const port = 8000;
 
 app.listen(port, () => {
   console.log(`Listening on http://localhost:${port}`);
