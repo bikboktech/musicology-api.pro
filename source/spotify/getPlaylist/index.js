@@ -27,9 +27,9 @@ const getPlaylist = async (req, res) => {
 
       item.track.artists.forEach((artist, index) => {
         if (index + 1 === item.track.artists.length) {
-          artists.concat(artist.name);
+          artists = artists.concat(artist.name);
         } else {
-          artists.concat(`${artist.name}, `);
+          artists = artists.concat(`${artist.name}, `);
         }
       });
 
