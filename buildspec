@@ -11,3 +11,8 @@ EOF
 mkdir public && cd public
 git clone https://github.com/bikboktech/musicology-api.pro
 cd musicology-api.pro
+sudo npm install -g knex
+npm install
+knex migrate:latest --knexfile source/commona/data/knexfile.js
+knex seed:run --knexfile source/common/data/knexfile.js
+npm run dev
