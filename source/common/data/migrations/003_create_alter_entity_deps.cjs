@@ -1,5 +1,34 @@
 exports.up = async knex => {
-
+  // musicology.quotes definition
+  const quotesTableExists = await knex.schema.hasTable('quotes');
+  if (!quotesTableExists) {
+    await knex.schema.createTable('quotes', table => {
+      table.increments('id').primary();
+      table.varchar('account_full_name', 512);
+      table.varchar('account_email', 256);
+      table.varchar('account_password', 2048);
+      table.varchar('account_marketing_type', 256);
+      table.integer('event_type_id').unsigned();
+      table
+        .foreign('event_type_id')
+        .references('id')
+        .inTable('event_types');
+      table.date('event_date');
+      table.varchar('event_location', 512);
+      table.integer('event_guest_count');
+      table.integer('event_duration');
+      table.dateTime('created_at', 6)
+        .notNullable()
+        .defaultTo(knex.fn.now(6));
+      table.dateTime('updated_at', 6);
+      table.integer('updated_by').unsigned();
+      table
+        .foreign('updated_by')
+        .references('id')
+        .inTable('accounts');
+    })
+  }
+  
   // musicology.event_accounts definition
   const eventAccountsTableExists = await knex.schema.hasTable('event_accounts');
   if (!eventAccountsTableExists) {

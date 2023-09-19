@@ -49,6 +49,11 @@ exports.up = async knex => {
         .foreign('account_type_id')
         .references('id')
         .inTable('account_types');
+      table.integer('event_type_id').unsigned();
+        table
+          .foreign('event_type_id')
+          .references('id')
+          .inTable('event_types');
       table.date('date');
       table.time('time');
       table.integer('guest_count');
@@ -63,7 +68,7 @@ exports.up = async knex => {
       table.dateTime('updated_at', 6);
     })
   }
-  
+
   // musicology.posts definition
   const postsTableExists = await knex.schema.hasTable('posts');
   if (!postsTableExists) {
