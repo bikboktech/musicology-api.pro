@@ -20,7 +20,7 @@ const QUOTES_TABLE = "quotes";
 const getAQuote = async (request, response) => {
   const validatedFormData = await validateFormData(request.body, request, response);
 
-  const _quote = {
+  const [quoteID] = await knex(QUOTES_TABLE).insert({
     account_full_name: validatedFormData.clientName,
     account_email: validatedFormData.email,
     event_budget: validatedFormData.eventBudget,
@@ -31,9 +31,7 @@ const getAQuote = async (request, response) => {
     event_duration: validatedFormData.eventDuration,
     marketing_type: validatedFormData.marketingType,
     quote_active: 0
-  };
-
-  const [quoteID] = await knex(QUOTES_TABLE).insert(_quote);
+  });
   const quote = await knex(QUOTES_TABLE).where('id', quoteID).first();
 
   response.status(validatedFormData._validation.status).json(quote);

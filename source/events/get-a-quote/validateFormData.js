@@ -5,6 +5,7 @@
 */
 import handleError from "../../common/middlewares/handleError.js";
 import knex from "../../common/data/database.js";
+import Joi from "joi";
 
 const EVENT_TYPES_TABLE = "event_types";
 const VALID_EVENT_DURATION = [
@@ -20,12 +21,11 @@ const VALID_BUDGET = [
   "6-more"
 ];
 
-const J = require('joi');
-
-const FORM_SCHEMA = J.object().keys({
-  eventType: J.number().integer().min(1).max(10).required(),
-  eventDuration: J.string().includes(VALID_EVENT_DURATION),
-  budget: J.string().includes(VALID_BUDGET)
+const formSchema = Joi.object().keys({
+  clientName: Joi.string(),
+  eventType: Joi.number().integer().required(),
+  eventDuration: Joi.string().valid(...VALID_EVENT_DURATION),
+  budget: Joi.string().valid(...VALID_BUDGET)
 })
 
 /**
@@ -36,13 +36,25 @@ const FORM_SCHEMA = J.object().keys({
  * @param {*} response
  */
 const validateFormData = async (formData, request, response) => {
-  // var _validation = {
-  //   status: 200,
-  //   message: undefined
-  // };
+  var _validation = {
+    status: 200,
+    message: undefined
+  };
 
   const eventType = await knex(EVENT_TYPES_TABLE).where('id', formData.eventType).first();
-  const result = J.validate({ ...formData, eventType})
+  if (!eventType) {
+    _validation.status = 404;
+    _validation.message = `Value ${formData.eventType} is not a valid eventType option, expecting an integer]`;
+    handleError(_validation, request, response);
+  }
+
+  try {
+    return await formSchema.validateAsync(formData, formSchema);
+  } catch (err) {
+    _validation.status = 400;
+    _validation.message = err.toString();
+    handleError(_validation, request, response);
+  }
   // if (!eventType) {
   //   validatedFormData._validation.status = 404;
   //   validatedFormData._validation.message = `Value ${formData.eventType} is not a valid eventType option, expecting an integer]`;
@@ -61,8 +73,6 @@ const validateFormData = async (formData, request, response) => {
   //   validatedFormData._validation.message = `Value ${formData.budget} is not a valid budget option. Please use one of [${VALID_BUDGET}]`;
   //   handleError(validatedFormData._validation, request, response);
   // }
-
-  return result;
 }
 
 export default validateFormData;
