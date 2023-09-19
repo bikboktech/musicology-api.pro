@@ -19,13 +19,13 @@ const QUOTES_TABLE = "quotes";
  */
 const getAQuote = async (request, response) => {
   const validatedFormData = await validateFormData(request.body, request, response);
-  const quote = {
-    account_type_id: accountType.id,
+
+  const _quote = {
     account_full_name: validatedFormData.clientName,
     account_email: validatedFormData.email,
-    updated_by: administrator.id,
-    date: validatedFormData.eventDate,
-    event_type_id: eventType.id,
+    event_budget: validatedFormData.eventBudget,
+    event_date: validatedFormData.eventDate,
+    event_type_id: validatedFormData.eventType,
     event_location: validatedFormData.eventLocation,
     event_guest_count: validatedFormData.guestCount,
     event_duration: validatedFormData.eventDuration,
@@ -33,8 +33,10 @@ const getAQuote = async (request, response) => {
     quote_active: 0
   };
 
-  const [quoteID] = await knex(QUOTES_TABLE).insert(quote);
-  response.status(validatedFormData._validation.status).json(validatedFormData);
+  const [quoteID] = await knex(QUOTES_TABLE).insert(_quote);
+  const quote = await knex(QUOTES_TABLE).where('id', quoteID).first();
+
+  response.status(validatedFormData._validation.status).json(quote);
 }
 
 export default getAQuote;

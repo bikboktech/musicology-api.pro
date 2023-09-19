@@ -35,7 +35,7 @@ const login = async (req, res) => {
     return;
   }
 
-  console.log(user)
+  console.log("Login successful")
   
   const passwordMatches = await bcrypt.compare(password, user.password);
   if (!passwordMatches) {
@@ -43,7 +43,7 @@ const login = async (req, res) => {
     
   }
   const userAccessToken = await generateUserAccessToken(user);
-  console.log(userAccessToken);
+  console.log("Generated JWT");
   res.status(200).json(userAccessToken);
 }
 

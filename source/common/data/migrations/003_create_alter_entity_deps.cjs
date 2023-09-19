@@ -12,9 +12,10 @@ exports.up = async knex => {
         .references('id')
         .inTable('event_types');
       table.date('event_date');
+      table.varchar('event_budget', 12);
+      table.varchar('event_duration', 12);
       table.varchar('event_location', 512);
       table.integer('event_guest_count');
-      table.integer('event_duration');
       table.boolean('quote_active')
         .notNullable()
         .defaultTo(false);
@@ -145,6 +146,7 @@ exports.up = async knex => {
 }
 
 exports.down = async knex => {
+  await knex.schema.dropTable('quotes');
   await knex.schema.dropTable('event_accounts');
   await knex.schema.dropTable('timelines');
   await knex.schema.dropTable('playlists');
