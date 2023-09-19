@@ -1,12 +1,12 @@
 /** Express router providing playlist related routes
  * @module events/routes
  * @requires express
- * @requires module:events/eventTypes
- * @requires module:events/getAQuote
+ * @requires module:events/event-types
+ * @requires module:events/get-a-quote
  */
 import express from "express";
-import getEventTypes from "./eventTypes/index.js";
-import getAQuote from "./getAQuote/index.js";
+import getEventTypes from "./event-types/index.js";
+import getAQuote from "./get-a-quote/index.js";
 
 /**
  * Service Name

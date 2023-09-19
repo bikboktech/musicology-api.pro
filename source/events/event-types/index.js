@@ -1,5 +1,5 @@
 /** Express route definitions providing events management related functions
- * @module module:events/eventTypes
+ * @module module:events/event-types
  * @requires express
  * @requires module:common/data/database
 */

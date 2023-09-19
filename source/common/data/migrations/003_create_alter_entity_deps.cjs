@@ -6,8 +6,6 @@ exports.up = async knex => {
       table.increments('id').primary();
       table.varchar('account_full_name', 512);
       table.varchar('account_email', 256);
-      table.varchar('account_password', 2048);
-      table.varchar('account_marketing_type', 256);
       table.integer('event_type_id').unsigned();
       table
         .foreign('event_type_id')
@@ -17,6 +15,10 @@ exports.up = async knex => {
       table.varchar('event_location', 512);
       table.integer('event_guest_count');
       table.integer('event_duration');
+      table.boolean('quote_active')
+        .notNullable()
+        .defaultTo(false);
+      table.varchar('marketing_type', 256);
       table.dateTime('created_at', 6)
         .notNullable()
         .defaultTo(knex.fn.now(6));
@@ -34,7 +36,9 @@ exports.up = async knex => {
   if (!eventAccountsTableExists) {
     await knex.schema.createTable('event_accounts', table => {
       table.increments('id').primary();
-      table.boolean('package_booked');
+      table.boolean('package_booked')
+        .notNullable()
+        .defaultTo(false);
       table.integer('account_dj_id').unsigned();
       table
         .foreign('account_dj_id')
@@ -145,6 +149,5 @@ exports.down = async knex => {
   await knex.schema.dropTable('timelines');
   await knex.schema.dropTable('playlists');
   await knex.schema.dropTable('event_posts');
-  await knex.schema.table('event_accounts').dropColumn('')
 }
 
