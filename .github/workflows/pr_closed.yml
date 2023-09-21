@@ -18,7 +18,6 @@ jobs:
         id: conventional_changelog_action
         uses: TriPSs/conventional-changelog-action@v3
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
           tag-prefix: 'v'
           version-file: package.json
           
