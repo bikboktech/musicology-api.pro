@@ -18,23 +18,24 @@ const QUOTES_TABLE = "quotes";
  * @param {*} response
  */
 const getAQuote = async (request, response) => {
-  const validatedFormData = await validateFormData(request.body, request, response);
+  const validatedFormData = await validateFormData(request, response);
+  if (validatedFormData) {
+    const [quoteID] = await knex(QUOTES_TABLE).insert({
+      account_full_name: validatedFormData.clientName,
+      account_email: validatedFormData.email,
+      event_budget: validatedFormData.eventBudget,
+      event_date: validatedFormData.eventDate,
+      event_type_id: validatedFormData.eventType,
+      event_location: validatedFormData.eventLocation,
+      event_guest_count: validatedFormData.guestCount,
+      event_duration: validatedFormData.eventDuration,
+      marketing_type: validatedFormData.marketingType,
+      quote_active: 0
+    });
 
-  const [quoteID] = await knex(QUOTES_TABLE).insert({
-    account_full_name: validatedFormData.clientName,
-    account_email: validatedFormData.email,
-    event_budget: validatedFormData.eventBudget,
-    event_date: validatedFormData.eventDate,
-    event_type_id: validatedFormData.eventType,
-    event_location: validatedFormData.eventLocation,
-    event_guest_count: validatedFormData.guestCount,
-    event_duration: validatedFormData.eventDuration,
-    marketing_type: validatedFormData.marketingType,
-    quote_active: 0
-  });
-  const quote = await knex(QUOTES_TABLE).where('id', quoteID).first();
-
-  response.status(validatedFormData._validation.status).json(quote);
+    const quote = await knex(QUOTES_TABLE).where('id', quoteID).first();
+    response.status(200).json(quote);
+  }
 }
 
 export default getAQuote;

@@ -4,13 +4,9 @@ exports.up = async knex => {
   if (!quotesTableExists) {
     await knex.schema.createTable('quotes', table => {
       table.increments('id').primary();
+      table.integer('event_type_id').unsigned();
       table.varchar('account_full_name', 512);
       table.varchar('account_email', 256);
-      table.integer('event_type_id').unsigned();
-      table
-        .foreign('event_type_id')
-        .references('id')
-        .inTable('event_types');
       table.date('event_date');
       table.varchar('event_budget', 12);
       table.varchar('event_duration', 12);
@@ -20,11 +16,15 @@ exports.up = async knex => {
         .notNullable()
         .defaultTo(false);
       table.varchar('marketing_type', 256);
+      table.integer('updated_by').unsigned();
+      table.dateTime('updated_at', 6);
       table.dateTime('created_at', 6)
         .notNullable()
         .defaultTo(knex.fn.now(6));
-      table.dateTime('updated_at', 6);
-      table.integer('updated_by').unsigned();
+      table
+        .foreign('event_type_id')
+        .references('id')
+        .inTable('event_types');
       table
         .foreign('updated_by')
         .references('id')
@@ -37,19 +37,19 @@ exports.up = async knex => {
   if (!eventAccountsTableExists) {
     await knex.schema.createTable('event_accounts', table => {
       table.increments('id').primary();
+      table.integer('event_id').unsigned();
+      table.integer('account_dj_id').unsigned();
       table.boolean('package_booked')
         .notNullable()
         .defaultTo(false);
-      table.integer('account_dj_id').unsigned();
-      table
-        .foreign('account_dj_id')
-        .references('id')
-        .inTable('accounts');
-      table.integer('event_id').unsigned();
       table
         .foreign('event_id')
         .references('id')
         .inTable('events');
+      table
+        .foreign('account_dj_id')
+        .references('id')
+        .inTable('accounts');
     })
   }
 
@@ -58,10 +58,10 @@ exports.up = async knex => {
   if (!timelinesTableExists) {
     await knex.schema.createTable('timelines', table => {
       table.increments('id').primary();
+      table.integer('event_id').unsigned();
       table.time('time');
       table.varchar('description', 2048);
       table.varchar('notes', 2048);
-      table.integer('event_id').unsigned();
       table
         .foreign('event_id')
         .references('id')
@@ -74,10 +74,10 @@ exports.up = async knex => {
   if (!playlistsTableExists) {
     await knex.schema.createTable('playlists', table => {
       table.increments('id').primary();
+      table.integer('event_id').unsigned();
+      table.varchar('spotify_playlist_id', 256);
       table.varchar('name', 128);
       table.varchar('notes', 2048);
-      table.varchar('spotify_playlist_id', 256);
-      table.integer('event_id').unsigned();
       table
         .foreign('event_id')
         .references('id')
@@ -91,54 +91,13 @@ exports.up = async knex => {
     await knex.schema.createTable('event_posts', table => {
       table.increments('id').primary();
       table.integer('event_id').unsigned();
+      table.integer('post_id').unsigned();
       table
         .foreign('event_id')
         .references('id')
         .inTable('events');
-      table.integer('post_id').unsigned();
       table
         .foreign('post_id')
-        .references('id')
-        .inTable('posts');
-    })
-  }
-
-  const accountsUpdatedByExists = await knex.schema.hasColumn('accounts', 'id');
-  if (!accountsUpdatedByExists) {
-    knex.schema.alterTable('accounts', table => {
-      table.integer('updated_by').unsigned();
-      table
-        .foreign('updated_by')
-        .references('id')
-        .inTable('accounts');
-    })
-  }
-  const eventsUpdatedByExists = await knex.schema.hasColumn('events', 'id');
-  if (!eventsUpdatedByExists) {
-    knex.schema.alterTable('events', table => {
-      table.integer('updated_by').unsigned();
-      table
-        .foreign('updated_by')
-        .references('id')
-        .inTable('accounts');
-    })
-  }
-  const accountsIdExists = await knex.schema.hasColumn('accounts', 'id');
-  if (!accountsIdExists) {
-    knex.schema.alterTable('posts', table => {
-      table.integer('account_author_id').unsigned();
-      table
-        .foreign('account_author_id')
-        .references('id')
-        .inTable('accounts');
-    })
-  }
-  const postsIdExists = await knex.schema.hasColumn('posts', 'id');
-  if (!postsIdExists) {
-    knex.schema.alterTable('posts', table => {
-      table.integer('in_reply_to_post_id').unsigned();
-      table
-        .foreign('in_reply_to_post_id')
         .references('id')
         .inTable('posts');
     })

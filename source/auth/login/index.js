@@ -1,6 +1,9 @@
-import knex from '../../common/data/database.js';
-import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+
+import Exception from '../../common/middlewares/exceptions.js'
+import knex from '../../common/data/database.js';
+
 
 const JWT_EXPIRY_TIME_MINUTES = 60;
 
@@ -18,33 +21,37 @@ const generateUserAccessToken = async (tokenData, rememberMe=false) => {
     })
 }
 
-const login = async (req, res) => {
-  // res.status(200).json("ejla");
-  const { email, password } = req.body;
+const login = async (request, response) => {
+  // response.status(200).json("ejla");
+  const { email, password } = request.body;
   const isValidEmail = /\S+@\S+\.\S+/.test(email);
 
   if (!isValidEmail) {
-    res.status(406).json({ message:  `Please provide a valid email` });
-    return;
+    return new Exception(
+      406, `Please provide a valid email`
+    ).handle(request, response);
   }
 
   const user = await knex('accounts').where('email', email).first();
 
   if (!user){
-    res.status(404).json({ message:  `User not found` });
-    return;
+    return new Exception(
+      404, `User not found`
+    ).handle(request, response);
   }
 
   console.log("Login successful")
   
   const passwordMatches = await bcrypt.compare(password, user.password);
   if (!passwordMatches) {
-    res.status(400).json({ message: "The provided password is invalid" }); 
-    
+    return new Exception(
+      400, `The provided password is invalid`
+    ).handle(request, response);
   }
   const userAccessToken = await generateUserAccessToken(user);
+  
   console.log("Generated JWT");
-  res.status(200).json(userAccessToken);
+  response.status(200).json(userAccessToken);
 }
 
 export default login;
