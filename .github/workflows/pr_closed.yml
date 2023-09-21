@@ -2,7 +2,7 @@ name: Changelog
 
 on:
   pull_request:
-    branches: [develop]
+    branches: [main]
     types: [closed]
 
 jobs:
@@ -13,9 +13,6 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
-        with:
-          ref: develop
-          fetch-depth: 0
       
       - name: Conventional Changelog Action
         id: conventional_changelog_action
@@ -33,3 +30,23 @@ jobs:
           tag_name: ${{ steps.conventional_changelog_action.outputs.tag }}
           release_name: ${{ steps.conventional_changelog_action.outputs.tag }}
           body: ${{ steps.conventional_changelog_action.outputs.clean_changelog }}
+
+  godaddy-deployment:
+    name: godaddy-deployment
+    runs-on: self-hosted
+    needs: changelog
+    if: ${{ github.event.pull_request.base.ref == 'main' }}
+    environment: ${{ github.event.pull_request.base.ref }}
+    steps:
+      - name: Pull & Run
+        run: |
+          cd /home/bikboktech/public/musicology-api.pro/
+          git checkout main
+          git pull origin main
+
+          screen -XS musicology-api.pro quit || true
+          echo "::notice::Closed active musicology-api.pro sessions"
+          RUNNER_TRACKING_ID="" && screen -dmS musicology-api.pro bash -c "npm run start"
+          screen -ls
+          echo "::notice::Opened a new musicology-api.pro session"
+      
