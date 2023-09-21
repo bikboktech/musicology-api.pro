@@ -45,5 +45,8 @@ jobs:
           git pull origin main
 
           screen -XS musicology-api.pro quit || true
+          echo "::notice::Closed active musicology-api.pro sessions"
           screen -dmS musicology-api.pro bash -c "npm run start"
+          screen -ls
+          echo "::notice::Opened a new musicology-api.pro session"
       
