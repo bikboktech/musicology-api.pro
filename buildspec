@@ -1,0 +1,18 @@
+sudo apt install mysql-server nodejs npm
+
+sudo mysql <<< $(cat EOF
+CREATE USER 'bikboktech'@'localhost' IDENTIFIED BY '${DATABASE_PASSWORD}';
+CREATE DATABASE `musicology-api` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+GRANT ALL PRIVILEGES ON `musicology-api`.* TO 'bikboktech'@'localhost';
+exit
+EOF
+)
+
+mkdir public && cd public
+git clone https://github.com/bikboktech/musicology-api.pro
+cd musicology-api.pro
+sudo npm install -g knex
+npm install
+knex migrate:latest --knexfile source/common/data/knexfile.js
+knex seed:run --knexfile source/common/data/knexfile.js
+npm run dev
