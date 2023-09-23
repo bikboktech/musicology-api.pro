@@ -1,12 +1,14 @@
 import * as dotenv from "dotenv";
-import express from "express";
 import cors from "cors";
+import express from "express";
 
-import spotifyAuth from "./source/common/middlewares/spotifyAuth.js";
 import handleError from "./source/common/middlewares/handleError.js";
+import spotifyAuth from "./source/common/middlewares/spotifyAuth.js";
 
 dotenv.config();
 
+import authRoutes from "./source/auth/routes.js";
+import eventsRoutes from "./source/events/routes.js";
 import playlistManagementRoutes from "./source/playlist-management/routes.js";
 import spotifyRoutes from "./source/spotify/routes.js";
 
@@ -23,6 +25,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(spotifyAuth);
+app.use("/", authRoutes);
+app.use("/", eventsRoutes);
 app.use("/", playlistManagementRoutes);
 app.use("/", spotifyRoutes);
 app.use(handleError);
