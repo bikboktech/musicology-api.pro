@@ -10,6 +10,7 @@ dotenv.config();
 import authRoutes from "./source/auth/routes.js";
 import eventsRoutes from "./source/events/routes.js";
 import playlistManagementRoutes from "./source/playlist-management/routes.js";
+import spotifyRoutes from "./source/spotify/routes.js";
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.use(spotifyAuth);
 app.use("/", authRoutes);
 app.use("/", eventsRoutes);
 app.use("/", playlistManagementRoutes);
+app.use("/", spotifyRoutes);
 app.use(handleError);
 
 const port = 8000;

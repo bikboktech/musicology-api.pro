@@ -5,7 +5,7 @@ const getPlaylistData = async (playlistLink, token) => {
   const playlistId = getSpotifyPlaylistId(playlistLink);
 
   const playlistResponse = await fetch(
-    `https://api.spotify.com/v1/playlists/${playlistId}`,
+    `${SPOTIFY_API_URL}/playlists/${playlistId}`,
     {
       method: "GET",
       headers: {
