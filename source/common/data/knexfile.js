@@ -1,27 +1,29 @@
 // Update with your config settings.
+import * as dotenv from "dotenv";
 
+dotenv.config();
 /**
  * @type { Object.<string, import("knex").Knex.Config> }
  */
 
 export default {
-  client: 'mysql2',
+  client: "mysql2",
   connection: {
-    host:     process.env.DATABASE_HOST,
-    port:     process.env.DATABASE_PORT,
-    database: process.env.DATABASE_DATABASE,
-    user:     process.env.DATABASE_USER,
-    password: process.env.DATABASE_PASSWORD
+    host: "localhost",
+    port: 3306,
+    user: "root",
+    password: "password",
+    database: "musicology",
   },
   pool: {
     min: 2,
-    max: 10
+    max: 10,
   },
   migrations: {
-    directory: './migrations',
-    loadExtensions: ['.cjs']
+    directory: "./migrations",
+    loadExtensions: [".cjs"],
   },
   seeds: {
-    directory: './seeds'
-  }
+    directory: "./seeds",
+  },
 };
