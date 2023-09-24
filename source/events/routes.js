@@ -7,6 +7,8 @@
 import express from "express";
 import getEventTypes from "./event-types/index.js";
 import getAQuote from "./get-a-quote/index.js";
+import createEventInfo from "./event-info/createEventInfo/index.js";
+import updateEventInfo from "./event-info/updateEventInfo/index.js";
 
 /**
  * Service Name
@@ -43,5 +45,8 @@ router.get(`/${SERVICE_NAME}/event-types`, getEventTypes);
  * @param {callback} middleware - Express middleware.
  */
 router.post(`/${SERVICE_NAME}/get-a-quote`, getAQuote);
+
+router.post(`/${SERVICE_NAME}/event-info`, createEventInfo);
+router.put(`/${SERVICE_NAME}/event-info/:eventId`, updateEventInfo);
 
 export default router;

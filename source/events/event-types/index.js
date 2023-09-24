@@ -2,7 +2,7 @@
  * @module module:events/event-types
  * @requires express
  * @requires module:common/data/database
-*/
+ */
 
 import knex from "../../common/data/database.js";
 
@@ -13,11 +13,18 @@ import knex from "../../common/data/database.js";
  * @param {*} response
  */
 
-const EVENT_TYPES_TABLE = 'event_types';
+const EVENT_TYPES_TABLE = "event_types";
 
 const getEventTypes = async (request, response) => {
   const eventTypes = await knex(EVENT_TYPES_TABLE);
-  response.status(200).json(eventTypes);
+  response
+    .status(200)
+    .json(
+      eventTypes.map((eventType) => ({
+        id: eventType.id,
+        name: eventType.name,
+      }))
+    );
 };
 
 export default getEventTypes;
