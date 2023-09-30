@@ -5,8 +5,13 @@
  * @requires module:events/get-a-quote
  */
 import express from "express";
+import deleteEvents from "./deleteEvents/index.js";
 import getEventTypes from "./event-types/index.js";
+import getEvents from "./getEvents/index.js";
+import getEventInfo from "./event-info/getEventInfo/index.js";
 import getAQuote from "./get-a-quote/index.js";
+import createEventInfo from "./event-info/createEventInfo/index.js";
+import updateEventInfo from "./event-info/updateEventInfo/index.js";
 
 /**
  * Service Name
@@ -21,6 +26,9 @@ const SERVICE_NAME = "events";
  * @namespace eventsRouter
  */
 const router = express.Router();
+
+router.get(`/${SERVICE_NAME}`, getEvents);
+router.delete(`/${SERVICE_NAME}`, deleteEvents);
 
 /**
  * Route serving quote management functions
@@ -43,5 +51,10 @@ router.get(`/${SERVICE_NAME}/event-types`, getEventTypes);
  * @param {callback} middleware - Express middleware.
  */
 router.post(`/${SERVICE_NAME}/get-a-quote`, getAQuote);
+
+router.post(`/${SERVICE_NAME}/event-info`, createEventInfo);
+router.put(`/${SERVICE_NAME}/event-info/:eventId`, updateEventInfo);
+
+router.get(`/${SERVICE_NAME}/:eventId`, getEventInfo);
 
 export default router;

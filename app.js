@@ -7,6 +7,7 @@ import spotifyAuth from "./source/common/middlewares/spotifyAuth.js";
 
 dotenv.config();
 
+import accountRoutes from "./source/accounts/routes.js";
 import authRoutes from "./source/auth/routes.js";
 import eventsRoutes from "./source/events/routes.js";
 import playlistManagementRoutes from "./source/playlist-management/routes.js";
@@ -25,6 +26,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(spotifyAuth);
+app.use("/", accountRoutes);
 app.use("/", authRoutes);
 app.use("/", eventsRoutes);
 app.use("/", playlistManagementRoutes);

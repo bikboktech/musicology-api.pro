@@ -2,7 +2,7 @@
  * @module module:playlist_management/download
  * @requires express
  * @requires module:playlist_management/download/downloadPlaylist
-*/
+ */
 
 import downloadPlaylist from "./downloadPlaylist.js";
 import getPlaylistData from "./getPlaylistData.js";
@@ -25,8 +25,6 @@ const download = async (request, response, next) => {
       body.playlistLink,
       context.spotifyToken
     );
-
-    console.log(playlistData);
 
     const fileName = `${playlistData.name}.zip`;
 
