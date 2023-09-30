@@ -36,8 +36,9 @@ const createEventInfo = async (request, response, next) => {
       .where("events.id", id)
       .first();
 
-    response.status(200).json({
+    response.status(203).json({
       id: event.id,
+      additionalInfo: event.additional_info,
       eventName: event.event_name,
       eventType: {
         id: event.event_type_id,
@@ -47,7 +48,7 @@ const createEventInfo = async (request, response, next) => {
         id: event.client_id,
         fullName: event.clientFullName,
       },
-      eventDate: event.event_date,
+      eventDate: event.date,
       guestCount: event.guest_count,
       artist: {
         id: event.artist_id,

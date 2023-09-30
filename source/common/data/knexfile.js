@@ -6,11 +6,11 @@
 export default {
   client: "mysql2",
   connection: {
-    host: process.env.DATABASE_HOST,
-    port: process.env.DATABASE_PORT,
-    database: process.env.DATABASE_DATABASE,
-    user: process.env.DATABASE_USER,
-    password: process.env.DATABASE_PASSWORD,
+    host: "127.0.0.1",
+    port: 3306,
+    database: "musicology",
+    user: "root",
+    password: "password",
   },
   pool: {
     min: 2,

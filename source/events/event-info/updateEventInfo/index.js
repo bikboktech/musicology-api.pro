@@ -41,6 +41,7 @@ const updateEventInfo = async (request, response, next) => {
 
     response.status(200).json({
       id: event.id,
+      additionalInfo: event.additional_info,
       eventName: event.event_name,
       eventType: {
         id: event.event_type_id,
@@ -50,7 +51,7 @@ const updateEventInfo = async (request, response, next) => {
         id: event.client_id,
         fullName: event.clientFullName,
       },
-      eventDate: event.event_date,
+      eventDate: event.date,
       guestCount: event.guest_count,
       artist: {
         id: event.artist_id,
