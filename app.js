@@ -2,7 +2,6 @@ import * as dotenv from "dotenv";
 import cors from "cors";
 import express from "express";
 
-import handleError from "./source/common/middlewares/handleError.js";
 import spotifyAuth from "./source/common/middlewares/spotifyAuth.js";
 
 dotenv.config();
@@ -31,7 +30,6 @@ app.use("/", authRoutes);
 app.use("/", eventsRoutes);
 app.use("/", playlistManagementRoutes);
 app.use("/", spotifyRoutes);
-app.use(handleError);
 
 const port = 8000;
 

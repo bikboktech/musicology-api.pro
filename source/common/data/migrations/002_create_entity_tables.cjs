@@ -55,7 +55,7 @@ exports.up = async (knex) => {
       table.varchar("location", 128);
       table.varchar("venue_name", 128);
       table.varchar("venue_contact", 256);
-      table.integer("duration");
+      table.varchar("duration", 12);
       table.varchar("additional_artists", 512);
       table.varchar("additional_info", 512);
       table.integer("updated_by").unsigned();

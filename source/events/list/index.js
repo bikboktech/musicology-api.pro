@@ -3,7 +3,7 @@ import knex from "../../common/data/database.js";
 
 const EVENTS_TABLE = "events";
 
-const getEvents = async (request, response, next) => {
+const getEventList = async (request, response, next) => {
   const query = knex(EVENTS_TABLE)
     .select(
       "events.*",
@@ -59,4 +59,4 @@ const getEvents = async (request, response, next) => {
   });
 };
 
-export default getEvents;
+export default getEventList;

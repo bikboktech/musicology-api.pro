@@ -1,5 +1,5 @@
 import { array, object, number } from "yup";
-import Exception from "../../common/middlewares/exceptions.js";
+import Exception from "../../common/utils/exceptions.js";
 
 const SchemaCreateEventInfo = object({
   ids: array().of(number().positive().required()),

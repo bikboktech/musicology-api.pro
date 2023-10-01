@@ -1,35 +1,21 @@
-/** Express route definitions providing quote management related functions
- * @module module:events/get-a-quote
- * @requires express
- * @requires module:events/get-a-quote/validateFormData
- * @requires module:common/data/database
-*/
-
 import knex from "../../common/data/database.js";
-import validateFormData from "./validateFormData.js";
+import validateRequestBody from "./validateRequestBody.js";
 
 const QUOTES_TABLE = "quotes";
 
-/**
- * Validates get-a-quote Form Data 
- * and creates a new Quote
- *
- * @param {*} request
- * @param {*} response
- */
 const getAQuote = async (request, response) => {
-  const validatedFormData = await validateFormData(request, response);
-  if (validatedFormData) {
+  const validatedRequestBody = await validateRequestBody(request, response);
+  if (validatedRequestBody) {
     const [quoteID] = await knex(QUOTES_TABLE).insert({
-      account_full_name: validatedFormData.clientName,
-      account_email: validatedFormData.email,
-      event_budget: validatedFormData.eventBudget,
-      event_date: validatedFormData.eventDate,
-      event_type_id: validatedFormData.eventType,
-      event_location: validatedFormData.eventLocation,
-      event_guest_count: validatedFormData.guestCount,
-      event_duration: validatedFormData.eventDuration,
-      marketing_type: validatedFormData.marketingType,
+      account_full_name: validatedRequestBody.clientName,
+      account_email: validatedRequestBody.email,
+      event_budget: validatedRequestBody.eventBudget,
+      event_date: validatedRequestBody.eventDate,
+      event_type_id: validatedRequestBody.eventType,
+      event_location: validatedRequestBody.eventLocation,
+      event_guest_count: validatedRequestBody.guestCount,
+      event_duration: validatedRequestBody.eventDuration,
+      marketing_type: validatedRequestBody.marketingType,
       quote_active: 0
     });
 
