@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 
-import knex from "../../../common/data/database.js";
+import knex from "../../common/data/database.js";
 
 const EVENTS_TABLE = "events";
 

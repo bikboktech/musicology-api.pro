@@ -1,14 +1,18 @@
 import { object, string, number, date } from "yup";
-import Exception from "../../../common/middlewares/exceptions.js";
-import knex from "../../../common/data/database.js";
+import Exception from "../../common/utils/exceptions.js";
+import knex from "../../common/data/database.js";
 
-const EVENTS_TABLE = "events";
 const ACCOUNTS_TABLE = "accounts";
 const EVENT_TYPES_TABLE = "event_types";
 const CLIENT_ID = 3;
 const ARTIST_ID = 2;
 const ADMIN_ID = 1;
 
+const ValidEventDuration = [
+  "3hours",
+  "6hours",
+  "other"
+];
 const SchemaCreateEventInfo = object({
   clientId: number().positive().required(),
   artistId: number().positive().required(),
@@ -18,23 +22,12 @@ const SchemaCreateEventInfo = object({
   location: string().nullable(),
   venueName: string().nullable(),
   venueContact: string().nullable(),
-  duration: string().nullable(),
+  duration: string().oneOf(ValidEventDuration),
   additionalArtists: string().nullable(),
   additionalInfo: string().nullable(),
 });
 
 const validateRequestBody = async (request, response) => {
-  const event = await knex(EVENTS_TABLE)
-    .where("id", request.params.eventId)
-    .first();
-
-  if (!event) {
-    return new Exception(404, `This event doesn't exist`).handle(
-      request,
-      response
-    );
-  }
-
   const client = await knex(ACCOUNTS_TABLE)
     .where("id", request.body.clientId)
     .andWhere("account_type_id", CLIENT_ID)

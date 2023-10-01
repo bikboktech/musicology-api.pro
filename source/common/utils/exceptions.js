@@ -1,5 +1,3 @@
-import handleError from './handleError.js'
-
 class Exception {
     constructor(status, message) {
         this._status = status || '500'
@@ -10,9 +8,10 @@ class Exception {
         }
     }
 
-    handle(...payload) {
-        handleError(this._error, ...payload);
-        return null; // treated by get-a-quote/index.js -- (await validateFormData(request, response) === null)
+    handle(request, response) {
+        console.error(this._error);
+        response.status(this._status).send(this._message);
+        return null;
     }
 }
 

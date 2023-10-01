@@ -1,10 +1,10 @@
-import knex from "../../../common/data/database.js";
+import knex from "../../common/data/database.js";
 import validateRequestBody from "./validateRequestBody.js";
-import Exception from "../../../common/middlewares/exceptions.js";
+import Exception from "../../common/utils/exceptions.js";
 
 const EVENTS_TABLE = "events";
 
-const createEventInfo = async (request, response, next) => {
+const createEvent = async (request, response, next) => {
   const validatedRequestBody = await validateRequestBody(request, response);
 
   if (validatedRequestBody) {
@@ -62,4 +62,4 @@ const createEventInfo = async (request, response, next) => {
   }
 };
 
-export default createEventInfo;
+export default createEvent;

@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
-import Exception from '../../common/middlewares/exceptions.js'
+import Exception from '../../common/utils/exceptions.js'
 import knex from '../../common/data/database.js';
 
 

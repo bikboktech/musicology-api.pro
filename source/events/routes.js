@@ -1,60 +1,28 @@
-/** Express router providing playlist related routes
- * @module events/routes
- * @requires express
- * @requires module:events/event-types
- * @requires module:events/get-a-quote
- */
 import express from "express";
-import deleteEvents from "./deleteEvents/index.js";
-import getEventTypes from "./event-types/index.js";
-import getEvents from "./getEvents/index.js";
-import getEventInfo from "./event-info/getEventInfo/index.js";
-import getAQuote from "./get-a-quote/index.js";
-import createEventInfo from "./event-info/createEventInfo/index.js";
-import updateEventInfo from "./event-info/updateEventInfo/index.js";
 
-/**
- * Service Name
- * @type {string}
- */
+/* events routes dependencies */
+import getEventTypes from "./event-types/index.js";
+
+/** quotes related routes */
+import getAQuote from "./get-a-quote/index.js";
+
+/* events related routes */
+import createEvent from "./create/index.js";
+import updateEvent from "./update/index.js";
+import deleteEvents from "./delete/index.js";
+import getEventList from "./list/index.js";
+import getEventInfo from "./info/index.js";
+
 const SERVICE_NAME = "events";
 
-/**
- * Express router to mount quote management related functions on.
- * @type {object}
- * @const
- * @namespace eventsRouter
- */
 const router = express.Router();
 
-router.get(`/${SERVICE_NAME}`, getEvents);
-router.delete(`/${SERVICE_NAME}`, deleteEvents);
-
-/**
- * Route serving quote management functions
- * @name get/events/getEventTypes
- * @function
- * @memberof module:events/getEventTypes~eventsRouter
- * @inner
- * @param {string} path - Express path
- * @param {callback} middleware - Express middleware.
- */
-router.get(`/${SERVICE_NAME}/event-types`, getEventTypes);
-
-/**
- * Route serving quote management functions
- * @name get/events/getAQuote
- * @function
- * @memberof module:events/getAQuote~eventsRouter
- * @inner
- * @param {string} path - Express path
- * @param {callback} middleware - Express middleware.
- */
+router.get(`/${SERVICE_NAME}/types`, getEventTypes);
 router.post(`/${SERVICE_NAME}/get-a-quote`, getAQuote);
-
-router.post(`/${SERVICE_NAME}/event-info`, createEventInfo);
-router.put(`/${SERVICE_NAME}/event-info/:eventId`, updateEventInfo);
-
+router.post(`/${SERVICE_NAME}`, createEvent);
+router.put(`/${SERVICE_NAME}/:eventId`, updateEvent);
+router.delete(`/${SERVICE_NAME}`, deleteEvents);
+router.get(`/${SERVICE_NAME}`, getEventList);
 router.get(`/${SERVICE_NAME}/:eventId`, getEventInfo);
 
 export default router;

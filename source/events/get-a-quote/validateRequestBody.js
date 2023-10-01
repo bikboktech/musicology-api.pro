@@ -1,15 +1,8 @@
-/** Validation function used against get-a-quote Form Data
- * @module module:quote_management/getAQuote/validateFormData
- * @requires express
- * @requires module:common/middlewares/handleError
- * @requires module:common/middlewares/exceptions
-*/
-
 import { object, string, number, date } from 'yup';
-import Exception from "../../common/middlewares/exceptions.js";
+import Exception from "../../common/utils/exceptions.js";
 import knex from "../../common/data/database.js";
 
-const EventTypesTable = "event_types";
+const EVENT_TYPES_TABLE = "event_types";
 const ValidEventDuration = [
   "3hours",
   "6hours",
@@ -35,16 +28,9 @@ const SchemaGetAQuote = object({
   marketingType: string(),
 })
 
-/**
- * Validates get-a-quote Form Data 
- *
- * @param {*} request
- * @param {*} response
- */
-const validateFormData = async (request, response) => {
-  const formData = request.body;
+const validateRequestBody = async (request, response) => {
   const eventType = await knex(
-    EventTypesTable).where('id', formData.eventType).first()
+    EVENT_TYPES_TABLE).where('id', request.body.eventType).first()
 
   if (!eventType) {
     return new Exception(
@@ -53,7 +39,7 @@ const validateFormData = async (request, response) => {
   }
 
   try {
-    return await SchemaGetAQuote.validate(formData);
+    return await SchemaGetAQuote.validate(request.body);
   } catch (err) {
     return new Exception(
       400, err.toString()
@@ -61,4 +47,4 @@ const validateFormData = async (request, response) => {
   }
 }
 
-export default validateFormData;
+export default validateRequestBody;
