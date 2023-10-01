@@ -1,28 +1,20 @@
 import express from "express";
 
-/* events routes dependencies */
-import getEventTypes from "./list/types/index.js";
+/* playlists related routes */
+import createPlaylist from "./create/index.js";
+import updatePlaylist from "./update/index.js";
+import deletePlaylists from "./delete/index.js";
+import getPlaylistList from "./list/index.js";
+import getPlaylistInfo from "./info/index.js";
 
-/** quotes related routes */
-import getAQuote from "./get-a-quote/index.js";
-
-/* events related routes */
-import createEvent from "./create/index.js";
-import updateEvent from "./update/index.js";
-import deleteEvents from "./delete/index.js";
-import getEventList from "./list/index.js";
-import getEventInfo from "./info/index.js";
-
-const SERVICE_NAME = "events";
+const SERVICE_NAME = "playlists";
 
 const router = express.Router();
 
-router.get(`/${SERVICE_NAME}/types`, getEventTypes);
-router.post(`/${SERVICE_NAME}/get-a-quote`, getAQuote);
-router.post(`/${SERVICE_NAME}/create`, createEvent);
-router.put(`/${SERVICE_NAME}/update/:eventId`, updateEvent);
-router.delete(`/${SERVICE_NAME}`, deleteEvents);
-router.get(`/${SERVICE_NAME}`, getEventList);
-router.get(`/${SERVICE_NAME}/:eventId`, getEventInfo);
+router.post(`/${SERVICE_NAME}/create`, createPlaylist);
+router.put(`/${SERVICE_NAME}/update/:playlistId`, updatePlaylist);
+router.delete(`/${SERVICE_NAME}`, deletePlaylists);
+router.get(`/${SERVICE_NAME}`, getPlaylistList);
+router.get(`/${SERVICE_NAME}/:playlistId`, getPlaylistInfo);
 
 export default router;

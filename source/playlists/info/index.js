@@ -1,46 +1,24 @@
-import { DateTime } from "luxon";
-
 import knex from "../../common/data/database.js";
 
-const EVENTS_TABLE = "events";
+const PLAYLISTS_TABLE = "playlists";
 
-const getEventInfo = async (request, response) => {
-  const event = await knex(EVENTS_TABLE)
+const getPlaylistInfo = async (request, response) => {
+  const playlist = await knex(PLAYLISTS_TABLE)
     .select(
-      "events.*",
-      "client.full_name as clientFullName",
-      "artist.full_name as artistFullName",
-      "event_types.name as eventTypeName"
+      "playlists.*",
+      "events.name as eventName"
     )
-    .join("accounts as client", "events.client_id", "=", "client.id")
-    .join("accounts as artist", "events.artist_id", "=", "artist.id")
-    .join("event_types", "events.event_type_id", "=", "event_types.id")
-    .where("events.id", request.params.eventId)
+    .join("events", "events.event_id", "=", "playlists.event_id")
+    .where("playlists.id", id)
     .first();
 
   response.status(200).json({
-    id: event.id,
-    additionalInfo: event.additional_info,
-    eventName: event.event_name,
-    eventType: {
-      id: event.event_type_id,
-      name: event.eventTypeName,
-    },
-    client: {
-      id: event.client_id,
-      fullName: event.clientFullName,
-    },
-    eventDate: DateTime.fromJSDate(event.date).toFormat("yyyy LLL dd"),
-    guestCount: event.guest_count,
-    artist: {
-      id: event.artist_id,
-      fullName: event.artistFullName,
-    },
-    location: event.location,
-    venueName: event.venue_name,
-    venueContact: event.venue_contact,
-    address: event.address,
+    id: playlist.id,
+    spotifyPlaylistId: playlist.spotify_playlist_id,
+    playlistName: playlist.name,
+    // playlistNotes: playlist.notes,
+    eventName: playlist.eventName,
   });
 };
 
-export default getEventInfo;
+export default getPlaylistInfo;
