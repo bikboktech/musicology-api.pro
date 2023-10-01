@@ -9,6 +9,7 @@ dotenv.config();
 import accountRoutes from "./source/accounts/routes.js";
 import authRoutes from "./source/auth/routes.js";
 import eventsRoutes from "./source/events/routes.js";
+import playlistsRoutes from "./source/playlists/routes.js";
 import playlistManagementRoutes from "./source/playlist-management/routes.js";
 import spotifyRoutes from "./source/spotify/routes.js";
 
@@ -29,6 +30,7 @@ app.use("/", accountRoutes);
 app.use("/", authRoutes);
 app.use("/", eventsRoutes);
 app.use("/", playlistManagementRoutes);
+app.use("/", playlistsRoutes);
 app.use("/", spotifyRoutes);
 
 const port = 8000;
