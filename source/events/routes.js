@@ -1,7 +1,7 @@
 import express from "express";
 
 /* events routes dependencies */
-import getEventTypes from "./list/types/index.js";
+import getEventTypes from "./event-types/index.js";
 
 /** quotes related routes */
 import getAQuote from "./get-a-quote/index.js";
@@ -19,8 +19,8 @@ const router = express.Router();
 
 router.get(`/${SERVICE_NAME}/types`, getEventTypes);
 router.post(`/${SERVICE_NAME}/get-a-quote`, getAQuote);
-router.post(`/${SERVICE_NAME}/create`, createEvent);
-router.put(`/${SERVICE_NAME}/update/:eventId`, updateEvent);
+router.post(`/${SERVICE_NAME}`, createEvent);
+router.put(`/${SERVICE_NAME}/:eventId`, updateEvent);
 router.delete(`/${SERVICE_NAME}`, deleteEvents);
 router.get(`/${SERVICE_NAME}`, getEventList);
 router.get(`/${SERVICE_NAME}/:eventId`, getEventInfo);
