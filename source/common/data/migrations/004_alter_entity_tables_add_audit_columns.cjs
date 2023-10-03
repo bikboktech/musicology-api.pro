@@ -1,11 +1,4 @@
 exports.up = async knex => {
-  const accountTypesHasCreatedBy = await knex.schema.hasColumn('account_types', 'created_by');
-  if (!accountTypesHasCreatedBy) {
-    await knex.schema.alterTable('account_types', table => {
-      table.integer('created_by').unsigned();
-      table.foreign('created_by').references('id').inTable('accounts');
-    })
-  }
   const accountTypesHasUpdatedAt = await knex.schema.hasColumn('account_types', 'updated_at');
   if (!accountTypesHasUpdatedAt) {
     await knex.schema.alterTable('account_types', table => {
