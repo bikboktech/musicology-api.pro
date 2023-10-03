@@ -12,10 +12,10 @@ exports.up = async knex => {
       table.varchar('event_duration', 12);
       table.varchar('event_location', 512);
       table.integer('event_guest_count');
-      table.boolean('quote_active')
+      table.boolean('is_active')
         .notNullable()
         .defaultTo(false);
-      table.varchar('marketing_type', 256);
+      table.varchar('marketing_type', 1024);
       table.integer('updated_by').unsigned();
       table.dateTime('updated_at', 6);
       table.dateTime('created_at', 6)
