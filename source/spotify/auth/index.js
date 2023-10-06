@@ -123,7 +123,6 @@ const refreshToken = async (req, res) => {
     return response.json()
   }).then((body) => {
     var access_token = body.access_token;
-    console.log(access_token);
     res.send({
       'access_token': access_token
     });
