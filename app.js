@@ -1,4 +1,5 @@
 import * as dotenv from "dotenv";
+import cookieParser from 'cookie-parser';
 import cors from "cors";
 import express from "express";
 
@@ -21,6 +22,8 @@ app.use(
     exposedHeaders: ["Content-Disposition"],
   })
 );
+
+app.use(cookieParser());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
