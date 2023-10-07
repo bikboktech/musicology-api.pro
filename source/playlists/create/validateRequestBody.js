@@ -6,7 +6,6 @@ const EVENTS_TABLE = "events";
 
 const SchemaCreatePlaylistInfo = object({
   eventId: number().positive().required(),
-  spotifyPlaylistId: string().required(),
   playlistName: string().required(),
   playlistNotes: string().nullable(),
 });
