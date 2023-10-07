@@ -1,4 +1,4 @@
-import knex from "../../../common/data/database.js";
+import knex from "../../common/data/database.js";
 
 const EVENT_TYPES_TABLE = "event_types";
 

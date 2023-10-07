@@ -12,6 +12,7 @@ import eventsRoutes from "./source/events/routes.js";
 import playlistsRoutes from "./source/playlists/routes.js";
 import playlistManagementRoutes from "./source/playlist-management/routes.js";
 import spotifyRoutes from "./source/spotify/routes.js";
+import templatePlaylistsRoutes from "./source/template-playlists/routes.js";
 
 const app = express();
 
@@ -32,6 +33,7 @@ app.use("/", eventsRoutes);
 app.use("/", playlistManagementRoutes);
 app.use("/", playlistsRoutes);
 app.use("/", spotifyRoutes);
+app.use("/", templatePlaylistsRoutes);
 
 const port = 8000;
 
