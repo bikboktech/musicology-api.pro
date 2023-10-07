@@ -90,7 +90,7 @@ exports.up = async (knex) => {
 
 exports.down = async (knex) => {
   await knex.schema.dropTable("permission_sets");
-  await knex.schema.dropTable("accounts");
   await knex.schema.dropTable("events");
   await knex.schema.dropTable("posts");
+  await knex.schema.dropTable("accounts");
 };
