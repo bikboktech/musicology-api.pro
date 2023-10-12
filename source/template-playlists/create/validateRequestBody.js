@@ -3,14 +3,12 @@ import Exception from "../../common/utils/exceptions.js";
 import knex from "../../common/data/database.js";
 
 const EVENT_TYPES_TABLE = "event_types";
-const ACCOUNTS_TABLE = "accounts";
 
 const SchemaCreateTemplatePlaylistInfo = object({
   eventTypeId: number().positive().required(),
   spotifyPlaylistId: string().required(),
   playlistName: string().required(),
   playlistNotes: string().nullable(),
-  createdBy: number().positive().required(),
 });
 
 const validateRequestBody = async (request, response) => {
@@ -20,17 +18,6 @@ const validateRequestBody = async (request, response) => {
 
   if (!eventType) {
     return new Exception(404, `The selected event type doesn't exist`).handle(
-      request,
-      response
-    );
-  }
-
-  const account = await knex(ACCOUNTS_TABLE)
-    .where("id", request.body.createdBy)
-    .first();
-
-  if (!account) {
-    return new Exception(404, `The selected account doesn't exist`).handle(
       request,
       response
     );

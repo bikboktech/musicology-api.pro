@@ -1,6 +1,5 @@
 import knex from "../../common/data/database.js";
 import validateRequestBody from "./validateRequestBody.js";
-import Exception from "../../common/utils/exceptions.js";
 
 const PLAYLISTS_TABLE = "playlists";
 
@@ -18,9 +17,9 @@ const createPlaylist = async (request, response, next) => {
     const playlist = await knex(PLAYLISTS_TABLE)
       .select(
         "playlists.*",
-        "events.name as eventName"
+        "events.event_name as eventName"
       )
-      .join("events", "events.event_id", "=", "playlists.event_id")
+      .join("events", "events.id", "=", "playlists.event_id")
       .where("playlists.id", id)
       .first();
 

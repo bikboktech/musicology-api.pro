@@ -2,14 +2,14 @@ import knex from "../../common/data/database.js";
 
 const TEMPLATE_PLAYLISTS_TABLE = "template_playlists";
 
-const getPlaylistLists = async (request, response, next) => {
+const getTemplatePlaylistLists = async (request, response, next) => {
   const playlists = await knex(TEMPLATE_PLAYLISTS_TABLE)
     .select(
       "template_playlists.*",
       "event_types.id as eventTypeId",
-      "event_types.name as eventTypeName",
+      "event_types.name as eventTypeName"
     )
-    .leftJoin("event_types", "template_playlists.event_type_id", "=", "event_types.id");
+    .join("event_types", "event_types.id", "=", "template_playlists.event_type_id");
 
   const playlistCount = await knex(TEMPLATE_PLAYLISTS_TABLE).count("template_playlists.id as count");
 
@@ -28,4 +28,4 @@ const getPlaylistLists = async (request, response, next) => {
   });
 };
 
-export default getPlaylistLists;
+export default getTemplatePlaylistLists;

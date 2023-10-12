@@ -1,6 +1,6 @@
 import express from "express";
 
-/* playlists related routes */
+/* template-playlists related routes */
 import createTemplatePlaylist from "./create/index.js";
 import updateTemplatePlaylist from "./update/index.js";
 import deleteTemplatePlaylists from "./delete/index.js";

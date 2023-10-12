@@ -6,7 +6,7 @@ const getEventInfo = async (id) => {
   return await fetch(`http://localhost:8000/events/${id}`, {
     method: 'GET',
     headers: {
-    'Content-Type': 'application/json'
+      'Content-Type': 'application/json'
     }
   });
 };
