@@ -10,8 +10,6 @@ const router = express.Router();
 router.get(`/${SERVICE_NAME}/playlists/:playlistId`, getPlaylist);
 router.get(`/${SERVICE_NAME}/tracks`, getTracks);
 
-router.post(`/${SERVICE_NAME}/playlists`, createPlaylist);
-
 router.get(`/${SERVICE_NAME}/login`, login);
 router.get(`/${SERVICE_NAME}/callback`, callback);
 router.get(`/${SERVICE_NAME}/refresh-token`, refreshToken);

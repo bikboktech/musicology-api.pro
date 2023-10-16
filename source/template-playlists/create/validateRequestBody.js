@@ -7,10 +7,9 @@ const ACCOUNTS_TABLE = "accounts";
 
 const SchemaCreateTemplatePlaylistInfo = object({
   eventTypeId: number().positive().required(),
-  spotifyPlaylistId: string().required(),
   playlistName: string().required(),
   playlistNotes: string().nullable(),
-  createdBy: number().positive().required(),
+  // createdBy: number().positive().required(),
 });
 
 const validateRequestBody = async (request, response) => {
@@ -25,16 +24,16 @@ const validateRequestBody = async (request, response) => {
     );
   }
 
-  const account = await knex(ACCOUNTS_TABLE)
-    .where("id", request.body.createdBy)
-    .first();
+  // const account = await knex(ACCOUNTS_TABLE)
+  //   .where("id", request.body.createdBy)
+  //   .first();
 
-  if (!account) {
-    return new Exception(404, `The selected account doesn't exist`).handle(
-      request,
-      response
-    );
-  }
+  // if (!account) {
+  //   return new Exception(404, `The selected account doesn't exist`).handle(
+  //     request,
+  //     response
+  //   );
+  // }
 
   try {
     return await SchemaCreateTemplatePlaylistInfo.validate(request.body);
