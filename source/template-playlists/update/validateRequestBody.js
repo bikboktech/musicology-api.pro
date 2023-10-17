@@ -6,10 +6,11 @@ const TEMPLATE_PLAYLISTS_TABLE = "template_playlists";
 const EVENT_TYPES_TABLE = "event_types";
 
 const SchemaUpdateTemplatePlaylistInfo = object({
-  eventTypeId: number().positive(),
-  spotifyPlaylistId: string(),
-  playlistName: string(),
-  playlistNotes: string()
+  eventTypeId: number().positive().required(),
+  spotifyPlaylistId: string().required(),
+  playlistName: string().required(),
+  // playlistNotes: string().nullable(),
+  // updatedBy: number().positive().required(),
 });
 
 const validateRequestBody = async (request, response) => {
@@ -35,8 +36,22 @@ const validateRequestBody = async (request, response) => {
     );
   }
 
+  // const account = await knex(ACCOUNTS_TABLE)
+  //   .where("id", request.body.createdBy)
+  //   .first();
+
+  // if (!account) {
+  //   return new Exception(404, `The selected account doesn't exist`).handle(
+  //     request,
+  //     response
+  //   );
+  // }
+
   try {
-    return await SchemaUpdateTemplatePlaylistInfo.validate(request.body);
+    return await SchemaUpdateTemplatePlaylistInfo.validate({
+      ...request.body,
+      spotifyPlaylistId: playlist.spotify_playlist_id,
+    });
   } catch (err) {
     return new Exception(400, err.toString()).handle(request, response);
   }

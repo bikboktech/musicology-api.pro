@@ -1,4 +1,4 @@
-import { object, string, number } from "yup";
+import { object, string, number, array } from "yup";
 import Exception from "../../common/utils/exceptions.js";
 import knex from "../../common/data/database.js";
 
@@ -6,9 +6,9 @@ const EVENTS_TABLE = "events";
 
 const SchemaCreatePlaylistInfo = object({
   eventId: number().positive().required(),
-  spotifyPlaylistId: string().required(),
   playlistName: string().required(),
   playlistNotes: string().nullable(),
+  trackIds: array().of(string().required()).min(1).required(),
 });
 
 const validateRequestBody = async (request, response) => {

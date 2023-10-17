@@ -15,6 +15,6 @@ router.post(`/${SERVICE_NAME}`, createPlaylist);
 router.put(`/${SERVICE_NAME}/:playlistId`, updatePlaylist);
 router.delete(`/${SERVICE_NAME}`, deletePlaylists);
 router.get(`/${SERVICE_NAME}`, getPlaylistList);
-router.get(`/${SERVICE_NAME}/:playlistId`, getPlaylistInfo);
+router.get(`/${SERVICE_NAME}/:eventId`, getPlaylistInfo);
 
 export default router;
