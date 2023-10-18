@@ -1,11 +1,12 @@
 import knex from "../../common/data/database.js";
+import Exception from "../../common/utils/exceptions.js";
 import { getSpotifyPlaylist } from "../../common/utils/spotify.js";
 
 const PLAYLISTS_TABLE = "playlists";
 
 const getPlaylistInfo = async (request, response) => {
   const { context, params } = request;
-
+  console.log(params)
   let playlist;
 
   if (params.eventId) {
@@ -16,6 +17,13 @@ const getPlaylistInfo = async (request, response) => {
     playlist = await knex(PLAYLISTS_TABLE)
       .where("playlists.id", params.playlistId)
       .first();
+  }
+
+  if (!playlist) {
+    return new Exception(404, `Playlist not found`).handle(
+      request,
+      response
+    )
   }
 
   const playlistOutput = await getSpotifyPlaylist(

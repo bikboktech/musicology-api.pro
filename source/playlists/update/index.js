@@ -1,6 +1,5 @@
 import knex from "../../common/data/database.js";
 import validateRequestBody from "./validateRequestBody.js";
-import Exception from "../../common/utils/exceptions.js";
 import {
   getAuthenticationToken,
   updateSpotifyPlaylist,

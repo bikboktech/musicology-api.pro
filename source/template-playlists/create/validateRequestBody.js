@@ -1,14 +1,14 @@
-import { object, string, number } from "yup";
+import { object, string, number, array } from "yup";
 import Exception from "../../common/utils/exceptions.js";
 import knex from "../../common/data/database.js";
 
 const EVENT_TYPES_TABLE = "event_types";
-const ACCOUNTS_TABLE = "accounts";
 
 const SchemaCreateTemplatePlaylistInfo = object({
   eventTypeId: number().positive().required(),
   playlistName: string().required(),
   playlistNotes: string().nullable(),
+  trackIds: array().of(string().required()).min(1).required(),
   // createdBy: number().positive().required(),
 });
 

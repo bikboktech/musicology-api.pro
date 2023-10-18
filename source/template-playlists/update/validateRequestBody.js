@@ -19,7 +19,7 @@ const validateRequestBody = async (request, response) => {
     .first();
 
   if (!playlist) {
-    return new Exception(404, `The selected playlist doesn't exist`).handle(
+    return new Exception(404, `The selected template playlist doesn't exist`).handle(
       request,
       response
     );

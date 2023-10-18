@@ -4,7 +4,7 @@ import { SPOTIFY_CONFIG } from "../data/config.js";
 
 const spotifyAuth = async (request, response, next) => {
   try {
-    console.log(SPOTIFY_CONFIG);
+    // console.log(SPOTIFY_CONFIG);
 
     const spotifyResponse = await fetch(
       "https://accounts.spotify.com/api/token",

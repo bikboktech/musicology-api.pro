@@ -9,7 +9,7 @@ import {
 
 const TEMPLATE_PLAYLISTS_TABLE = "template_playlists";
 
-const updatePlaylist = async (request, response, next) => {
+const updateTemplatePlaylist = async (request, response, next) => {
   const validatedRequestBody = await validateRequestBody(request, response);
 
   if (validatedRequestBody) {
@@ -29,7 +29,7 @@ const updatePlaylist = async (request, response, next) => {
 
     await knex(TEMPLATE_PLAYLISTS_TABLE)
       .update({
-        event_type_id: validatedRequestBody.eventTypeId,
+        event_id: validatedRequestBody.eventId,
         spotify_playlist_id: validatedRequestBody.spotifyPlaylistId,
         name: validatedRequestBody.playlistName,
         // notes: validatedRequestBody.playlistNotes,
@@ -67,4 +67,4 @@ const updatePlaylist = async (request, response, next) => {
   }
 };
 
-export default updatePlaylist;
+export default updateTemplatePlaylist;

@@ -54,6 +54,7 @@ const addTracksToSpotifyPlaylist = async (
   trackIds,
   authenticationToken
 ) => {
+  console.log(playlistId);
   const trackURIs = trackIds.map((trackId) => `spotify:track:${trackId}`);
 
   await fetch(`${process.env.SPOTIFY_API_URL}/playlists/${playlistId}/tracks`, {
@@ -68,7 +69,7 @@ const addTracksToSpotifyPlaylist = async (
     },
   }).catch((err) => console.log(err));
 
-  console.log("SUCCESS");
+  console.log("SUCCESS addTracksToSpotifyPlaylist");
 };
 
 const updateSpotifyPlaylistTracks = async (
@@ -76,6 +77,7 @@ const updateSpotifyPlaylistTracks = async (
   trackIds,
   authenticationToken
 ) => {
+  console.log(playlistId)
   const trackURIs = trackIds.map((trackId) => `spotify:track:${trackId}`);
 
   await fetch(`${process.env.SPOTIFY_API_URL}/playlists/${playlistId}/tracks`, {
@@ -89,7 +91,7 @@ const updateSpotifyPlaylistTracks = async (
     },
   }).catch((err) => console.log(err));
 
-  console.log("SUCCESS");
+  console.log("SUCCESS updateSpotifyPlaylistTracks");
 };
 
 const updateSpotifyPlaylist = async (playlistId, name, authenticationToken) => {
@@ -118,7 +120,6 @@ const getSpotifyPlaylist = async (playlistId, spotifyToken) => {
   );
 
   const playlist = await spotifyResponse.json();
-
   const playlistOutput = {
     id: playlist.id,
     name: playlist.name,
@@ -141,7 +142,7 @@ const getSpotifyPlaylist = async (playlistId, spotifyToken) => {
         name: item.track.name,
       };
     }),
-    url: playlist.external_urls.spotify,
+    // url: playlist.external_urls.spotify,
   };
 
   return playlistOutput;

@@ -3,6 +3,7 @@ import Exception from "../../common/utils/exceptions.js";
 import knex from "../../common/data/database.js";
 
 const PLAYLISTS_TABLE = "playlists";
+const EVENTS_TABLE = "events";
 
 const SchemaUpdatePlaylistInfo = object({
   playlistName: string().required(),
@@ -17,6 +18,17 @@ const validateRequestBody = async (request, response) => {
 
   if (!playlist) {
     return new Exception(404, `The selected playlist doesn't exist`).handle(
+      request,
+      response
+    );
+  }
+
+  const event = await knex(EVENTS_TABLE)
+    .where("id", request.body.eventId)
+    .first();
+
+  if (!event) {
+    return new Exception(404, `The selected event doesn't exist`).handle(
       request,
       response
     );
