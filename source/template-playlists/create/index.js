@@ -1,6 +1,5 @@
 import knex from "../../common/data/database.js";
 import validateRequestBody from "./validateRequestBody.js";
-import Exception from "../../common/utils/exceptions.js";
 import {
   addTracksToSpotifyPlaylist,
   createSpotifyPlaylist,
@@ -28,7 +27,7 @@ const createTemplatePlaylist = async (request, response, next) => {
 
     const [id] = await knex(TEMPLATE_PLAYLISTS_TABLE).insert({
       event_type_id: validatedRequestBody.eventTypeId,
-      spotify_playlist_id: playlist.id,
+      spotify_playlist_id: validatedRequestBody.spotifyPlaylistId,
       name: validatedRequestBody.playlistName,
       // notes: validatedRequestBody.playlistNotes,
       // created_by: validatedRequestBody.createdBy,
@@ -40,7 +39,7 @@ const createTemplatePlaylist = async (request, response, next) => {
         "event_types.id as eventTypeId",
         "event_types.name as eventTypeName"
       )
-      .join("event_types", "event_types.id", "=", "template_playlists.event_type_id")
+      // .join("event_types", "event_types.id", "=", "template_playlists.event_type_id")
       .where("template_playlists.id", id)
       .leftJoin(
         "event_types",

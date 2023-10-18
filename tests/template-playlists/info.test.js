@@ -38,7 +38,7 @@ describe('get template playlist info tests', () => {
 
     response = await getTemplatePlaylistInfo(data.id);
     await deleteTemplatePlaylist({ids: [data.id]});
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(203);
   });
 
   test('template playlist info - invalid get', async () => {

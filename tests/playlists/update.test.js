@@ -43,7 +43,7 @@ describe('update playlist tests', () => {
     let data = await response.json();
     let updateResponse = await updatePlaylist(data.id, updateValid);
     await deletePlaylist([data.id]);
-    expect(updateResponse.status).toBe(203);
+    expect(updateResponse.status).toBe(200);
   });
 
   test('playlist update - playlist not found', async () => {

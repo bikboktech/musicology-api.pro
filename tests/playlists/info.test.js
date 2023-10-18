@@ -35,7 +35,6 @@ describe('get playlist info tests', () => {
   test('playlist info - valid get', async () => {
     let response = await createPlaylist(createValid);
     let data = await response.json();
-
     response = await getPlaylistInfo(data.id);
     await deletePlaylist({ids: [data.id]});
     expect(response.status).toBe(200);

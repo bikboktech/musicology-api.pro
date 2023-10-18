@@ -2,7 +2,7 @@ import knex from "../../common/data/database.js";
 
 const TEMPLATE_PLAYLISTS_TABLE = "template_playlists";
 
-const getPlaylistLists = async (request, response, next) => {
+const getTemplatePlaylistList = async (request, response, next) => {
   const query = knex(TEMPLATE_PLAYLISTS_TABLE)
     .select(
       "template_playlists.*",
@@ -59,4 +59,4 @@ const getPlaylistLists = async (request, response, next) => {
   });
 };
 
-export default getTemplatePlaylistLists;
+export default getTemplatePlaylistList;

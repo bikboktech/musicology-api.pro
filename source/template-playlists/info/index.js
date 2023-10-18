@@ -7,6 +7,7 @@ const TEMPLATE_PLAYLISTS_TABLE = "template_playlists";
 const getTemplatePlaylistInfo = async (request, response) => {
   const { params, context } = request;
 
+  console.log(params);
   const playlist = await knex(TEMPLATE_PLAYLISTS_TABLE)
     .select(
       "template_playlists.*",
@@ -21,7 +22,6 @@ const getTemplatePlaylistInfo = async (request, response) => {
       "event_types.id"
     )
     .first();
-
   if (!playlist) {
     return new Exception(404, `Template Playlist not found`).handle(
       request,

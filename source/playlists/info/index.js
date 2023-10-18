@@ -6,7 +6,7 @@ const PLAYLISTS_TABLE = "playlists";
 
 const getPlaylistInfo = async (request, response) => {
   const { context, params } = request;
-
+  console.log(params)
   let playlist;
 
   if (params.eventId) {
