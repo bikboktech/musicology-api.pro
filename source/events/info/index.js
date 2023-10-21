@@ -1,6 +1,7 @@
 import { DateTime } from "luxon";
 
 import knex from "../../common/data/database.js";
+import Exception from "../../common/utils/exceptions.js";
 
 const EVENTS_TABLE = "events";
 
@@ -17,7 +18,14 @@ const getEventInfo = async (request, response) => {
     .join("event_types", "events.event_type_id", "=", "event_types.id")
     .where("events.id", request.params.eventId)
     .first();
-
+  
+  if (!event) {
+    return new Exception(404, `Event not found`).handle(
+      request,
+      response
+    )
+  }
+  
   response.status(200).json({
     id: event.id,
     additionalInfo: event.additional_info,

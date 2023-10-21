@@ -1,0 +1,13 @@
+{
+    "clientId" : 3,
+    "artistId" : 3,
+    "eventTypeId" : 1,
+    "eventDate" : "2023-10-31",
+    "guestCount" : 100,
+    "location" : "Test Location",
+    "venueName" : "Test Venue",
+    "venueContact" : "Test Contact",
+    "duration" : "6hours",
+    "additionalArtists" : "Test Additional Artists",
+    "additionalInfo" : "Test Additional Info"
+}

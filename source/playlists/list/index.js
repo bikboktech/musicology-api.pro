@@ -6,9 +6,9 @@ const getPlaylistLists = async (request, response, next) => {
   const playlists = await knex(PLAYLISTS_TABLE)
     .select(
       "playlists.*",
-      "events.name as eventName"
+      "events.event_name as eventName"
     )
-    .join("events", "events.event_id", "=", "playlists.event_id");
+    .join("events", "events.id", "=", "playlists.event_id");
 
   const playlistCount = await knex(PLAYLISTS_TABLE).count("playlists.id as count");
 
