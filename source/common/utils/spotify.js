@@ -97,7 +97,6 @@ const updateSpotifyPlaylistTracks = async (
 };
 
 const updateSpotifyPlaylist = async (playlistId, name, authenticationToken) => {
-  console.log(playlistId, name);
   await fetch(`${process.env.SPOTIFY_API_URL}/playlists/${playlistId}`, {
     method: "PUT",
     body: JSON.stringify({
@@ -166,8 +165,6 @@ const getSpotifyTrack = async (trackId, spotifyToken) => {
   const track = await spotifyResponse.json();
 
   let artists = "";
-
-  console.log(track.artists);
 
   track.artists.forEach((artist, index) => {
     if (index + 1 === track.artists.length) {

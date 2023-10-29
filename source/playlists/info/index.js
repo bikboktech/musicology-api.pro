@@ -32,6 +32,7 @@ const getPlaylistInfo = async (request, response) => {
     id: playlist.id,
     spotifyPlaylistId: playlist.spotify_playlist_id,
     name: playlist.name,
+    eventId: playlist.event_id,
     // playlistNotes: playlist.notes,
     tracks: playlistOutput.tracks,
   });

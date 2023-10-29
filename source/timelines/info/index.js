@@ -15,10 +15,8 @@ const getTimelineInfo = async (request, response) => {
     return new Exception(404, `Timeline not found`).handle(request, response);
   }
 
-  const timelineOutput = [];
-
-  for (const timeline of timelines) {
-    timelineOutput.push({
+  const timelineOutput = await Promise.all(
+    timelines.map(async (timeline) => ({
       id: timeline.id,
       name: timeline.name,
       time: timeline.time,
@@ -27,8 +25,8 @@ const getTimelineInfo = async (request, response) => {
         request.context.spotifyToken
       ),
       instructions: timeline.instructions ?? "",
-    });
-  }
+    }))
+  );
 
   response.status(200).json(timelineOutput);
 };
