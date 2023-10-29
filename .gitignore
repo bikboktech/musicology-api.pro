@@ -1,4 +1,8 @@
 .vscode/
+
+# Spotify cache
+spotify/
+
 # Created by https://www.toptal.com/developers/gitignore/api/node,macos,windows,intellij,visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=node,macos,windows,intellij,visualstudiocode
 
