@@ -1,35 +1,36 @@
+import { DateTime } from "luxon";
 import knex from "../../common/data/database.js";
 import Exception from "../../common/utils/exceptions.js";
+import { getSpotifyTrack } from "../../common/utils/spotify.js";
 
 const TIMELINES_TABLE = "timelines";
 
 const getTimelineInfo = async (request, response) => {
-  let timeline;
+  const timelines = await knex(TIMELINES_TABLE).where(
+    "timelines.event_id",
+    request.params.eventId
+  );
 
-  if (request.params.eventId) {
-    timeline = await knex(TIMELINES_TABLE)
-      .where("timelines.event_id", request.params.eventId)
-      .first();
-  } else {
-    timeline = await knex(TIMELINES_TABLE)
-      .where("timelines.id", request.params.timelineId)
-      .first();
+  if (!timelines) {
+    return new Exception(404, `Timeline not found`).handle(request, response);
   }
 
-  if (!timeline) {
-    return new Exception(404, `Timeline not found`).handle(
-      request,
-      response
-    )
+  const timelineOutput = [];
+
+  for (const timeline of timelines) {
+    timelineOutput.push({
+      id: timeline.id,
+      name: timeline.name,
+      time: timeline.time,
+      track: await getSpotifyTrack(
+        timeline.spotify_track_id,
+        request.context.spotifyToken
+      ),
+      instructions: timeline.instructions ?? "",
+    });
   }
 
-  response.status(200).json({
-    id: timeline.id,
-    eventId: timeline.event_id,
-    time: timeline.time,
-    description: timeline.description,
-    // notes: timeline.notes,
-  });
+  response.status(200).json(timelineOutput);
 };
 
 export default getTimelineInfo;

@@ -37,7 +37,7 @@ const updatePlaylist = async (request, response, next) => {
       id: request.params.playlistId,
       spotifyPlaylistId: validatedRequestBody.spotifyPlaylistId,
       eventId: validatedRequestBody.eventId,
-      playlistName: validatedRequestBody.name,
+      playlistName: validatedRequestBody.playlistName,
       trackIds: validatedRequestBody.trackIds,
     });
   }

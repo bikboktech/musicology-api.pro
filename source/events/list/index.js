@@ -15,8 +15,6 @@ const getEventList = async (request, response, next) => {
     .join("accounts as artist", "events.artist_id", "=", "artist.id")
     .join("event_types", "events.event_type_id", "=", "event_types.id");
 
-  const eventCount = await knex(EVENTS_TABLE).count("events.id as count");
-
   if (request.query.search) {
     query.where((builder) =>
       builder
@@ -32,6 +30,9 @@ const getEventList = async (request, response, next) => {
   if (request.query.sortField && request.query.sortDirection) {
     query.orderBy(request.query.sortField, request.query.sortDirection);
   }
+
+  const countQuery = query.clone().count("events.id as count");
+  const eventCount = await countQuery;
 
   if (request.query.limit) {
     query.limit(request.query.limit);

@@ -16,10 +16,6 @@ const getTemplatePlaylistList = async (request, response, next) => {
       "event_types.id"
     );
 
-  const playlistCount = await knex(TEMPLATE_PLAYLISTS_TABLE).count(
-    "template_playlists.id as count"
-  );
-
   if (request.query.search) {
     query.where((builder) =>
       builder
@@ -31,6 +27,9 @@ const getTemplatePlaylistList = async (request, response, next) => {
   if (request.query.sortField && request.query.sortDirection) {
     query.orderBy(request.query.sortField, request.query.sortDirection);
   }
+
+  const countQuery = query.clone().count("template_playlists.id as count");
+  const playlistCount = await countQuery;
 
   if (request.query.limit) {
     query.limit(request.query.limit);
