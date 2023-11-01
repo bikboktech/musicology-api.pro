@@ -1,5 +1,24 @@
 version: "3.9"
 services:
+  db:
+    container_name: musicology_db
+    command:
+      - --sql_mode=
+    image: mysql:8
+    restart: always
+    ports:
+      - 3306:3306
+    volumes:
+      - ./.docker/mysql:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: ${DATABASE_NAME}
+      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+    healthcheck:
+      test: '/usr/bin/mysql --user=${DATABASE_USER} --password=${DATABASE_PASSWORD} --execute "SHOW DATABASES;"'
+      interval: 5s
+      timeout: 30s
+      retries: 15
   backend:
     container_name: musicology_api
     image: node:18
@@ -20,24 +39,3 @@ services:
       DATABASE_USER: ${DATABASE_USER}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
       DATABASE_NAME: ${DATABASE_NAME}
-
-
-  db:
-    container_name: musicology_db
-    command:
-      - --sql_mode=
-    image: mysql:8
-    restart: always
-    ports:
-      - 3306:3306
-    volumes:
-      - ./.docker/mysql:/var/lib/mysql
-    environment:
-      MYSQL_DATABASE: ${DATABASE_NAME}
-      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
-    healthcheck:
-      test: '/usr/bin/mysql --user=${DATABASE_USER} --password=${DATABASE_PASSWORD} --execute "SHOW DATABASES;"'
-      interval: 5s
-      timeout: 30s
-      retries: 15
