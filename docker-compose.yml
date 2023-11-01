@@ -2,9 +2,9 @@ version: "3.9"
 services:
   db:
     container_name: musicology_db
+    image: mysql:8
     command:
       - --sql_mode=
-    image: mysql:8
     restart: always
     ports:
       - 3306:3306
