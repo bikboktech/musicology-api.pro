@@ -21,7 +21,9 @@ services:
       retries: 15
   backend:
     container_name: musicology_api
-    image: node:18
+    image: ${AWS_ACCOUNT_ID}.dkr.ecr.eu-central-1.amazonaws.com/${ECR_REPO_NAME}:latest
+    depends_on:
+      - db
     build:
       dockerfile: Dockerfile.BACKEND
     ports:
