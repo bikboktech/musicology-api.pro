@@ -9,8 +9,6 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 COPY docker-compose.yml ./
 
-RUN curl -fsSL https://get.docker.com | sh
-
 RUN npm install
 RUN npm install -g knex
 # RUN npm run migrate
@@ -22,4 +20,4 @@ RUN npm install -g knex
 COPY . .
 
 # EXPOSE 8000
-CMD [ "docker", "compose", "up" ]
+CMD [ "npm", "start" ]
