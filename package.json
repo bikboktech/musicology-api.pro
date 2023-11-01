@@ -9,7 +9,8 @@
     "doc": "jsdoc -c .github/docs/conf.json",
     "test": "jest",
     "dev": "nodemon app.js",
-    "start": "node app.js"
+    "start": "node app.js",
+    "migrate": "knex migrate:latest --knexfile source/common/data/knexfile.js"
   },
   "author": "Bik Bok Technologies",
   "license": "ISC",

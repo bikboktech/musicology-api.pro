@@ -9,6 +9,8 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 RUN npm install
+RUN npm install -g knex
+RUN npm run migrate
 # If you are building your code for production
 # RUN npm ci --omit=dev
 

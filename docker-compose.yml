@@ -1,5 +1,27 @@
 version: "3.9"
 services:
+  backend:
+    container_name: musicology_api
+    image: node:18
+    build:
+      dockerfile: Dockerfile.BACKEND
+    ports:
+      - 8000:5000
+    environment:
+      DEEZER_EMAIL: ${DEEZER_EMAIL}
+      DEEZER_PASSWORD: ${DEEZER_PASSWORD}
+      SPOTIFY_API_URL: ${SPOTIFY_API_URL}
+      SPOTIFY_CLIENT_ID: ${SPOTIFY_CLIENT_ID}
+      SPOTIFY_CLIENT_SECRET: ${SPOTIFY_CLIENT_SECRET}
+      SPOTIFY_USER_ID: ${SPOTIFY_USER_ID}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_PORT: ${DATABASE_PORT}
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_NAME: ${DATABASE_NAME}
+
+
   db:
     container_name: musicology_db
     command:
@@ -11,11 +33,11 @@ services:
     volumes:
       - ./.docker/mysql:/var/lib/mysql
     environment:
-      - MYSQL_DATABASE=musicology
-      - MYSQL_PASSWORD=password
-      - MYSQL_ROOT_PASSWORD=password
+      MYSQL_DATABASE: ${DATABASE_NAME}
+      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
     healthcheck:
-      test: '/usr/bin/mysql --user=root --password=password --execute "SHOW DATABASES;"'
+      test: '/usr/bin/mysql --user=${DATABASE_USER} --password=${DATABASE_PASSWORD} --execute "SHOW DATABASES;"'
       interval: 5s
       timeout: 30s
       retries: 15
