@@ -3,6 +3,7 @@ services:
   db:
     container_name: musicology_db
     image: mysql:8
+    env_file: .env
     command:
       - --sql_mode=
     restart: always
@@ -19,25 +20,15 @@ services:
       interval: 5s
       timeout: 30s
       retries: 15
+  
   backend:
     container_name: musicology_api
     image: ${AWS_ACCOUNT_ID}.dkr.ecr.eu-central-1.amazonaws.com/${ECR_REPO_NAME}:latest
+    env_file: .env
+    restart: always
     depends_on:
       - db
     build:
-      dockerfile: Dockerfile.BACKEND
+      dockerfile: Dockerfile
     ports:
-      - 8000:5000
-    environment:
-      DEEZER_EMAIL: ${DEEZER_EMAIL}
-      DEEZER_PASSWORD: ${DEEZER_PASSWORD}
-      SPOTIFY_API_URL: ${SPOTIFY_API_URL}
-      SPOTIFY_CLIENT_ID: ${SPOTIFY_CLIENT_ID}
-      SPOTIFY_CLIENT_SECRET: ${SPOTIFY_CLIENT_SECRET}
-      SPOTIFY_USER_ID: ${SPOTIFY_USER_ID}
-      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
-      DATABASE_HOST: ${DATABASE_HOST}
-      DATABASE_PORT: ${DATABASE_PORT}
-      DATABASE_USER: ${DATABASE_USER}
-      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
-      DATABASE_NAME: ${DATABASE_NAME}
+      - 8000:8000
