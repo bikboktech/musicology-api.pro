@@ -18,12 +18,12 @@ import timelinesRoutes from "./source/timelines/routes.js";
 
 const app = express();
 
-app.use(
-  cors({
-    origin: "http://localhost:3000",
-    exposedHeaders: ["Content-Disposition"],
-  })
-);
+// app.use(
+//   cors({
+//     origin: "http://localhost:3000",
+//     exposedHeaders: ["Content-Disposition"],
+//   })
+// );
 
 app.use(cookieParser());
 
@@ -44,4 +44,5 @@ const port = 8000;
 
 app.listen(port, () => {
   console.log(`Listening on http://localhost:${port}`);
+  console.log(process.env)
 });

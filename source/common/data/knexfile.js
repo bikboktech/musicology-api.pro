@@ -3,6 +3,10 @@
  * @type { Object.<string, import("knex").Knex.Config> }
  */
 
+import dotenv from 'dotenv'
+dotenv.config({ path: '../../../.env' });
+
+
 export default {
   client: "mysql2",
   connection: {
