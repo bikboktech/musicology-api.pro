@@ -16,14 +16,14 @@ services:
       MYSQL_DATABASE: ${DATABASE_NAME}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     healthcheck:
-      test: '/usr/bin/mysql --user=root --password=${MYSQL_ROOT_PASSWORD} --execute "SHOW DATABASES;"'
+      test: '/usr/bin/mysql --user=${DATABASE_USER} --password=${MYSQL_ROOT_PASSWORD} --execute "SHOW DATABASES;"'
       interval: 5s
       timeout: 30s
       retries: 15
   backend:
     container_name: musicology_api
-    # image: ${AWS_ACCOUNT_ID}.dkr.ecr.eu-central-1.amazonaws.com/${ECR_BREPO_NAME}:latest
-    image: repository/backend
+    image: ${AWS_ACCOUNT_ID}.dkr.ecr.eu-central-1.amazonaws.com/${ECR_BREPO_NAME}:latest
+    # image: repository/backend
     env_file: .env
     restart: unless-stopped
     ports:
@@ -34,5 +34,5 @@ services:
       dockerfile: Dockerfile.BACKEND
   frontend:
     container_name: musicology_pro
-    # image: ${AWS_ACCOUNT_ID}.dkr.ecr.eu-central-1.amazonaws.com/${ECR_FREPO_NAME}:latest
-    image: repository/frontend
+    image: ${AWS_ACCOUNT_ID}.dkr.ecr.eu-central-1.amazonaws.com/${ECR_FREPO_NAME}:latest
+    # image: repository/frontend
