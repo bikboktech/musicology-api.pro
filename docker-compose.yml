@@ -1,16 +1,19 @@
 version: "3.9"
 services:
-  db:
+  mysql:
     container_name: musicology_db
     image: mysql:8
-    command:
-      - --sql_mode=
+    # env_file: .env
     restart: always
+    command: 
+      - --default-authentication-plugin=mysql_native_password
+      - --sql_mode=
     ports:
-      - 3306:3306
+      - "3306:3306"
     volumes:
       - ./.docker/mysql:/var/lib/mysql
     environment:
+      MYSQL_USER: ${DATABASE_USER}
       MYSQL_DATABASE: ${DATABASE_NAME}
       MYSQL_PASSWORD: ${DATABASE_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
@@ -19,25 +22,29 @@ services:
       interval: 5s
       timeout: 30s
       retries: 15
+    extra_hosts:
+      - "host.docker.internal:172.17.0.1"
   backend:
     container_name: musicology_api
-    image: ${AWS_ACCOUNT_ID}.dkr.ecr.eu-central-1.amazonaws.com/${ECR_REPO_NAME}:latest
+    image: ${AWS_ACCOUNT_ID}.dkr.ecr.eu-central-1.amazonaws.com/${ECR_BREPO_NAME}:latest
+    env_file: .env
+    restart: always
+    ports:
+      - 8000
     depends_on:
       - db
     build:
       dockerfile: Dockerfile.BACKEND
+  frontend:
+    container_name: musicology_pro
+    image: ${AWS_ACCOUNT_ID}.dkr.ecr.eu-central-1.amazonaws.com/${ECR_FREPO_NAME}:latest
+    env_file: .env
+    restart: always
     ports:
-      - 8000:5000
-    environment:
-      DEEZER_EMAIL: ${DEEZER_EMAIL}
-      DEEZER_PASSWORD: ${DEEZER_PASSWORD}
-      SPOTIFY_API_URL: ${SPOTIFY_API_URL}
-      SPOTIFY_CLIENT_ID: ${SPOTIFY_CLIENT_ID}
-      SPOTIFY_CLIENT_SECRET: ${SPOTIFY_CLIENT_SECRET}
-      SPOTIFY_USER_ID: ${SPOTIFY_USER_ID}
-      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
-      DATABASE_HOST: ${DATABASE_HOST}
-      DATABASE_PORT: ${DATABASE_PORT}
-      DATABASE_USER: ${DATABASE_USER}
-      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
-      DATABASE_NAME: ${DATABASE_NAME}
+      - 3000
+    depends_on:
+      - db
+      - backend
+    build:
+      dockerfile: Dockerfile.FRONTEND
+    
