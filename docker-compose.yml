@@ -3,7 +3,6 @@ services:
   mysql_db:
     container_name: musicology_db
     image: mysql:8
-    # env_file: .env
     restart: unless-stopped
     # command: 
     #   - --default-authentication-plugin=mysql_native_password
@@ -12,6 +11,7 @@ services:
       - "3306:3306"
     volumes:
       - ./.docker/mysql:/var/lib/mysql
+    # env_file: .env
     environment:
       MYSQL_DATABASE: ${DATABASE_NAME}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
@@ -24,7 +24,6 @@ services:
     container_name: musicology_api
     image: ${AWS_ACCOUNT_ID}.dkr.ecr.eu-central-1.amazonaws.com/${ECR_BREPO_NAME}:latest
     # image: repository/backend
-    env_file: .env
     restart: unless-stopped
     ports:
       - 8000
@@ -32,6 +31,24 @@ services:
       - mysql_db
     build:
       dockerfile: Dockerfile.BACKEND
+    # env_file: .env
+    environment:
+      AWS_ACCOUNT_ID: ${AWS_ACCOUNT_ID}
+      ECR_REGISTRY: ${ECR_REGISTRY}
+      ECR_BREPO_NAME: ${ECR_BREPO_NAME}
+      ECR_FREPO_NAME: ${ECR_FREPO_NAME}
+      DEEZER_EMAIL: ${DEEZER_EMAIL}
+      DEEZER_PASSWORD: ${DEEZER_PASSWORD}
+      SPOTIFY_API_URL: ${SPOTIFY_API_URL}
+      SPOTIFY_CLIENT_ID: ${SPOTIFY_CLIENT_ID}
+      SPOTIFY_CLIENT_SECRET: ${SPOTIFY_CLIENT_SECRET}
+      SPOTIFY_USER_ID: ${SPOTIFY_USER_ID}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_PORT: ${DATABASE_PORT}
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_NAME: ${DATABASE_NAME}
   frontend:
     container_name: musicology_pro
     image: ${AWS_ACCOUNT_ID}.dkr.ecr.eu-central-1.amazonaws.com/${ECR_FREPO_NAME}:latest

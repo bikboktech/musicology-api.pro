@@ -40,7 +40,8 @@ jobs:
           IMAGE_TAG: latest
           AWS_ACCOUNT_ID: ${{ vars.AWS_ACCOUNT_ID }}
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPO_NAME: ${{ vars.ECR_REPO_NAME }}
+          ECR_BREPO_NAME: ${{ vars.ECR_BREPO_NAME }}
+          ECR_FREPO_NAME: ${{ vars.ECR_FREPO_NAME }}
           DEEZER_EMAIL: ${{ secrets.DEEZER_EMAIL }}
           DEEZER_PASSWORD: ${{ secrets.DEEZER_PASSWORD }}
           SPOTIFY_API_URL: ${{ secrets.SPOTIFY_API_URL }}
