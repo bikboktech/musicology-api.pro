@@ -13,7 +13,7 @@ services:
       - ./.docker/mysql:/var/lib/mysql
     # env_file: .env
     environment:
-      MYSQL_DATABASE: ${DATABASE_NAME}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     healthcheck:
       test: '/usr/bin/mysql --user=${DATABASE_USER} --password=${MYSQL_ROOT_PASSWORD} --execute "SHOW DATABASES;"'
@@ -22,11 +22,11 @@ services:
       retries: 15
   backend:
     container_name: musicology_api
-    image: ${AWS_ACCOUNT_ID}.dkr.ecr.eu-central-1.amazonaws.com/${ECR_BREPO_NAME}:latest
+    # image: ${AWS_ACCOUNT_ID}.dkr.ecr.eu-central-1.amazonaws.com/${ECR_BREPO_NAME}:latest
     # image: repository/backend
     restart: unless-stopped
     ports:
-      - 8000
+      - '8000:8000'
     depends_on:
       - mysql_db
     build:
@@ -43,6 +43,7 @@ services:
       SPOTIFY_CLIENT_ID: ${SPOTIFY_CLIENT_ID}
       SPOTIFY_CLIENT_SECRET: ${SPOTIFY_CLIENT_SECRET}
       SPOTIFY_USER_ID: ${SPOTIFY_USER_ID}
+      SPOTIFY_REDIRECT_URI: ${SPOTIFY_REDIRECT_URI}
       JWT_SECRET_KEY: ${JWT_SECRET_KEY}
       DATABASE_HOST: ${DATABASE_HOST}
       DATABASE_PORT: ${DATABASE_PORT}
@@ -53,3 +54,5 @@ services:
     container_name: musicology_pro
     image: ${AWS_ACCOUNT_ID}.dkr.ecr.eu-central-1.amazonaws.com/${ECR_FREPO_NAME}:latest
     # image: repository/frontend
+    ports:
+      - "3000:3000"

@@ -18,12 +18,12 @@ import timelinesRoutes from "./source/timelines/routes.js";
 
 const app = express();
 
-// app.use(
-//   cors({
-//     origin: "http://localhost:3000",
-//     exposedHeaders: ["Content-Disposition"],
-//   })
-// );
+app.use(
+  cors({
+    origin: "http://52.59.106.70:3000",
+    exposedHeaders: ["Content-Disposition"],
+  })
+);
 
 app.use(cookieParser());
 
