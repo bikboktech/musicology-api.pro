@@ -5,16 +5,6 @@ on:
     branches:
       - feat/aws-ecs-cicd
 
-env:
-  AWS_REGION: eu-central-1                   # set this to your preferred AWS region, e.g. us-west-1
-  ECR_REPOSITORY: musicology.pro           # set this to your Amazon ECR repository name
-  # ECS_SERVICE: MY_ECS_SERVICE                 # set this to your Amazon ECS service name
-  ECS_CLUSTER: MusicologyCluster                 # set this to your Amazon ECS cluster name
-  ECS_TASK_DEFINITION: .github/fargate-task-definition.json # set this to the path to your Amazon ECS task definition
-                                               # file, e.g. .aws/task-definition.json
-  CONTAINER_NAME: backend           # set this to the name of the container in the
-                                               # containerDefinitions section of your task definition
-
 jobs:
   deploy-backend:
     name: Deploy Backend
@@ -28,7 +18,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
+          aws-region: eu-central-1
 
       - name: Login to Amazon ECR
         id: login-ecr
@@ -38,30 +28,13 @@ jobs:
         id: build-image
         env:
           IMAGE_TAG: latest
-          AWS_ACCOUNT_ID: ${{ vars.AWS_ACCOUNT_ID }}
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_BREPO_NAME: ${{ vars.ECR_BREPO_NAME }}
           ECR_FREPO_NAME: ${{ vars.ECR_FREPO_NAME }}
-          DEEZER_EMAIL: ${{ secrets.DEEZER_EMAIL }}
-          DEEZER_PASSWORD: ${{ secrets.DEEZER_PASSWORD }}
-          SPOTIFY_API_URL: ${{ secrets.SPOTIFY_API_URL }}
-          SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
-          SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
-          SPOTIFY_USER_ID: ${{ secrets.SPOTIFY_USER_ID }}
-          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
-          DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
-          DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
-          DATABASE_USER: ${{ secrets.DATABASE_USER }}
-          DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
-          DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
         run: |
-          # Build a docker container and
-          # push it to ECR so that it can
-          # be deployed to ECS.
-          # docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker compose build
-          # docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          docker compose push
+          # Build a docker container and push it to ECR so that it can be deployed to ECS.
+          bash .github/docker-build.sh
+          bash .github/docker-push.sh
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
       # - name: Fill in the new image ID in the Amazon ECS task definition
