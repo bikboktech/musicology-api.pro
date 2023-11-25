@@ -1,6 +1,9 @@
 .env
+.git
+.dockerignore
+.gitignore
+
 node_modules
-docker-build.sh
-docker-push.sh
-docker-compose.yml
 Dockerfile.*
+npm-debug.log
+README.md
