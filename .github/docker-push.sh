@@ -1,1 +1,1 @@
-docker push ${ECR_REGISTRY}/${ECR_FREPO_NAME}:${IMAGE_TAG}
+docker push ${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}

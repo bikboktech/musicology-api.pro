@@ -2,5 +2,5 @@
 
 docker build \
     --file Dockerfile.BACKEND \
-    --tag ${ECR_REGISTRY}/${ECR_BREPO_NAME}:${IMAGE_TAG} \
+    --tag ${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG} \
     .
