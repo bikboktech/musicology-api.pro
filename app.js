@@ -20,7 +20,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "http://18.197.131.10:3000",
     exposedHeaders: ["Content-Disposition"],
   })
 );
@@ -44,4 +44,5 @@ const port = 8000;
 
 app.listen(port, () => {
   console.log(`Listening on http://localhost:${port}`);
+  console.log(process.env)
 });

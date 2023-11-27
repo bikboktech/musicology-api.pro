@@ -1,6 +1,4 @@
 import knex from "../../common/data/database.js";
-import Exception from "../../common/utils/exceptions.js";
-import { getSpotifyPlaylist } from "../../common/utils/spotify.js";
 
 const PLAYLISTS_TABLE = "playlists";
 
@@ -20,22 +18,21 @@ const getPlaylistInfo = async (request, response) => {
   }
 
   if (!playlist) {
-    return new Exception(404, `Playlist not found`).handle(request, response);
+    response.status(200).json({});
+  } else {
+    const playlistOutput = await getSpotifyPlaylist(
+      playlist.spotify_playlist_id,
+      context.spotifyToken
+    );
+
+    response.status(200).json({
+      id: playlist.id,
+      spotifyPlaylistId: playlist.spotify_playlist_id,
+      name: playlist.name,
+      // playlistNotes: playlist.notes,
+      tracks: playlistOutput.tracks,
+    });
   }
-
-  const playlistOutput = await getSpotifyPlaylist(
-    playlist.spotify_playlist_id,
-    context.spotifyToken
-  );
-
-  response.status(200).json({
-    id: playlist.id,
-    spotifyPlaylistId: playlist.spotify_playlist_id,
-    name: playlist.name,
-    eventId: playlist.event_id,
-    // playlistNotes: playlist.notes,
-    tracks: playlistOutput.tracks,
-  });
 };
 
 export default getPlaylistInfo;
