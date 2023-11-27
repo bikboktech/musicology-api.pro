@@ -9,23 +9,19 @@ const CLIENT_ID = 3;
 const ARTIST_ID = 2;
 const ADMIN_ID = 1;
 
-const ValidEventDuration = [
-  "3hours",
-  "6hours",
-  "other"
-];
+const ValidEventDuration = ["3hours", "6hours", "other"];
 const SchemaCreateEventInfo = object({
-  clientId: number().positive(),
-  artistId: number().positive(),
-  eventTypeId: number().positive(),
-  eventDate: date(),
-  guestCount: number().positive(),
-  location: string(),
-  venueName: string(),
-  venueContact: string(),
+  clientId: number().positive().required(),
+  artistId: number().positive().required(),
+  eventTypeId: number().positive().required(),
+  eventDate: date().required(),
+  guestCount: number().positive().required(),
+  location: string().nullable(),
+  venueName: string().nullable(),
+  venueContact: string().nullable(),
   duration: string().oneOf(ValidEventDuration),
-  additionalArtists: string(),
-  additionalInfo: string(),
+  additionalArtists: string().nullable(),
+  additionalInfo: string().nullable(),
 });
 
 const validateRequestBody = async (request, response) => {

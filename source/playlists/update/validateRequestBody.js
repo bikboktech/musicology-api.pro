@@ -23,9 +23,7 @@ const validateRequestBody = async (request, response) => {
     );
   }
 
-  const event = await knex(EVENTS_TABLE)
-    .where("id", request.body.eventId)
-    .first();
+  const event = await knex(EVENTS_TABLE).where("id", playlist.event_id).first();
 
   if (!event) {
     return new Exception(404, `The selected event doesn't exist`).handle(

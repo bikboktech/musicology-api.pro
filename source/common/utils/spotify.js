@@ -46,6 +46,8 @@ const createSpotifyPlaylist = async (name, authenticationToken) => {
 
   const playlist = await playlistResponse.json();
 
+  console.log(playlist, "playlist");
+
   return playlist;
 };
 
@@ -77,7 +79,7 @@ const updateSpotifyPlaylistTracks = async (
   trackIds,
   authenticationToken
 ) => {
-  console.log(playlistId)
+  console.log(playlistId);
   const trackURIs = trackIds.map((trackId) => `spotify:track:${trackId}`);
 
   await fetch(`${process.env.SPOTIFY_API_URL}/playlists/${playlistId}/tracks`, {
@@ -95,7 +97,6 @@ const updateSpotifyPlaylistTracks = async (
 };
 
 const updateSpotifyPlaylist = async (playlistId, name, authenticationToken) => {
-  console.log(playlistId, name);
   await fetch(`${process.env.SPOTIFY_API_URL}/playlists/${playlistId}`, {
     method: "PUT",
     body: JSON.stringify({
@@ -148,11 +149,46 @@ const getSpotifyPlaylist = async (playlistId, spotifyToken) => {
   return playlistOutput;
 };
 
+const getSpotifyTrack = async (trackId, spotifyToken) => {
+  if (!trackId) return;
+
+  const spotifyResponse = await fetch(
+    `${process.env.SPOTIFY_API_URL}/tracks/${trackId}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + spotifyToken,
+      },
+    }
+  );
+
+  const track = await spotifyResponse.json();
+
+  let artists = "";
+
+  track.artists.forEach((artist, index) => {
+    if (index + 1 === track.artists.length) {
+      artists = artists.concat(artist.name);
+    } else {
+      artists = artists.concat(`${artist.name}, `);
+    }
+  });
+
+  return {
+    artists,
+    id: track.id,
+    imageUrl: track.album.images[track.album.images.length - 1].url,
+    name: track.name,
+    url: track.external_urls.spotify,
+  };
+};
+
 export {
   addTracksToSpotifyPlaylist,
   createSpotifyPlaylist,
   getSpotifyPlaylistId,
   getSpotifyPlaylist,
+  getSpotifyTrack,
   getAuthenticationToken,
   updateSpotifyPlaylist,
   updateSpotifyPlaylistTracks,
