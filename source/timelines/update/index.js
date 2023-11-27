@@ -1,4 +1,6 @@
+import { DateTime } from "luxon";
 import knex from "../../common/data/database.js";
+import { getSpotifyTrack } from "../../common/utils/spotify.js";
 import validateRequestBody from "./validateRequestBody.js";
 
 const TIMELINES_TABLE = "timelines";
@@ -6,22 +8,69 @@ const TIMELINES_TABLE = "timelines";
 const updateTimeline = async (request, response, next) => {
   const validatedRequestBody = await validateRequestBody(request, response);
 
-  if (validatedRequestBody) {
-    await knex(TIMELINES_TABLE)
-      .update({
-        time: validatedRequestBody.time,
-        description: validatedRequestBody.description,
-        // notes: validatedRequestBody.notes,
-      })
-      .where("id", request.params.timelineId);
+  const insertPromises = [];
+  const updatePromises = [];
 
-    response.status(200).json({
-      id: request.params.timelineId,
-      time: validatedRequestBody.time,
-      eventId: validatedRequestBody.eventId,
-      description: validatedRequestBody.description,
-      // notes: validatedRequestBody.notes,
+  if (validatedRequestBody) {
+    validatedRequestBody.timelines.forEach((timeline) => {
+      if (timeline.id) {
+        updatePromises.push(
+          knex(TIMELINES_TABLE)
+            .update({
+              event_id: validatedRequestBody.eventId,
+              time: timeline.time,
+              description: timeline.description,
+              spotify_track_id: timeline.trackId,
+              name: timeline.name,
+              // notes: validatedRequestBody.notes,
+            })
+            .where("id", timeline.id)
+        );
+      } else {
+        insertPromises.push(
+          knex(TIMELINES_TABLE).insert({
+            event_id: validatedRequestBody.eventId,
+            time: timeline.time,
+            description: timeline.description,
+            spotify_track_id: timeline.trackId,
+            name: timeline.name,
+            // notes: validatedRequestBody.notes,
+          })
+        );
+      }
     });
+
+    const existingTimeline = validatedRequestBody.timelines
+      .filter((timeline) => timeline.id)
+      .map((timeline) => timeline.id);
+
+    if (existingTimeline.length) {
+      await knex(TIMELINES_TABLE).del().whereNotIn("id", existingTimeline);
+    }
+
+    await Promise.all(insertPromises);
+    await Promise.all(updatePromises);
+
+    const timelines = await knex(TIMELINES_TABLE)
+      .where("event_id", validatedRequestBody.eventId)
+      .orderBy("time", "ASC");
+
+    const timelineOutput = [];
+
+    for (const timeline of timelines) {
+      timelineOutput.push({
+        id: timeline.id,
+        name: timeline.name,
+        time: timeline.time,
+        track: await getSpotifyTrack(
+          timeline.spotify_track_id,
+          request.context.spotifyToken
+        ),
+        instructions: timeline.instructions,
+      });
+    }
+
+    response.status(200).json();
   }
 };
 

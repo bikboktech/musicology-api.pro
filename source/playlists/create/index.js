@@ -13,11 +13,11 @@ const createPlaylist = async (request, response, next) => {
 
   if (validatedRequestBody) {
     const authenticationToken = await getAuthenticationToken();
-    
-    var playlist = createSpotifyPlaylist(
+
+    const playlist = await createSpotifyPlaylist(
       validatedRequestBody.playlistName,
       authenticationToken
-    )
+    );
 
     await addTracksToSpotifyPlaylist(
       playlist.id,
@@ -28,27 +28,16 @@ const createPlaylist = async (request, response, next) => {
     const [id] = await knex(PLAYLISTS_TABLE).insert({
       event_id: validatedRequestBody.eventId,
       spotify_playlist_id: playlist.id,
-      name: playlist.name,
+      name: validatedRequestBody.playlistName,
       // notes: validatedRequestBody.playlistNotes,
     });
 
-    playlist = await knex(PLAYLISTS_TABLE)
-      .select(
-        "playlists.*",
-        "events.event_name as eventName"
-      )
-      .where("playlists.id", id)
-      .join("events", "events.id", "=", "playlists.event_id")
-      .first();
-  
-
     response.status(203).json({
-      id: playlist.id,
-      eventName: playlist.eventName,
-      spotifyPlaylistId: playlist.spotify_playlist_id,
-      playlistName: playlist.name,
+      id: id,
+      spotifyPlaylistId: playlist.id,
+      eventId: validatedRequestBody.eventId,
+      playlistName: validatedRequestBody.playlistName,
       trackIds: validatedRequestBody.trackIds,
-      // playlistNotes: playlist.notes,
     });
   }
 };

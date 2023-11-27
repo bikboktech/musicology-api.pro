@@ -6,7 +6,7 @@ const PLAYLISTS_TABLE = "playlists";
 
 const getPlaylistInfo = async (request, response) => {
   const { context, params } = request;
-  console.log(params)
+
   let playlist;
 
   if (params.eventId) {
@@ -20,10 +20,7 @@ const getPlaylistInfo = async (request, response) => {
   }
 
   if (!playlist) {
-    return new Exception(404, `Playlist not found`).handle(
-      request,
-      response
-    )
+    return new Exception(404, `Playlist not found`).handle(request, response);
   }
 
   const playlistOutput = await getSpotifyPlaylist(
@@ -35,6 +32,7 @@ const getPlaylistInfo = async (request, response) => {
     id: playlist.id,
     spotifyPlaylistId: playlist.spotify_playlist_id,
     name: playlist.name,
+    eventId: playlist.event_id,
     // playlistNotes: playlist.notes,
     tracks: playlistOutput.tracks,
   });
