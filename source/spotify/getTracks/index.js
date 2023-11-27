@@ -2,11 +2,13 @@ import fetch from "node-fetch";
 
 const getTracks = async (req, res) => {
   const { context, query } = req;
+  console.log("req: ", req);
 
   let limit = query.limit ?? 50;
   let offset = query.offset ?? 0;
   let search = query.search ?? "";
 
+  console.log(`Spotify search URL: ${process.env.SPOTIFY_API_URL}/search?q=track:${search}&type=track,artist&limit=${limit}&offset=${offset}`);
   const spotifyResponse = await fetch(
     `${process.env.SPOTIFY_API_URL}/search?q=track:${search}&type=track,artist&limit=${limit}&offset=${offset}`,
     {
@@ -16,8 +18,11 @@ const getTracks = async (req, res) => {
       },
     }
   );
+  console.log("spotifyResponse: ", spotifyResponse);
 
   const { tracks } = await spotifyResponse.json();
+
+  console.log("tracks: ", tracks);
 
   const tracksOutput = tracks?.items.map((track) => {
     let artists = "";
