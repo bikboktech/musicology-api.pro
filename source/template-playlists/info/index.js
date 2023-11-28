@@ -1,5 +1,4 @@
 import knex from "../../common/data/database.js";
-import Exception from "../../common/utils/exceptions.js";
 import { getSpotifyPlaylist } from "../../common/utils/spotify.js";
 
 const TEMPLATE_PLAYLISTS_TABLE = "template_playlists";

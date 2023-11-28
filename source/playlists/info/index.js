@@ -1,4 +1,5 @@
 import knex from "../../common/data/database.js";
+import { getSpotifyPlaylist } from "../../common/utils/spotify.js";
 
 const PLAYLISTS_TABLE = "playlists";
 
