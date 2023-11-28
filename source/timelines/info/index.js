@@ -12,23 +12,23 @@ const getTimelineInfo = async (request, response) => {
   );
 
   if (!timelines) {
-    return new Exception(404, `Timeline not found`).handle(request, response);
+    response.status(200).json({});
+  } else {
+    const timelineOutput = await Promise.all(
+      timelines.map(async (timeline) => ({
+        id: timeline.id,
+        name: timeline.name,
+        time: timeline.time,
+        track: await getSpotifyTrack(
+          timeline.spotify_track_id,
+          request.context.spotifyToken
+        ),
+        instructions: timeline.instructions ?? "",
+      }))
+    );
+
+    response.status(200).json(timelineOutput);
   }
-
-  const timelineOutput = await Promise.all(
-    timelines.map(async (timeline) => ({
-      id: timeline.id,
-      name: timeline.name,
-      time: timeline.time,
-      track: await getSpotifyTrack(
-        timeline.spotify_track_id,
-        request.context.spotifyToken
-      ),
-      instructions: timeline.instructions ?? "",
-    }))
-  );
-
-  response.status(200).json(timelineOutput);
 };
 
 export default getTimelineInfo;

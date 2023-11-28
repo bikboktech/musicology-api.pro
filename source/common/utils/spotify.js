@@ -46,8 +46,6 @@ const createSpotifyPlaylist = async (name, authenticationToken) => {
 
   const playlist = await playlistResponse.json();
 
-  console.log(playlist, "playlist");
-
   return playlist;
 };
 
@@ -56,7 +54,6 @@ const addTracksToSpotifyPlaylist = async (
   trackIds,
   authenticationToken
 ) => {
-  console.log(playlistId);
   const trackURIs = trackIds.map((trackId) => `spotify:track:${trackId}`);
 
   await fetch(`${process.env.SPOTIFY_API_URL}/playlists/${playlistId}/tracks`, {
@@ -70,8 +67,6 @@ const addTracksToSpotifyPlaylist = async (
       Authorization: "Bearer " + authenticationToken,
     },
   }).catch((err) => console.log(err));
-
-  console.log("SUCCESS addTracksToSpotifyPlaylist");
 };
 
 const updateSpotifyPlaylistTracks = async (
@@ -79,7 +74,6 @@ const updateSpotifyPlaylistTracks = async (
   trackIds,
   authenticationToken
 ) => {
-  console.log(playlistId);
   const trackURIs = trackIds.map((trackId) => `spotify:track:${trackId}`);
 
   await fetch(`${process.env.SPOTIFY_API_URL}/playlists/${playlistId}/tracks`, {
@@ -92,8 +86,6 @@ const updateSpotifyPlaylistTracks = async (
       Authorization: "Bearer " + authenticationToken,
     },
   }).catch((err) => console.log(err));
-
-  console.log("SUCCESS updateSpotifyPlaylistTracks");
 };
 
 const updateSpotifyPlaylist = async (playlistId, name, authenticationToken) => {

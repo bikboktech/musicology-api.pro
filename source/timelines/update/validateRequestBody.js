@@ -18,7 +18,6 @@ const SchemaCreateTimelineInfo = object({
 });
 
 const validateRequestBody = async (request, response) => {
-  console.log(request.body, "aaaaaaaaaaaaaaaaaaaaaaaa");
   const event = await knex(EVENTS_TABLE)
     .where("id", request.body.eventId)
     .first();

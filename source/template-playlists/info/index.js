@@ -21,29 +21,27 @@ const getTemplatePlaylistInfo = async (request, response) => {
       "event_types.id"
     )
     .first();
+
   if (!playlist) {
-    return new Exception(404, `Template Playlist not found`).handle(
-      request,
-      response
+    response.status(200).json({});
+  } else {
+    const playlistOutput = await getSpotifyPlaylist(
+      playlist.spotify_playlist_id,
+      context.spotifyToken
     );
+
+    response.status(203).json({
+      id: playlist.id,
+      spotifyPlaylistId: playlist.spotify_playlist_id,
+      name: playlist.name,
+      // playlistNotes: playlist.notes,
+      eventType: {
+        id: playlist.eventTypeId,
+        name: playlist.eventTypeName,
+      },
+      tracks: playlistOutput.tracks,
+    });
   }
-
-  const playlistOutput = await getSpotifyPlaylist(
-    playlist.spotify_playlist_id,
-    context.spotifyToken
-  );
-
-  response.status(203).json({
-    id: playlist.id,
-    spotifyPlaylistId: playlist.spotify_playlist_id,
-    name: playlist.name,
-    // playlistNotes: playlist.notes,
-    eventType: {
-      id: playlist.eventTypeId,
-      name: playlist.eventTypeName,
-    },
-    tracks: playlistOutput.tracks,
-  });
 };
 
 export default getTemplatePlaylistInfo;
