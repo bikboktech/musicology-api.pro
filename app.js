@@ -20,7 +20,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "http://3.120.182.28:3000",
+    origin: "http://localhost:3000",
     exposedHeaders: ["Content-Disposition"],
   })
 );
