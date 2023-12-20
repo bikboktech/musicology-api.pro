@@ -17,7 +17,7 @@ const updateTimeline = async (request, response, next) => {
         updatePromises.push(
           knex(TIMELINES_TABLE)
             .update({
-              event_id: validatedRequestBody.eventId,
+              // event_id: validatedRequestBody.eventId,
               time: timeline.time,
               description: timeline.description,
               spotify_track_id: timeline.trackId,
@@ -29,7 +29,7 @@ const updateTimeline = async (request, response, next) => {
       } else {
         insertPromises.push(
           knex(TIMELINES_TABLE).insert({
-            event_id: validatedRequestBody.eventId,
+            // event_id: validatedRequestBody.eventId,
             time: timeline.time,
             description: timeline.description,
             spotify_track_id: timeline.trackId,
@@ -52,7 +52,7 @@ const updateTimeline = async (request, response, next) => {
     await Promise.all(updatePromises);
 
     const timelines = await knex(TIMELINES_TABLE)
-      .where("event_id", validatedRequestBody.eventId)
+      // .where("event_id", validatedRequestBody.eventId)
       .orderBy("time", "ASC");
 
     const timelineOutput = [];
