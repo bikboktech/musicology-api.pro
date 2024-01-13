@@ -8,7 +8,7 @@ exports.up = async (knex) => {
       table.varchar("account_full_name", 512);
       table.varchar("account_email", 256);
       table.date("event_date");
-      table.varchar("event_budget", 12);
+      table.varchar("event_budget", 512);
       table.varchar("event_duration", 12);
       table.varchar("event_location", 512);
       table.integer("event_guest_count");
