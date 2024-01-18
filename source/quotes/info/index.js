@@ -14,7 +14,7 @@ const getQuoteInfo = async (request, response) => {
       "event_types.name as eventTypeName"
     )
     .join("event_types", "quotes.event_type_id", "=", "event_types.id")
-    .join("accounts", "quotes.account_id", "=", "account.id")
+    .join("accounts", "quotes.account_id", "=", "accounts.id")
     .where("quotes.id", request.params.quoteId)
     .first();
 
@@ -32,7 +32,7 @@ const getQuoteInfo = async (request, response) => {
         fullName: quote.full_name,
         email: quote.email,
       },
-      active: quote.quote_active,
+      approved: !quote.quote_active,
       eventDate: DateTime.fromJSDate(quote.date).toFormat("yyyy LLL dd"),
       clientName: quote.account_full_name,
       guestCount: quote.event_guest_count,

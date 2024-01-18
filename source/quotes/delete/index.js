@@ -16,7 +16,7 @@ const deleteEvents = async (request, response, next) => {
         this.on("quotes.account_id", "=", "accounts.id");
         this.on("accounts.active", "=", 1);
       })
-      .whereIn("id", validatedRequestBody.ids);
+      .whereIn("quotes.id", validatedRequestBody.ids);
 
     const unverifiedAccountIds = unverifiedAccounts.map(
       (unverifiedAccount) => unverifiedAccount.account_id

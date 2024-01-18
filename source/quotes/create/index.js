@@ -18,12 +18,11 @@ const getAQuote = async (request, response) => {
 
     const [quoteID] = await knex(QUOTES_TABLE).insert({
       account_id: accountId,
-      event_budget: validatedRequestBody.eventBudget,
       event_date: validatedRequestBody.eventDate,
       event_type_id: validatedRequestBody.eventTypeId,
       event_location: validatedRequestBody.eventLocation,
       event_guest_count: validatedRequestBody.guestCount,
-      event_duration: validatedRequestBody.eventDuration,
+      event_budget: validatedRequestBody.eventBudget,
       marketing_type: validatedRequestBody.marketingType,
       quote_active: 1,
       extra_musician: validatedRequestBody.extraMusician,

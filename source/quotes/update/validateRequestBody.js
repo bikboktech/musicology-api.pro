@@ -1,11 +1,11 @@
-import { object, string, number, date } from "yup";
+import { object, bool } from "yup";
 import Exception from "../../common/utils/exceptions.js";
 import knex from "../../common/data/database.js";
 
 const QUOTES_TABLE = "quotes";
 
 const SchemaUpdateQuoteInfo = object({
-  approved: number().bool().required(),
+  approved: bool().required(),
 });
 
 const validateRequestBody = async (request, response) => {

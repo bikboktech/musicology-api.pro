@@ -1,5 +1,6 @@
 import knex from "../../common/data/database.js";
 import validateRequestBody from "./validateRequestBody.js";
+import { DateTime } from "luxon";
 import Exception from "../../common/utils/exceptions.js";
 
 const ACCOUNTS_TABLE = "accounts";
@@ -25,11 +26,11 @@ const updateQuote = async (request, response, next) => {
         "event_types.name as eventTypeName"
       )
       .join("event_types", "quotes.event_type_id", "=", "event_types.id")
-      .join("accounts", "quotes.account_id", "=", "account.id")
+      .join("accounts", "quotes.account_id", "=", "accounts.id")
       .where("quotes.id", request.params.quoteId)
       .first();
 
-    await knex(EVENTS_TABLE).insert({
+    const [eventId] = await knex(EVENTS_TABLE).insert({
       client_id: quote.account_id,
       event_name: `${quote.full_name} - ${quote.eventTypeName}`,
       event_type_id: quote.event_type_id,
@@ -67,6 +68,7 @@ const updateQuote = async (request, response, next) => {
       audioSupport: quote.audio_support,
       naturalApproachInteractions: quote.natural_approach_interactions,
       referencePlaylistLink: quote.reference_playlist_link,
+      eventId,
     });
   }
 };

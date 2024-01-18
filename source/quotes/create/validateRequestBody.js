@@ -1,4 +1,4 @@
-import { object, string, number, date } from "yup";
+import { object, string, number, date, bool } from "yup";
 import Exception from "../../common/utils/exceptions.js";
 import knex from "../../common/data/database.js";
 
