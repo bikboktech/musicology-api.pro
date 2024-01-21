@@ -8,6 +8,7 @@ import spotifyAuth from "./source/common/middlewares/spotifyAuth.js";
 dotenv.config();
 
 import accountRoutes from "./source/accounts/routes.js";
+import accountTypeRoutes from "./source/account-types/routes.js";
 import authRoutes from "./source/auth/routes.js";
 import eventsRoutes from "./source/events/routes.js";
 import playlistsRoutes from "./source/playlists/routes.js";
@@ -21,7 +22,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "http://3.120.182.28:3000",
+    origin: "*",
     exposedHeaders: ["Content-Disposition"],
   })
 );
@@ -33,6 +34,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(spotifyAuth);
 app.use("/", accountRoutes);
+app.use("/", accountTypeRoutes);
 app.use("/", authRoutes);
 app.use("/", eventsRoutes);
 app.use("/", playlistManagementRoutes);
