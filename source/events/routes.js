@@ -3,9 +3,6 @@ import express from "express";
 /* events routes dependencies */
 import getEventTypes from "./event-types/index.js";
 
-/** quotes related routes */
-import getAQuote from "./get-a-quote/index.js";
-
 /* events related routes */
 import createEvent from "./create/index.js";
 import updateEvent from "./update/index.js";
@@ -18,7 +15,6 @@ const SERVICE_NAME = "events";
 const router = express.Router();
 
 router.get(`/${SERVICE_NAME}/types`, getEventTypes);
-router.post(`/${SERVICE_NAME}/get-a-quote`, getAQuote);
 router.post(`/${SERVICE_NAME}`, createEvent);
 router.put(`/${SERVICE_NAME}/:eventId`, updateEvent);
 router.delete(`/${SERVICE_NAME}`, deleteEvents);

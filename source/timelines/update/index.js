@@ -44,9 +44,10 @@ const updateTimeline = async (request, response, next) => {
       .filter((timeline) => timeline.id)
       .map((timeline) => timeline.id);
 
-    if (existingTimeline.length) {
-      await knex(TIMELINES_TABLE).del().whereNotIn("id", existingTimeline);
-    }
+    await knex(TIMELINES_TABLE)
+      .del()
+      .where("event_id", validatedRequestBody.eventId)
+      .whereNotIn("id", existingTimeline);
 
     await Promise.all(insertPromises);
     await Promise.all(updatePromises);

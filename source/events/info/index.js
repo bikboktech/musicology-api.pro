@@ -14,7 +14,7 @@ const getEventInfo = async (request, response) => {
       "event_types.name as eventTypeName"
     )
     .join("accounts as client", "events.client_id", "=", "client.id")
-    .join("accounts as artist", "events.artist_id", "=", "artist.id")
+    .leftJoin("accounts as artist", "events.artist_id", "=", "artist.id")
     .join("event_types", "events.event_type_id", "=", "event_types.id")
     .where("events.id", request.params.eventId)
     .first();
