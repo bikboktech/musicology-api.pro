@@ -1,4 +1,4 @@
-var AWS = require("aws-sdk");
+import AWS from "aws-sdk";
 
 AWS.config.update({ region: "eu-central-1" });
 const awsSes = new AWS.SES({ apiVersion: "2010-12-01" });
