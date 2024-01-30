@@ -32,7 +32,7 @@ const router = express.Router();
  * @param {callback} middleware - Express middleware.
  */
 router.post(`/${SERVICE_NAME}/login`, login);
-router.post(`/${SERVICE_NAME}/passwordReset`, passwordReset);
-router.post(`/${SERVICE_NAME}/passwordReset/request`, passwordResetRequest);
+router.post(`/${SERVICE_NAME}/password-reset`, passwordReset);
+router.post(`/${SERVICE_NAME}/password-reset/request`, passwordResetRequest);
 
 export default router;

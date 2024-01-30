@@ -2,9 +2,9 @@
 
 POST: passwordReset/index.js
     - body: {email: string}
-    - **response**: RAW token
+    - **response**: RAW token (string)
 
 POST: passwordReset/request.js
     - body: {email: string}
-    - query: {}
-    - **response**: RAW token
+    - query: {token: string}
+    - **response**: 204 (No Content: Email sent)
