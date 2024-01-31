@@ -5,6 +5,8 @@
  */
 import express from "express";
 import login from "./login/index.js";
+import passwordReset from "./passwordReset/index.js";
+import passwordResetRequest from "./passwordReset/request.js";
 
 /**
  * Service Name
@@ -30,5 +32,7 @@ const router = express.Router();
  * @param {callback} middleware - Express middleware.
  */
 router.post(`/${SERVICE_NAME}/login`, login);
+router.post(`/${SERVICE_NAME}/password-reset`, passwordReset);
+router.post(`/${SERVICE_NAME}/password-reset/request`, passwordResetRequest);
 
 export default router;

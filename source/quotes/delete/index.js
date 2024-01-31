@@ -4,7 +4,7 @@ import validateRequestBody from "./validateRequestBody.js";
 const QUOTES_TABLE = "quotes";
 const ACCOUNTS_TABLE = "accounts";
 
-const deleteEvents = async (request, response, next) => {
+const deleteQuotes = async (request, response, next) => {
   const validatedRequestBody = await validateRequestBody(request, response);
 
   if (validatedRequestBody) {
@@ -28,4 +28,4 @@ const deleteEvents = async (request, response, next) => {
   response.status(204).end();
 };
 
-export default deleteEvents;
+export default deleteQuotes;
