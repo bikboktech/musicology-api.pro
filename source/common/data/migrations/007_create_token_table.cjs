@@ -1,5 +1,5 @@
 exports.up = async (knex) => {
-  await knex.schema.createTable("tokens", (table) => {
+  await knex.schema.createTable("reset_password_tokens", (table) => {
     table.integer("account_id").unsigned().notNullable();
     table.varchar("hash", 512).notNullable();
     table.integer("expiry_time").defaultTo(86400); // 24 hours
@@ -8,5 +8,5 @@ exports.up = async (knex) => {
 };
 
 exports.down = async (knex) => {
-  await knex.schema.dropTable('tokens');
+  await knex.schema.dropTable('reset_password_tokens');
 };

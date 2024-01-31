@@ -24,7 +24,7 @@ const getAQuote = async (request, response) => {
       event_guest_count: validatedRequestBody.guestCount,
       event_budget: validatedRequestBody.eventBudget,
       marketing_type: validatedRequestBody.marketingType,
-      quote_active: 1,
+      is_active: 1,
       extra_musician: validatedRequestBody.extraMusician,
       audio_support: validatedRequestBody.audioSupport,
       natural_approach_interactions:
