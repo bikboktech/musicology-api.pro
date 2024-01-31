@@ -5,7 +5,8 @@ import Exception from '../../common/utils/exceptions.js'
 import knex from '../../common/data/database.js';
 import sendEmail from '../../common/utils/email.js';
 
-const RESET_TOKENS_TABLE_NAME = "reset_tokens"
+const ACCOUNTS_TABLE_NAME = "accounts";
+const RESET_PASSWORD_TOKENS_TABLE_NAME = "reset_password_tokens"
 const tokenExpiryTime = 86400; // 24 hours in seconds
 const saltRounds = 12;
 
@@ -19,7 +20,7 @@ const passwordReset = async (request, response) => {
     ).handle(request, response);
   }
 
-  const user = await knex('accounts').where('email', email).first();
+  const user = await knex(ACCOUNTS_TABLE_NAME).where('email', email).first();
 
   if (!user){
     return new Exception(
@@ -44,17 +45,17 @@ const passwordReset = async (request, response) => {
 
 
 const createDbResetToken = async (user) => {
-  let token = await knex(RESET_TOKENS_TABLE_NAME).where('account_id', user.id);
+  let token = await knex(RESET_PASSWORD_TOKENS_TABLE_NAME).where('account_id', user.id);
   if (token) 
-      await knex(RESET_TOKENS_TABLE_NAME).where('account_id', user.id).del();
+      await knex(RESET_PASSWORD_TOKENS_TABLE_NAME).where('account_id', user.id).del();
   let resetToken = crypto.randomBytes(32).toString('hex');
   const hash = await bcrypt.hash(resetToken, saltRounds);
-  const [tokenId] = await knex(RESET_TOKENS_TABLE_NAME).insert({
+  const [tokenId] = await knex(RESET_PASSWORD_TOKENS_TABLE_NAME).insert({
       'account_id': user.id,
       'hash': hash,
       'expiry_time': tokenExpiryTime
   });
-  return await knex(RESET_TOKENS_TABLE_NAME).where('id', tokenId).first();
+  return await knex(RESET_PASSWORD_TOKENS_TABLE_NAME).where('id', tokenId).first();
 }
   
 export default passwordReset;

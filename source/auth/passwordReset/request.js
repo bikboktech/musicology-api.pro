@@ -3,6 +3,8 @@ import bcrypt from 'bcryptjs';
 import Exception from '../../common/utils/exceptions.js'
 import knex from '../../common/data/database.js';
 
+const ACCOUNTS_TABLE_NAME = "accounts";
+const RESET_PASSWORD_TOKENS_TABLE_NAME = "reset_password_tokens"
 
 const passwordResetRequest = async (request, response) => {
     const { email } = request.body;
@@ -15,7 +17,7 @@ const passwordResetRequest = async (request, response) => {
       ).handle(request, response);
     }
   
-    const user = await knex('accounts').where('email', email).first();
+    const user = await knex(ACCOUNTS_TABLE_NAME).where('email', email).first();
   
     if (!user){
       return new Exception(
@@ -24,7 +26,7 @@ const passwordResetRequest = async (request, response) => {
     }
   
     console.log("Login successful")
-    const token = await knex('tokens').where('account_id', user.id).first();
+    const token = await knex(RESET_PASSWORD_TOKENS_TABLE_NAME).where('account_id', user.id).first();
     const tokenMatches = await bcrypt.compare(resetToken, token.hash);
     // let resetToken = crypto.randomBytes(32).toString('hex');
     // const hash = await bcrypt.hash(resetToken, saltRounds);
