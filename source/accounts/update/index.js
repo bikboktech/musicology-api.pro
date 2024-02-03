@@ -1,4 +1,4 @@
-import bcrypt from 'bcryptjs';
+import bcrypt from "bcryptjs";
 import knex from "../../common/data/database.js";
 import validateRequestBody from "./validateRequestBody.js";
 
@@ -11,26 +11,30 @@ const updateAccount = async (request, response) => {
   if (validatedRequestBody) {
     let accountId;
     if (Object.keys(request.params).includes("accountId")) {
-      await knex(ACCOUNTS_TABLE).update({
-        // account_type_id: validatedRequestBody.accountTypeId,
-        full_name: validatedRequestBody.fullName,
-        password: await bcrypt.hash(validatedRequestBody.password, saltRounds),
-        email: validatedRequestBody.email,
-        active: validatedRequestBody.active
-      }).where("id", request.params.accountId);
+      await knex(ACCOUNTS_TABLE)
+        .update({
+          // account_type_id: validatedRequestBody.accountTypeId,
+          full_name: validatedRequestBody.fullName,
+          // password: bcrypt.hash(validatedRequestBody.password, saltRounds),
+          email: validatedRequestBody.email,
+          phone: validatedRequestBody.phone,
+          active: validatedRequestBody.active,
+        })
+        .where("id", request.params.accountId);
       accountId = request.params.accountId;
     } else {
       [accountId] = await knex(ACCOUNTS_TABLE).insert({
         account_type_id: validatedRequestBody.accountTypeId,
         full_name: validatedRequestBody.fullName,
-        password: await bcrypt.hash(validatedRequestBody.password, saltRounds),
+        // password: bcrypt.hash(validatedRequestBody.password, saltRounds),
         email: validatedRequestBody.email,
-        active: validatedRequestBody.active
+        active: validatedRequestBody.active,
+        phone: validatedRequestBody.phone,
       });
     }
 
     const account = await knex(ACCOUNTS_TABLE).where("id", accountId).first();
-    
+
     const accountType = await knex(ACCOUNT_TYPES_TABLE)
       .where("id", account.account_type_id)
       .first();
@@ -40,7 +44,7 @@ const updateAccount = async (request, response) => {
       fullName: account.full_name,
       email: account.email,
       active: account.active,
-      accountTypeName: accountType.name
+      accountTypeName: accountType.name,
     });
   }
 };

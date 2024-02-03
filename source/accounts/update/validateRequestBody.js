@@ -10,15 +10,15 @@ const SchemaCreateAccount = object({
   fullName: string().required(),
   email: string().required(),
   password: string()
-    .required("Please enter a password")
     .min(8, "Password must have at least 8 characters")
     .matches(/[0-9]/, "Your password must have at least 1 digit character")
     .matches(/[a-z]/, "Your password must have at least 1 lowercase character")
     .matches(/[A-Z]/, "Your password must have at least 1 uppercase character"),
+  phone: string().nullable(),
   confirmPassword: string()
     .nullable()
     .oneOf([ref("password")], "Passwords does not match"),
-  active: bool().required()
+  active: bool(),
 });
 
 const validateRequestBody = async (request, response) => {
@@ -27,10 +27,10 @@ const validateRequestBody = async (request, response) => {
     .first();
 
   if (!accountType) {
-    return new Exception(404, `The selected account type "${accountType}" doesn't exist`).handle(
-      request,
-      response
-    );
+    return new Exception(
+      404,
+      `The selected account type "${accountType}" doesn't exist`
+    ).handle(request, response);
   }
 
   try {
