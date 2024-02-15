@@ -32,7 +32,20 @@ const login = async (request, response) => {
     );
   }
 
-  const user = await knex("accounts").where("email", email).first();
+  const user = await knex("accounts")
+    .select(
+      "accounts.id",
+      "accounts.full_name",
+      "accounts.email",
+      "accounts.password",
+      "account_types.id as accountTypeId",
+      "account_types.name as accountTypeName"
+    )
+    .innerJoin("account_types", function () {
+      this.on("accounts.account_type_id", "=", "account_types.id");
+    })
+    .where("email", email)
+    .first();
 
   if (!user) {
     return new Exception(404, `User not found`).handle(request, response);
@@ -47,7 +60,18 @@ const login = async (request, response) => {
       response
     );
   }
-  const userAccessToken = await generateUserAccessToken(user);
+
+  const userData = {
+    id: user.id,
+    fullName: user.full_name,
+    email: user.email,
+    accountType: {
+      id: user.accountTypeId,
+      name: user.accountTypeName,
+    },
+  };
+
+  const userAccessToken = await generateUserAccessToken(userData);
 
   console.log("Generated JWT");
   response.status(200).json(userAccessToken);

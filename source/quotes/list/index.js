@@ -3,7 +3,13 @@ import knex from "../../common/data/database.js";
 
 const QUOTES_TABLE = "quotes";
 
+const CLIENT_ID = 3;
+
 const getQuoteList = async (request, response, next) => {
+  if (request.user.accountType.id === CLIENT_ID) {
+    throw new Error("Access denied");
+  }
+
   const query = knex(QUOTES_TABLE)
     .select("quotes.*", "accounts.full_name")
     .join("accounts", "quotes.account_id", "=", "accounts.id");

@@ -15,9 +15,15 @@ import getPlaylistData from "./getPlaylistData.js";
  * @param {*} response
  * @param {*} next
  */
+const CLIENT_ID = 3;
+
 const download = async (request, response, next) => {
   try {
     const { body, context } = request;
+
+    if (request.user.accountType.id === CLIENT_ID) {
+      throw new Error("Access denied");
+    }
 
     const archive = await downloadPlaylist(body.playlistLink);
 

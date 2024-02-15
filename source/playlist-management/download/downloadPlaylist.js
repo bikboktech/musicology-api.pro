@@ -3,7 +3,7 @@
  * @requires deemix
  * @requires deezer-js
  * @requires archiver
-*/
+ */
 import deemix from "deemix";
 import { Deezer } from "deezer-js";
 import archiver from "archiver";
@@ -36,14 +36,20 @@ const downloadPlaylist = async (playlistLink) => {
 
   spotify.setCredentials(SPOTIFY_CONFIG.clientId, SPOTIFY_CONFIG.clientSecret);
 
+  console.log(process.env.DEEZER_EMAIL, process.env.DEEZER_PASSWORD, "deezer");
+
   const deezerAccessToken = await deemix.utils.deezer.getAccessToken(
     process.env.DEEZER_EMAIL,
     process.env.DEEZER_PASSWORD
   );
 
+  console.log(deezerAccessToken, "deezerAccessToken");
+
   const arl = await deemix.utils.deezer.getArlFromAccessToken(
     deezerAccessToken
   );
+
+  console.log(arl, "arl");
 
   await dz.login_via_arl(arl);
 

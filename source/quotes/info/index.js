@@ -4,7 +4,13 @@ import knex from "../../common/data/database.js";
 
 const QUOTES_TABLE = "quotes";
 
+const CLIENT_ID = 3;
+
 const getQuoteInfo = async (request, response) => {
+  if (request.user.accountType.id === CLIENT_ID) {
+    throw new Error("Access denied");
+  }
+
   const quote = await knex(QUOTES_TABLE)
     .select(
       "quotes.*",

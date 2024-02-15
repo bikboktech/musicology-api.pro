@@ -3,6 +3,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import express from "express";
 
+import authMiddleware from "./source/common/middlewares/authMiddleware.js";
 import spotifyAuth from "./source/common/middlewares/spotifyAuth.js";
 
 dotenv.config();
@@ -32,6 +33,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use(authMiddleware);
 app.use(spotifyAuth);
 app.use("/", accountRoutes);
 app.use("/", accountTypeRoutes);
