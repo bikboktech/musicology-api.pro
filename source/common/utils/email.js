@@ -6,6 +6,10 @@ const awsSes = new AWS.SES({ apiVersion: "2010-12-01" });
 
 const sendEmail = (toAddresses, fromAddress, subject, textMessage, htmlMessage) => {
   var Message = {
+    Subject: {
+      Charset: "UTF-8",
+      Data: subject,
+    },
     Body: {}
   }
   if (htmlMessage) {

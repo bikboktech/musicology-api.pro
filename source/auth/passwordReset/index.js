@@ -32,7 +32,7 @@ const passwordReset = async (request, response) => {
   const resetToken = await createDbResetToken(user);
   const emailTextMessage = `http://localhost:8080/accounts/password-reset/request?resetToken=${resetToken.hash}`
 
-  sendEmail([email], '', 'Password reset', emailTextMessage, null)
+  sendEmail([email], 'andhrelja@hotmail.com', 'musicology.pro - Password Reset Request', emailTextMessage, null)
     .then(function (data) {
       console.log(data.MessageId);
       response.status(204).send("OK");
