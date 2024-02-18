@@ -50,5 +50,5 @@ const port = 8000;
 
 app.listen(port, () => {
   console.log(`Listening on http://localhost:${port}`);
-  console.log(process.env);
+  // console.log(process.env);
 });

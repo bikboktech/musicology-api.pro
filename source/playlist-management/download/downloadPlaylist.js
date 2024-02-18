@@ -36,7 +36,7 @@ const downloadPlaylist = async (playlistLink) => {
 
   spotify.setCredentials(SPOTIFY_CONFIG.clientId, SPOTIFY_CONFIG.clientSecret);
 
-  console.log(process.env.DEEZER_EMAIL, process.env.DEEZER_PASSWORD, "deezer");
+  // console.log(process.env.DEEZER_EMAIL, process.env.DEEZER_PASSWORD, "deezer");
 
   const deezerAccessToken = await deemix.utils.deezer.getAccessToken(
     process.env.DEEZER_EMAIL,
