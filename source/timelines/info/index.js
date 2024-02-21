@@ -14,8 +14,10 @@ const getTimelineInfo = async (request, response) => {
   if (!timelines) {
     response.status(200).json({});
   } else {
-    const timelineOutput = await Promise.all(
-      timelines.map(async (timeline) => ({
+    const timelineOutput = [];
+
+    for (const timeline of timelines) {
+      timelineOutput.push({
         id: timeline.id,
         name: timeline.name,
         time: timeline.time,
@@ -23,9 +25,9 @@ const getTimelineInfo = async (request, response) => {
           timeline.spotify_track_id,
           request.context.spotifyToken
         ),
-        instructions: timeline.instructions ?? "",
-      }))
-    );
+        instructions: timeline.instructions,
+      });
+    }
 
     response.status(200).json(timelineOutput);
   }

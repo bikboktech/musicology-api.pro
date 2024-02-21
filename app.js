@@ -11,6 +11,7 @@ dotenv.config();
 import accountRoutes from "./source/accounts/routes.js";
 import accountTypeRoutes from "./source/account-types/routes.js";
 import authRoutes from "./source/auth/routes.js";
+import contractRoutes from "./source/contracts/routes.js";
 import eventsRoutes from "./source/events/routes.js";
 import playlistsRoutes from "./source/playlists/routes.js";
 import playlistManagementRoutes from "./source/playlist-management/routes.js";
@@ -38,6 +39,7 @@ app.use(spotifyAuth);
 app.use("/", accountRoutes);
 app.use("/", accountTypeRoutes);
 app.use("/", authRoutes);
+app.use("/", contractRoutes);
 app.use("/", eventsRoutes);
 app.use("/", playlistManagementRoutes);
 app.use("/", playlistsRoutes);
@@ -50,5 +52,4 @@ const port = 8000;
 
 app.listen(port, () => {
   console.log(`Listening on http://localhost:${port}`);
-  console.log(process.env);
 });

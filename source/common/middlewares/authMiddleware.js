@@ -12,7 +12,9 @@ const authMiddleware = (request, response, next) => {
 
       if (token && token !== "undefined" && token !== "false") {
         try {
-          const user = jwt.verify(token, process.env.JWT_SECRET_KEY);
+          const user = jwt.verify(token, process.env.JWT_SECRET_KEY, {
+            ignoreExpiration: true,
+          });
 
           request.user = { ...user, token };
         } catch (e) {

@@ -54,6 +54,11 @@ const getEventInfo = async (request, response) => {
       venueName: event.venue_name,
       venueContact: event.venue_contact,
       address: event.address,
+      contract: {
+        id: event.contract_id,
+        url: event.contract_url,
+        signed: event.contract_signed,
+      },
     });
   }
 };
