@@ -8,5 +8,5 @@ exports.up = async (knex) => {
 };
 
 exports.down = async (knex) => {
-  await knex.schema.dropTable('tokens');
+  await knex.schema.dropTable('reset_tokens');
 };

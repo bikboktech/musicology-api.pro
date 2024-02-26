@@ -14,8 +14,6 @@ const getAccountInfo = async (request, response, next) => {
     )
     .first();
 
-  console.log(account);
-
   response.status(200).json({
     id: account.id,
     fullName: account.full_name,
