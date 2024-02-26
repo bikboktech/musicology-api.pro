@@ -1,10 +1,13 @@
 import AWS from "aws-sdk";
 
-AWS.config.update({ region: "eu-central-1" });
+AWS.config.update({ 
+  region: "eu-central-1",
+  credentials: new AWS.SharedIniFileCredentials({ profile: "ecr-upload-user" })
+});
 const awsSes = new AWS.SES({ apiVersion: "2010-12-01" });
 
 
-const sendEmail = (toAddresses, fromAddress, subject, textMessage, htmlMessage) => {
+const sendEmail = (fromAddress, toAddresses, subject, textMessage, htmlMessage) => {
   var Message = {
     Subject: {
       Charset: "UTF-8",

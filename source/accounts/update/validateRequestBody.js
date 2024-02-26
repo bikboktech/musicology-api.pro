@@ -21,6 +21,11 @@ const SchemaCreateAccount = object({
   active: bool(),
 });
 
+const SchemaUpdatePassword = object({
+  accountId: number().required(),
+  password: string().required(),
+});
+
 const validateRequestBody = async (request, response) => {
   const accountType = await knex(ACCOUNT_TYPES_TABLE)
     .where("id", request.body.accountTypeId)
@@ -39,5 +44,13 @@ const validateRequestBody = async (request, response) => {
     return new Exception(400, err.toString()).handle(request, response);
   }
 };
+
+const validateUpdatePassword = async (request, response) => {
+  try {
+    return await SchemaUpdatePassword.validate(request.body);
+  } catch (err) {
+    return new Exception(400, err.toString()).handle(request, response);
+  }
+}
 
 export default validateRequestBody;

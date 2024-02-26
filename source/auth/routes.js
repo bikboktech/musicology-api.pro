@@ -33,6 +33,6 @@ const router = express.Router();
  */
 router.post(`/${SERVICE_NAME}/login`, login);
 router.post(`/${SERVICE_NAME}/password-reset`, passwordReset);
-router.post(`/${SERVICE_NAME}/password-reset/request`, passwordResetRequest);
+router.get(`/${SERVICE_NAME}/password-reset/request`, passwordResetRequest);
 
 export default router;
