@@ -4,38 +4,42 @@ import Exception from '../../common/utils/exceptions.js'
 import knex from '../../common/data/database.js';
 
 const ACCOUNTS_TABLE_NAME = "accounts";
-const RESET_PASSWORD_TOKENS_TABLE_NAME = "reset_password_tokens"
+const RESET_TOKENS_TABLE_NAME = "reset_tokens"
 
 const passwordResetRequest = async (request, response) => {
-    const { email } = request.body;
-    const { resetToken } = request.query;
-    const isValidEmail = /\S+@\S+\.\S+/.test(email);
+    const { token } = request.query;
+
+    const resetTokenUser = await knex(ACCOUNTS_TABLE_NAME)
+      .select(
+        `${ACCOUNTS_TABLE_NAME}.id as id`,
+        `${ACCOUNTS_TABLE_NAME}.email as email`,
+        `${ACCOUNTS_TABLE_NAME}.password as password`,
+        `${RESET_TOKENS_TABLE_NAME}.token as token`,
+        `${RESET_TOKENS_TABLE_NAME}.hash as hash`,
+        `${RESET_TOKENS_TABLE_NAME}.expiry_time as expiry_time`,
+        `${RESET_TOKENS_TABLE_NAME}.created_at as created_at`)
+      .join(
+        RESET_TOKENS_TABLE_NAME, 
+        `${ACCOUNTS_TABLE_NAME}.id`,
+        '=',
+        `${RESET_TOKENS_TABLE_NAME}.account_id`)
+      .where(`${RESET_TOKENS_TABLE_NAME}.token`, token)
+      .first();
   
-    if (!isValidEmail) {
-      return new Exception(
-        406, `Please provide a valid email`
-      ).handle(request, response);
-    }
-  
-    const user = await knex(ACCOUNTS_TABLE_NAME).where('email', email).first();
-  
-    if (!user){
+    if (!resetTokenUser){
       return new Exception(
         404, `User not found`
       ).handle(request, response);
     }
   
-    console.log("Login successful")
-    const token = await knex(RESET_PASSWORD_TOKENS_TABLE_NAME).where('account_id', user.id).first();
-    const tokenMatches = await bcrypt.compare(resetToken, token.hash);
-    // let resetToken = crypto.randomBytes(32).toString('hex');
-    // const hash = await bcrypt.hash(resetToken, saltRounds);
+    console.log("User found")
+    let hash = `${resetTokenUser.email}:${resetTokenUser.password}&token=${token}`;
+    const tokenMatches = await bcrypt.compare(hash, resetTokenUser.hash);
     if (!tokenMatches) {
-        return new Exception(
-          406, `The provided token is invalid`
-        ).handle(request, response);
+      return new Exception(
+        406, `The provided token is invalid`
+      ).handle(request, response);
     }
-
     response.status(200).end();
   }
   
