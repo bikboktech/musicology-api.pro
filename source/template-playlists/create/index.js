@@ -27,7 +27,7 @@ const createTemplatePlaylist = async (request, response, next) => {
 
     const [id] = await knex(TEMPLATE_PLAYLISTS_TABLE).insert({
       event_type_id: validatedRequestBody.eventTypeId,
-      spotify_playlist_id: validatedRequestBody.spotifyPlaylistId,
+      spotify_playlist_id: playlist.id,
       name: validatedRequestBody.playlistName,
       // notes: validatedRequestBody.playlistNotes,
       // created_by: validatedRequestBody.createdBy,
