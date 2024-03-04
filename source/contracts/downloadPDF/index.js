@@ -3,7 +3,7 @@ import fetch from "node-fetch";
 
 const EVENTS_TABLE = "events";
 
-const downloadContractPDF = async (request, response) => {
+const downloadContractPDF = async (request, response, next) => {
   try {
     const pdfResponse = await fetch(
       `https://www.signwell.com/api/v1/documents/${request.params.contractId}/completed_pdf`,
@@ -43,6 +43,8 @@ const downloadContractPDF = async (request, response) => {
     }
   } catch (error) {
     console.error("Failed to send document for signing:", error);
+
+    next(error);
   }
 
   // 47631eff-9aaa-48de-bd42-4b9b401d035f

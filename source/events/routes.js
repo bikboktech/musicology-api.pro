@@ -8,6 +8,7 @@ import createEvent from "./create/index.js";
 import updateEvent from "./update/index.js";
 import deleteEvents from "./delete/index.js";
 import getEventList from "./list/index.js";
+import getUpcomingEventsList from "./upcoming/index.js";
 import getEventInfo from "./info/index.js";
 
 const SERVICE_NAME = "events";
@@ -19,6 +20,7 @@ router.post(`/${SERVICE_NAME}`, createEvent);
 router.put(`/${SERVICE_NAME}/:eventId`, updateEvent);
 router.delete(`/${SERVICE_NAME}`, deleteEvents);
 router.get(`/${SERVICE_NAME}`, getEventList);
+router.get(`/${SERVICE_NAME}/upcoming`, getUpcomingEventsList);
 router.get(`/${SERVICE_NAME}/:eventId`, getEventInfo);
 
 export default router;

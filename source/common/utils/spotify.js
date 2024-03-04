@@ -133,6 +133,7 @@ const getSpotifyPlaylist = async (playlistId, spotifyToken) => {
         imageUrl:
           item.track.album.images[item.track.album.images.length - 1].url,
         name: item.track.name,
+        url: item.track.external_urls.spotify,
       };
     }),
     // url: playlist.external_urls.spotify,

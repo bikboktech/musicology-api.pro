@@ -17,14 +17,16 @@ const getTimelineInfo = async (request, response) => {
     const timelineOutput = [];
 
     for (const timeline of timelines) {
+      const track = await getSpotifyTrack(
+        timeline.spotify_track_id,
+        request.context.spotifyToken
+      );
+
       timelineOutput.push({
         id: timeline.id,
         name: timeline.name,
         time: timeline.time,
-        track: await getSpotifyTrack(
-          timeline.spotify_track_id,
-          request.context.spotifyToken
-        ),
+        track,
         instructions: timeline.instructions,
       });
     }
