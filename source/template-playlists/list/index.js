@@ -46,6 +46,15 @@ const getTemplatePlaylistList = async (request, response, next) => {
       query.offset(request.query.offset);
     }
 
+    if (request.query.eventTypeId) {
+      query.where(
+        "template_playlists.event_type_id",
+        "=",
+        request.query.eventTypeId
+      );
+      query.orWhereNull("template_playlists.event_type_id");
+    }
+
     const playlists = await query;
 
     response.status(200).json({

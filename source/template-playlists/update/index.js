@@ -16,6 +16,8 @@ const updateTemplatePlaylist = async (request, response, next) => {
     if (validatedRequestBody) {
       const authenticationToken = await getAuthenticationToken();
 
+      console.log(validatedRequestBody, "validatedRequestBody");
+
       await updateSpotifyPlaylist(
         validatedRequestBody.spotifyPlaylistId,
         validatedRequestBody.playlistName,
@@ -33,6 +35,7 @@ const updateTemplatePlaylist = async (request, response, next) => {
           event_id: validatedRequestBody.eventId,
           spotify_playlist_id: validatedRequestBody.spotifyPlaylistId,
           name: validatedRequestBody.playlistName,
+          event_type_id: validatedRequestBody.eventTypeId,
           // notes: validatedRequestBody.playlistNotes,
           // updated_by: validatedRequestBody.updatedBy,
           updated_at: knex.fn.now(6),
@@ -67,6 +70,7 @@ const updateTemplatePlaylist = async (request, response, next) => {
       });
     }
   } catch (err) {
+    console.log(err, "err");
     next(err);
   }
 };
