@@ -16,8 +16,6 @@ const updateTemplatePlaylist = async (request, response, next) => {
     if (validatedRequestBody) {
       const authenticationToken = await getAuthenticationToken();
 
-      console.log(validatedRequestBody, "validatedRequestBody");
-
       await updateSpotifyPlaylist(
         validatedRequestBody.spotifyPlaylistId,
         validatedRequestBody.playlistName,
