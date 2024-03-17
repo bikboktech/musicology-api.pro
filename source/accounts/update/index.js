@@ -1,4 +1,5 @@
 import bcrypt from "bcryptjs";
+import crypto from "crypto";
 import knex from "../../common/data/database.js";
 import validateRequestBody from "./validateRequestBody.js";
 
@@ -23,10 +24,12 @@ const updateAccount = async (request, response) => {
         .where("id", request.params.accountId);
       accountId = request.params.accountId;
     } else {
+      const tmpPassword = crypto.randomBytes(32).toString('hex');
+      
       [accountId] = await knex(ACCOUNTS_TABLE).insert({
         account_type_id: validatedRequestBody.accountTypeId,
         full_name: validatedRequestBody.fullName,
-        // password: bcrypt.hash(validatedRequestBody.password, saltRounds),
+        password: await bcrypt.hash(tmpPassword, saltRounds),
         email: validatedRequestBody.email,
         active: validatedRequestBody.active,
         phone: validatedRequestBody.phone,
