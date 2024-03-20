@@ -13,6 +13,7 @@ const updateAccount = async (request, response) => {
   if (validatedRequestBody) {
     let accountId;
     if (Object.keys(request.params).includes("accountId")) {
+      const existingAccount = await knex(ACCOUNTS_TABLE).where("id", request.params.accountId).first();
       await knex(ACCOUNTS_TABLE)
         .update({
           // account_type_id: validatedRequestBody.accountTypeId,
@@ -23,7 +24,11 @@ const updateAccount = async (request, response) => {
           active: validatedRequestBody.active,
         })
         .where("id", request.params.accountId);
+      
       accountId = request.params.accountId;
+      if (existingAccount.active == 0 && validatedRequestBody.active == 1) {
+        await notifyAccountCreated(request, response, accountId);
+      }
     } else {
       const tmpPassword = crypto.randomBytes(32).toString('hex');
       
