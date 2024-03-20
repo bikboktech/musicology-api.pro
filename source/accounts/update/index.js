@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import knex from "../../common/data/database.js";
+import notifyAccountCreated from "./utils.js";
 import validateRequestBody from "./validateRequestBody.js";
 
 const ACCOUNTS_TABLE = "accounts";
@@ -34,6 +35,10 @@ const updateAccount = async (request, response) => {
         active: validatedRequestBody.active,
         phone: validatedRequestBody.phone,
       });
+
+      if (validatedRequestBody.active) {
+        await notifyAccountCreated(request, response, accountId);
+      }
     }
 
     const account = await knex(ACCOUNTS_TABLE).where("id", accountId).first();
