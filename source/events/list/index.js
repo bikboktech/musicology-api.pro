@@ -62,7 +62,7 @@ const getEventList = async (request, response, next) => {
         eventName: event.event_name,
         eventType: event.eventTypeName,
         client: event.clientFullName,
-        eventDate: DateTime.fromJSDate(event.date).toFormat("yyyy LLL dd"),
+        eventDate: DateTime.fromJSDate(event.date).toFormat("dd/MM/yyyy"),
         artist: event.artistFullName,
         location: event.location,
       })),

@@ -48,12 +48,10 @@ const getQuoteList = async (request, response, next) => {
       data: quotes.map((quote) => ({
         id: quote.id,
         clientName: quote.full_name,
-        eventDate: DateTime.fromJSDate(quote.event_date).toFormat(
-          "yyyy LLL dd"
-        ),
+        eventDate: DateTime.fromJSDate(quote.event_date).toFormat("dd/MM/yyyy"),
         location: quote.event_location,
         budget: quote.event_budget,
-        approved: !quote.quote_active,
+        approved: !quote.is_active,
       })),
       count: eventCount[0].count,
     });

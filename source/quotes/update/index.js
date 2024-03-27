@@ -1,7 +1,7 @@
 import knex from "../../common/data/database.js";
+import createContract from "../../common/utils/createContract.js";
 import validateRequestBody from "./validateRequestBody.js";
 import { DateTime } from "luxon";
-import Exception from "../../common/utils/exceptions.js";
 
 const ACCOUNTS_TABLE = "accounts";
 const QUOTES_TABLE = "quotes";
@@ -14,7 +14,7 @@ const updateQuote = async (request, response, next) => {
     if (validatedRequestBody) {
       await knex(QUOTES_TABLE)
         .update({
-          quote_active: 0,
+          is_active: 0,
         })
         .where("id", request.params.quoteId);
 
@@ -40,6 +40,22 @@ const updateQuote = async (request, response, next) => {
         location: quote.event_location,
       });
 
+      const contract = await createContract(
+        eventId,
+        quote.full_name,
+        quote.eventTypeName,
+        quote.email
+      );
+
+      if (contract) {
+        await knex(EVENTS_TABLE)
+          .update({
+            contract_id: contract.id,
+            contract_url: contract.recipients[0].embedded_signing_url,
+          })
+          .where("id", eventId);
+      }
+
       await knex(ACCOUNTS_TABLE)
         .update({
           active: 1,
@@ -57,8 +73,8 @@ const updateQuote = async (request, response, next) => {
           fullName: quote.full_name,
           email: quote.email,
         },
-        active: quote.quote_active,
-        eventDate: DateTime.fromJSDate(quote.date).toFormat("yyyy LLL dd"),
+        active: quote.is_active,
+        eventDate: DateTime.fromJSDate(quote.event_date).toFormat("dd/MM/yyyy"),
         clientName: quote.account_full_name,
         guestCount: quote.event_guest_count,
         eventLocation: quote.event_location,

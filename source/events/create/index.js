@@ -1,10 +1,12 @@
+import { DateTime } from "luxon";
 import knex from "../../common/data/database.js";
 import validateRequestBody from "./validateRequestBody.js";
 import fetch from "node-fetch";
+import createContract from "../../common/utils/createContract.js";
 
 const EVENTS_TABLE = "events";
 
-const TEMPLATE_ID = "494b913f-a08a-4b57-9af0-b3c4eae352f8";
+const TEMPLATE_ID = "0f9c2897-2e3a-4f97-b529-383e94a018cb";
 
 const createEvent = async (request, response, next) => {
   try {
@@ -40,65 +42,20 @@ const createEvent = async (request, response, next) => {
         .where("events.id", id)
         .first();
 
-      const requestData = {
-        name: `${event.clientFullName}_${event.eventTypeName}_contract`,
-        test_mode: true,
-        embedded_signing: true,
-        template_id: TEMPLATE_ID,
-        recipients: [
-          {
-            id,
-            email: event.clientEmail,
-            placeholder_name: "client",
-          },
-        ],
-        template_fields: [
-          {
-            api_id: "clientNameCRO",
-            value: event.clientFullName,
-          },
-          {
-            api_id: "clientNameENG",
-            value: event.clientFullName,
-          },
-          {
-            api_id: "clientIDCRO",
-            value: "12345",
-          },
-          {
-            api_id: "clientIDENG",
-            value: "12345",
-          },
-        ],
-      };
+      const contract = await createContract(
+        event.id,
+        event.clientFullName,
+        event.eventTypeName,
+        event.clientEmail
+      );
 
-      const config = {
-        method: "POST",
-        headers: {
-          "X-Api-Key": process.env.SIGN_WELL_TOKEN,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestData),
-      };
-
-      let contract = {};
-
-      try {
-        const response = await fetch(
-          `https://www.signwell.com/api/v1/document_templates/documents`,
-          config
-        );
-
-        contract = await response.json();
-
+      if (contract) {
         await knex(EVENTS_TABLE)
           .update({
             contract_id: contract.id,
             contract_url: contract.recipients[0].embedded_signing_url,
           })
           .where("id", id);
-      } catch (error) {
-        console.error("Failed to send document for signing:", error);
       }
 
       response.status(201).json({
@@ -113,7 +70,7 @@ const createEvent = async (request, response, next) => {
           id: event.client_id,
           fullName: event.clientFullName,
         },
-        eventDate: event.date,
+        eventDate: DateTime.fromJSDate(event.date).toFormat("dd/MM/yyyy"),
         guestCount: event.guest_count,
         artist: {
           id: event.artist_id,

@@ -25,6 +25,7 @@ const getAQuote = async (request, response, next) => {
         event_guest_count: validatedRequestBody.guestCount,
         event_budget: validatedRequestBody.eventBudget,
         marketing_type: validatedRequestBody.marketingType,
+        hours_of_entertainment: validatedRequestBody.hoursOfEntertainment,
         is_active: 1,
         extra_musician: validatedRequestBody.extraMusician,
         audio_support: validatedRequestBody.audioSupport,

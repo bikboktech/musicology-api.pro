@@ -1,6 +1,6 @@
 import knex from "../../common/data/database.js";
 import validateRequestBody from "./validateRequestBody.js";
-import Exception from "../../common/utils/exceptions.js";
+import { DateTime } from "luxon";
 
 const EVENTS_TABLE = "events";
 
@@ -52,7 +52,7 @@ const updateEvent = async (request, response, next) => {
           id: event.client_id,
           fullName: event.clientFullName,
         },
-        eventDate: event.date,
+        eventDate: DateTime.fromJSDate(event.date).toFormat("dd/MM/yyyy"),
         guestCount: event.guest_count,
         artist: {
           id: event.artist_id,

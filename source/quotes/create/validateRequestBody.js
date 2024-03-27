@@ -14,6 +14,7 @@ const SchemaCreateQuote = object({
   eventDuration: string(),
   eventBudget: string(),
   marketingType: string(),
+  hoursOfEntertainment: string(),
   extraMusician: string(),
   audioSupport: bool(),
   naturalApproachInteractions: string().required(),
