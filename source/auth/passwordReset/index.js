@@ -8,7 +8,7 @@ const fromEmail = "info@musicology.pro";
 const subject = "Password Reset Request at musicology.pro";
 
 const passwordReset = async (request, response) => {
-  const { email } = request.body;
+  const { email } = request.user.email;
 
   const user = await knex(ACCOUNTS_TABLE_NAME).where("email", email).first();
 
@@ -20,8 +20,8 @@ const passwordReset = async (request, response) => {
   const token = await createResetToken(user);
   const textMessage = null;
   const htmlMessage = `<p>You have requested a password reset for your musicology.pro account.</p><br>
-  <p>Click <a href="http://localhost:8000/accounts/password-reset/request?token=${token}">
-  http://localhost:8000/accounts/password-reset/request?token=${token}
+  <p>Click <a href="http://localhost:8000/auth/password-reset/request?token=${token}">
+  http://localhost:8000/auth/password-reset/request?token=${token}
   </a> to reset your password.</p>`;
 
   sendEmail(fromEmail, [email], subject, textMessage, htmlMessage)

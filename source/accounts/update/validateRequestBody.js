@@ -27,30 +27,28 @@ const SchemaUpdatePassword = object({
 });
 
 const validateRequestBody = async (request, response) => {
-  const accountType = await knex(ACCOUNT_TYPES_TABLE)
-    .where("id", request.body.accountTypeId)
-    .first();
+  const accountTypeId = request.body.accountTypeId;
+  if (accountTypeId !== undefined) {
+    const accountType = await knex(ACCOUNT_TYPES_TABLE)
+      .where("id", accountTypeId)
+      .first();
 
-  if (!accountType) {
-    return new Exception(
-      404,
-      `The selected account type "${accountType}" doesn't exist`
-    ).handle(request, response);
+    if (!accountType) {
+      return new Exception(
+        404,
+        `The selected account type "${accountType}" doesn't exist`
+      ).handle(request, response);
+    }
   }
 
   try {
-    return await SchemaCreateAccount.validate(request.body);
+    if (accountTypeId !== undefined)
+      return await SchemaCreateAccount.validate(request.body);
+    else
+      return await SchemaUpdatePassword.validate({...request.body, ...request.params});
   } catch (err) {
     return new Exception(400, err.toString()).handle(request, response);
   }
 };
-
-const validateUpdatePassword = async (request, response) => {
-  try {
-    return await SchemaUpdatePassword.validate(request.body);
-  } catch (err) {
-    return new Exception(400, err.toString()).handle(request, response);
-  }
-}
 
 export default validateRequestBody;

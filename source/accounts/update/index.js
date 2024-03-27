@@ -1,5 +1,7 @@
 import bcrypt from "bcryptjs";
+import crypto from "crypto";
 import knex from "../../common/data/database.js";
+import notifyAccountCreated from "./utils.js";
 import validateRequestBody from "./validateRequestBody.js";
 
 const ACCOUNTS_TABLE = "accounts";
@@ -11,6 +13,7 @@ const updateAccount = async (request, response) => {
   if (validatedRequestBody) {
     let accountId;
     if (Object.keys(request.params).includes("accountId")) {
+      const existingAccount = await knex(ACCOUNTS_TABLE).where("id", request.params.accountId).first();
       await knex(ACCOUNTS_TABLE)
         .update({
           // account_type_id: validatedRequestBody.accountTypeId,
@@ -21,16 +24,26 @@ const updateAccount = async (request, response) => {
           active: validatedRequestBody.active,
         })
         .where("id", request.params.accountId);
+      
       accountId = request.params.accountId;
+      if (existingAccount.active == 0 && validatedRequestBody.active == 1) {
+        await notifyAccountCreated(request, response, accountId);
+      }
     } else {
+      const tmpPassword = crypto.randomBytes(32).toString('hex');
+      
       [accountId] = await knex(ACCOUNTS_TABLE).insert({
         account_type_id: validatedRequestBody.accountTypeId,
         full_name: validatedRequestBody.fullName,
-        // password: bcrypt.hash(validatedRequestBody.password, saltRounds),
+        password: await bcrypt.hash(tmpPassword, saltRounds),
         email: validatedRequestBody.email,
         active: validatedRequestBody.active,
         phone: validatedRequestBody.phone,
       });
+
+      if (validatedRequestBody.active) {
+        await notifyAccountCreated(request, response, accountId);
+      }
     }
 
     const account = await knex(ACCOUNTS_TABLE).where("id", accountId).first();
