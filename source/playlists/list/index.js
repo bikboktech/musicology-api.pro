@@ -17,7 +17,6 @@ const getPlaylistLists = async (request, response, next) => {
         id: playlist.id,
         spotifyPlaylistId: playlist.spotify_playlist_id,
         playlistName: playlist.name,
-        // playlistNotes: playlist.notes,
         eventName: playlist.eventName,
       })),
       count: playlistCount[0].count,

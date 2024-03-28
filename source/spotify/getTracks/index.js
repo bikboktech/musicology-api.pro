@@ -37,6 +37,7 @@ const getTracks = async (req, res) => {
       id: track.id,
       imageUrl: track.album.images[track.album.images.length - 1].url,
       name: track.name,
+      url: track.preview_url,
     };
   });
 

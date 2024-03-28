@@ -34,7 +34,7 @@ const getTemplatePlaylistInfo = async (request, response, next) => {
         id: playlist.id,
         spotifyPlaylistId: playlist.spotify_playlist_id,
         name: playlist.name,
-        // playlistNotes: playlist.notes,
+        playlistUrl: playlistOutput.url,
         eventType: {
           id: playlist.eventTypeId,
           name: playlist.eventTypeName,

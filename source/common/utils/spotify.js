@@ -163,7 +163,7 @@ const getSpotifyPlaylist = async (playlistId, spotifyToken) => {
           url: item.track.preview_url,
         };
       }),
-      // url: playlist.external_urls.spotify,
+      url: playlist.external_urls.spotify,
     };
 
     return playlistOutput;
@@ -203,7 +203,7 @@ const getSpotifyTrack = async (trackId, spotifyToken) => {
       id: track.id,
       imageUrl: track.album.images[track.album.images.length - 1].url,
       name: track.name,
-      url: track.external_urls.spotify,
+      url: track.preview_url,
     };
   } catch (err) {
     throw new Error("Error getting Spotify track");
