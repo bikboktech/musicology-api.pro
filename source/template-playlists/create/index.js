@@ -20,6 +20,10 @@ const createTemplatePlaylist = async (request, response, next) => {
         authenticationToken
       );
 
+      if (!playlist) {
+        throw new Error("Playlist creation failed");
+      }
+
       await addTracksToSpotifyPlaylist(
         playlist.id,
         validatedRequestBody.trackIds,
