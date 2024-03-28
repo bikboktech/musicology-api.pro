@@ -8,7 +8,7 @@ const getTracks = async (req, res) => {
   let search = query.search ?? "";
 
   const spotifyTrackResponse = await fetch(
-    `${process.env.SPOTIFY_API_URL}/search?q=track:${search}&type=track&limit=${limit}&offset=${offset}`,
+    `${process.env.SPOTIFY_API_URL}/search?q=${search}&type=track&limit=${limit}&offset=${offset}`,
     {
       method: "GET",
       headers: {
@@ -19,28 +19,9 @@ const getTracks = async (req, res) => {
 
   const trackResults = await spotifyTrackResponse.json();
 
-  const spotifyArtistsResponse = await fetch(
-    `${process.env.SPOTIFY_API_URL}/search?q=artist:${search}&type=track&limit=${limit}&offset=${offset}`,
-    {
-      method: "GET",
-      headers: {
-        Authorization: "Bearer " + context.spotifyToken,
-      },
-    }
-  );
+  const tracks = trackResults.tracks.items;
 
-  const artistResults = await spotifyArtistsResponse.json();
-
-  const mergedResults = [
-    ...trackResults.tracks.items,
-    ...artistResults.tracks.items,
-  ];
-
-  const sortedResults = mergedResults.sort(
-    (a, b) => b.popularity - a.popularity
-  );
-
-  const tracksOutput = sortedResults.map((track) => {
+  const tracksOutput = tracks.map((track) => {
     let artists = "";
 
     track.artists.forEach((artist, index) => {
