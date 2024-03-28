@@ -47,13 +47,17 @@ const createSpotifyPlaylist = async (name, authenticationToken) => {
           Authorization: "Bearer " + authenticationToken,
         },
       }
-    ).catch((err) => console.log(err));
+    );
 
     const playlist = await playlistResponse.json();
 
+    if (playlist.error) {
+      throw new Error(playlist.error.message);
+    }
+
     return playlist;
   } catch (err) {
-    throw new Error("Error creating Spotify playlist");
+    throw new Error(`Error creating Spotify playlist: ${err}`);
   }
 };
 
