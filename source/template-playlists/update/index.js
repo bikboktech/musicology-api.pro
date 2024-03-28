@@ -59,7 +59,6 @@ const updateTemplatePlaylist = async (request, response, next) => {
         id: playlist.id,
         spotifyPlaylistId: playlist.spotify_playlist_id,
         playlistName: playlist.name,
-        // playlistNotes: playlist.notes,
         eventType: {
           id: playlist.eventTypeId,
           name: playlist.eventTypeName,

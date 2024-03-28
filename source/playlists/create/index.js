@@ -41,6 +41,7 @@ const createPlaylist = async (request, response, next) => {
         id: id,
         spotifyPlaylistId: playlist.id,
         eventId: validatedRequestBody.eventId,
+        playlistUrl: playlist.external_urls.spotify,
         playlistName: validatedRequestBody.playlistName,
         trackIds: validatedRequestBody.trackIds,
       });

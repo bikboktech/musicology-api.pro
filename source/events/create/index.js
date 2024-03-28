@@ -6,8 +6,6 @@ import createContract from "../../common/utils/createContract.js";
 
 const EVENTS_TABLE = "events";
 
-const TEMPLATE_ID = "0f9c2897-2e3a-4f97-b529-383e94a018cb";
-
 const createEvent = async (request, response, next) => {
   try {
     const validatedRequestBody = await validateRequestBody(request, response);

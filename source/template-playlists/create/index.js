@@ -58,7 +58,7 @@ const createTemplatePlaylist = async (request, response, next) => {
         id: templatePlaylist.id,
         spotifyPlaylistId: templatePlaylist.spotify_playlist_id,
         playlistName: templatePlaylist.name,
-        // playlistNotes: playlist.notes,
+        playlistUrl: playlist.external_urls.spotify,
         eventType: {
           id: templatePlaylist.eventTypeId,
           name: templatePlaylist.eventTypeName,
