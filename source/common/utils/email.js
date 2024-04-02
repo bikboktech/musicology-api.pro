@@ -2,7 +2,7 @@ import AWS from "aws-sdk";
 
 AWS.config.update({ 
   region: "eu-central-1",
-  credentials: new AWS.SharedIniFileCredentials({ profile: "ecr-upload-user" })
+  credentials: new AWS.SharedIniFileCredentials({ profile: "default" })
 });
 const awsSes = new AWS.SES({ apiVersion: "2010-12-01" });
 
