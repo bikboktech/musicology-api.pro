@@ -19,7 +19,7 @@ const notifyAccountCreated = async (request, response, accountId) => {
   http://localhost:8000/auth/password-reset/request?token=${token}
   </a> to access your account.</p>`
 
-  sendEmail(fromEmail, [toEmail], subject, textMessage, htmlMessage)
+  await sendEmail(fromEmail, [toEmail], subject, textMessage, htmlMessage)
     .then(function (data) {
       console.log("email message ID: ", data.MessageId);
       response.status(204).send("OK");

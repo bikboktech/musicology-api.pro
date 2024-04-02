@@ -3,7 +3,7 @@ import AWS from "aws-sdk";
 const awsSes = new AWS.SES({ apiVersion: "2010-12-01" });
 
 
-const sendEmail = (fromAddress, toAddresses, subject, textMessage, htmlMessage) => {
+const sendEmail = async (fromAddress, toAddresses, subject, textMessage, htmlMessage) => {
   var Message = {
     Subject: {
       Charset: "UTF-8",
