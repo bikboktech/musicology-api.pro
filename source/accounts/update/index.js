@@ -46,19 +46,7 @@ const updateAccount = async (request, response) => {
       }
     }
 
-    const account = await knex(ACCOUNTS_TABLE).where("id", accountId).first();
-
-    const accountType = await knex(ACCOUNT_TYPES_TABLE)
-      .where("id", account.account_type_id)
-      .first();
-
-    response.status(200).json({
-      id: account.id,
-      fullName: account.full_name,
-      email: account.email,
-      active: account.active,
-      accountTypeName: accountType.name,
-    });
+    response.status(200);
   }
 };
 
