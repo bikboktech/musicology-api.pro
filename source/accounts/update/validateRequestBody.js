@@ -24,6 +24,7 @@ const SchemaCreateAccount = object({
 const SchemaUpdatePassword = object({
   accountId: number().required(),
   password: string().required(),
+  token: string().required()
 });
 
 const validateRequestBody = async (request, response) => {

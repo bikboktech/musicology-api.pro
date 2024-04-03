@@ -4,7 +4,8 @@ import createResetToken from "../../common/utils/resetTokens.js";
 import sendEmail from "../../common/utils/email.js";
 
 const ACCOUNTS_TABLE_NAME = "accounts";
-const fromEmail = "info@musicology.pro";
+const EMAIL_SENDER = process.env.EMAIL_SENDER;
+const CHANGE_PASSWORD_URL = process.env.CHANGE_PASSWORD_URL;
 const subject = "Password Reset Request at musicology.pro";
 
 const passwordReset = async (request, response) => {
@@ -20,13 +21,12 @@ const passwordReset = async (request, response) => {
   const token = await createResetToken(user);
   const textMessage = null;
   const htmlMessage = `<p>You have requested a password reset for your musicology.pro account.</p><br>
-  <p>Click <a href="http://localhost:8000/auth/password-reset/request?token=${token}">
-  http://localhost:8000/auth/password-reset/request?token=${token}
+  <p>Click <a href="${CHANGE_PASSWORD_URL}?token=${token}">
+  ${CHANGE_PASSWORD_URL}?token=${token}
   </a> to reset your password.</p>`;
 
-  sendEmail(fromEmail, [email], subject, textMessage, htmlMessage)
+  await sendEmail(EMAIL_SENDER, [email], subject, textMessage, htmlMessage)
     .then(function (data) {
-      console.log(data.MessageId);
       response.status(204).send("OK");
     })
     .catch(function (err) {
