@@ -1,10 +1,12 @@
 import knex from "../../common/data/database.js";
 import validateRequestBody from "./validateRequestBody.js";
+import createSubscriber from "../../common/utils/mailerlite.js";
 
 const QUOTES_TABLE = "quotes";
 const ACCOUNTS_TABLE = "accounts";
 
 const CLIENT_ACCOUNT_TYPE_ID = 3;
+const MAILERLITE_GROUP_NAME = "TEST - NEW LEADS";
 
 const getAQuote = async (request, response, next) => {
   try {
@@ -35,6 +37,12 @@ const getAQuote = async (request, response, next) => {
       });
 
       const quote = await knex(QUOTES_TABLE).where("id", quoteID).first();
+
+      const client = {
+        email: validatedRequestBody.email,
+        fullName: validatedRequestBody.clientName
+      };
+      await createSubscriber(client, MAILERLITE_GROUP_NAME);
 
       response.status(201).json(quote);
     }
