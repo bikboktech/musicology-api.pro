@@ -8,25 +8,30 @@ const saltRounds = 12;
 
 const updatePassword = async (request, response) => {
   const validatedData = await validateRequestBody(request, response);
-  const isValidPasswordResetRequest = await passwordResetRequest(validatedData.token);
-  if (!isValidPasswordResetRequest) {
+  if (!validatedData) {
     return new Exception(
       400, `Error validating password reset request. Please try again.`
     ).handle(request, response);
   }
 
-  if (validatedData) {
-    await knex(ACCOUNTS_TABLE)
-      .update({
-        password: await bcrypt.hash(validatedData.password.toString(), saltRounds),
-      })
-      .where("id", request.params.accountId);
-    response.status(201).send();
+  const user = await getAccountFromToken(validatedData.token);
+  if (user === undefined) {
+    return new Exception(
+      400, `Error validating password reset request. Please try again.`
+    ).handle(request, response);
   }
+
+  await knex(ACCOUNTS_TABLE)
+    .update({
+      password: await bcrypt.hash(validatedData.password.toString(), saltRounds),
+    })
+    .where("id", user.id);
+  
+  response.status(201).send();
 };
 
 
-const passwordResetRequest = async (token) => {
+const getAccountFromToken = async (token) => {
   const resetTokenUser = await knex(ACCOUNTS_TABLE)
     .select(
       `${ACCOUNTS_TABLE}.id as id`,
@@ -45,14 +50,14 @@ const passwordResetRequest = async (token) => {
     .first();
 
   if (!resetTokenUser)
-    return false;
+    return undefined;
 
   console.log("User found")
   let hash = `${resetTokenUser.email}:${resetTokenUser.password}&token=${token}`;
   const tokenMatches = await bcrypt.compare(hash, resetTokenUser.hash);
   if (!tokenMatches)
-    return false;
-  return true;
+    return undefined;
+  return resetTokenUser;
 }
 
 export default updatePassword;

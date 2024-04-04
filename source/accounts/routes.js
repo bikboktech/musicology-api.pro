@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.post(`/${SERVICE_NAME}`, updateAccount);
 router.put(`/${SERVICE_NAME}/:accountId`, updateAccount);
-router.put(`/${SERVICE_NAME}/:accountId/password`, updatePassword);
+router.post(`/${SERVICE_NAME}/password`, updatePassword);
 router.delete(`/${SERVICE_NAME}`, deleteAccounts);
 router.get(`/${SERVICE_NAME}`, getAccountList); // [?accountTypeId=<int>|?accountType=<str>]&active=<bool>
 router.get(`/${SERVICE_NAME}/:accountId`, getAccountInfo);

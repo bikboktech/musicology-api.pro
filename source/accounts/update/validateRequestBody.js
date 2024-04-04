@@ -22,7 +22,7 @@ const SchemaCreateAccount = object({
 });
 
 const SchemaUpdatePassword = object({
-  accountId: number().required(),
+  // accountId: number().required(),
   password: string().required(),
   token: string().required()
 });
@@ -46,7 +46,7 @@ const validateRequestBody = async (request, response) => {
     if (accountTypeId !== undefined)
       return await SchemaCreateAccount.validate(request.body);
     else
-      return await SchemaUpdatePassword.validate({...request.body, ...request.params});
+      return await SchemaUpdatePassword.validate(request.body);
   } catch (err) {
     return new Exception(400, err.toString()).handle(request, response);
   }

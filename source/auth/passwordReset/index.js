@@ -9,7 +9,7 @@ const CHANGE_PASSWORD_URL = process.env.CHANGE_PASSWORD_URL;
 const subject = "Password Reset Request at musicology.pro";
 
 const passwordReset = async (request, response) => {
-  const { email } = request.user.email;
+  const { email } = request.body.email;
 
   const user = await knex(ACCOUNTS_TABLE_NAME).where("email", email).first();
 
