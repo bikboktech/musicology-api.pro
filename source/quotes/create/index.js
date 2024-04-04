@@ -42,8 +42,7 @@ const getAQuote = async (request, response, next) => {
         email: validatedRequestBody.email,
         fullName: validatedRequestBody.clientName
       };
-      await createSubscriber(client, MAILERLITE_GROUP_NAME);
-
+      await createSubscriber(MAILERLITE_GROUP_NAME, client);
       response.status(201).json(quote);
     }
   } catch (err) {
