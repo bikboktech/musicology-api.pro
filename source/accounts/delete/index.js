@@ -2,6 +2,7 @@ import knex from "../../common/data/database.js";
 import validateRequestBody from "./validateRequestBody.js";
 
 const ACCOUNTS_TABLE = "accounts";
+const RESET_TOKENS_TABLE = "reset_tokens";
 const EVENTS_TABLE = "events";
 const QUOTES_TABLE = "quotes";
 
@@ -10,6 +11,10 @@ const deleteAccounts = async (request, response, next) => {
 
   if (validatedRequestBody) {
     await knex(QUOTES_TABLE)
+      .whereIn("account_id", validatedRequestBody.ids)
+      .del();
+
+    await knex(RESET_TOKENS_TABLE)
       .whereIn("account_id", validatedRequestBody.ids)
       .del();
 

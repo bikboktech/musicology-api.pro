@@ -3,7 +3,7 @@ import knex from "../../common/data/database.js";
 import validateRequestBody from "./validateRequestBody.js";
 
 const ACCOUNTS_TABLE = "accounts";
-const RESET_TOKENS_TABLE = "reset_tokens"
+const RESET_TOKENS_TABLE = "reset_tokens";
 const saltRounds = 12;
 
 const updatePassword = async (request, response) => {
