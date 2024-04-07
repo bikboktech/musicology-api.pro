@@ -15,15 +15,24 @@ const getAQuote = async (request, response, next) => {
   try {
     const validatedRequestBody = await validateRequestBody(request, response);
     if (validatedRequestBody) {
-      const tmpPassword = crypto.randomBytes(32).toString('hex');
-      const [accountId] = await knex(ACCOUNTS_TABLE).insert({
-        account_type_id: CLIENT_ACCOUNT_TYPE_ID,
-        full_name: validatedRequestBody.clientName,
-        email: validatedRequestBody.email,
-        password: await bcrypt.hash(tmpPassword, saltRounds),
-        active: 0,
-      });
-
+      var accountId;
+      const existingUser = await knex(ACCOUNTS_TABLE)
+        .where('email', validatedRequestBody.email)
+        .first();
+      
+      if (!existingUser) {
+        const tmpPassword = crypto.randomBytes(32).toString('hex');
+        [accountId] = await knex(ACCOUNTS_TABLE).insert({
+          account_type_id: CLIENT_ACCOUNT_TYPE_ID,
+          full_name: validatedRequestBody.clientName,
+          email: validatedRequestBody.email,
+          password: await bcrypt.hash(tmpPassword, saltRounds),
+          active: 0,
+        });
+      } else {
+        accountId = existingUser.id;
+      }
+      
       const [quoteID] = await knex(QUOTES_TABLE).insert({
         account_id: accountId,
         event_date: validatedRequestBody.eventDate,
