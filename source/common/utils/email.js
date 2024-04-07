@@ -10,7 +10,7 @@ const sendEmail = async (fromAddress, toAddresses, subject, textMessage, htmlMes
     senderAddress: fromAddress,
     content: {
         subject: subject,
-        plainText: textMessage,
+        plainText: textMessage || htmlMessage,
     },
     recipients: {
         to: toAddresses.map((address) => { return { address: address } }),
