@@ -4,6 +4,7 @@ import knex from "../../common/data/database.js";
 
 const EVENT_TYPES_TABLE = "event_types";
 const ACCOUNTS_TABLE = "accounts";
+const QUOTES_TABLE = "quotes";
 
 const SchemaCreateQuote = object({
   email: string().required(),
@@ -35,15 +36,16 @@ const validateRequestBody = async (request, response) => {
   }
 
   const user = await knex(ACCOUNTS_TABLE)
-    .where("email", request.body.email)
+    .join(QUOTES_TABLE, `${ACCOUNTS_TABLE}.id`, "=", `${QUOTES_TABLE}.account_id`)
+    .where(`${ACCOUNTS_TABLE}.email`, request.body.email)
     .first();
 
-    if (user) {
-      return new Exception(
-        409,
-        `Quote already exists for user with email ${request.body.email}`
-      ).handle(request, response);
-    }
+  if (user) {
+    return new Exception(
+      409,
+      `Quote already exists for user with email ${request.body.email}`
+    ).handle(request, response);
+  }
 
   try {
     return await SchemaCreateQuote.validate(request.body);
