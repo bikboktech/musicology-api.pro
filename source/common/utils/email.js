@@ -1,4 +1,4 @@
-import EmailClient from "@azure/communication-email";
+import { EmailClient } from "@azure/communication-email";
 
 // This code retrieves your connection string from an environment variable.
 const connectionString = `endpoint=${process.env.AZ_EMAIL_ENDPOINT};accesskey=${process.env.AZ_EMAIL_ACCESSKEY}`;
