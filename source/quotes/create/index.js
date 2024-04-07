@@ -1,9 +1,12 @@
+import bcrypt from "bcryptjs";
+import crypto from "crypto";
 import knex from "../../common/data/database.js";
 import validateRequestBody from "./validateRequestBody.js";
 import createSubscriber from "../../common/utils/mailerlite.js";
 
 const QUOTES_TABLE = "quotes";
 const ACCOUNTS_TABLE = "accounts";
+const saltRounds = 12;
 
 const CLIENT_ACCOUNT_TYPE_ID = 3;
 const MAILERLITE_GROUP_NAME = "TEST - NEW LEADS";
@@ -12,10 +15,12 @@ const getAQuote = async (request, response, next) => {
   try {
     const validatedRequestBody = await validateRequestBody(request, response);
     if (validatedRequestBody) {
+      const tmpPassword = crypto.randomBytes(32).toString('hex');
       const [accountId] = await knex(ACCOUNTS_TABLE).insert({
         account_type_id: CLIENT_ACCOUNT_TYPE_ID,
         full_name: validatedRequestBody.clientName,
         email: validatedRequestBody.email,
+        password: await bcrypt.hash(tmpPassword, saltRounds),
         active: 0,
       });
 

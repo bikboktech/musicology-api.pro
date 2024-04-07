@@ -1,38 +1,25 @@
-import AWS from "aws-sdk";
+import EmailClient from "@azure/communication-email";
 
-const awsSes = new AWS.SES({ apiVersion: "2010-12-01" });
+// This code retrieves your connection string from an environment variable.
+const connectionString = `endpoint=${process.env.AZ_EMAIL_ENDPOINT};accesskey=${process.env.AZ_EMAIL_ACCESSKEY}`;
+const client = new EmailClient(connectionString);
 
 
-const sendEmail = (fromAddress, toAddresses, subject, textMessage, htmlMessage) => {
-  var Message = {
-    Subject: {
-      Charset: "UTF-8",
-      Data: subject,
+const sendEmail = async (fromAddress, toAddresses, subject, textMessage, htmlMessage) => {
+  const emailMessage = {
+    senderAddress: fromAddress,
+    content: {
+        subject: subject,
+        plainText: textMessage,
     },
-    Body: {}
-  }
-  if (htmlMessage) {
-    Message.Body.Html = {
-      Charset: "UTF-8",
-      Data: htmlMessage,
-    }
-  }
-  if (textMessage) {
-    Message.Body.Text = {
-      Charset: "UTF-8",
-      Data: textMessage,
-    }
-  }
-
-  var params = {
-    Destination: {
-      ToAddresses: toAddresses,
+    recipients: {
+        to: toAddresses.map((address) => { return { address: address } }),
     },
-    Message: Message,
-    Source: fromAddress,
   };
 
-  return awsSes.sendEmail(params).promise();
+  const poller = await client.beginSend(emailMessage);
+  const result = await poller.pollUntilDone();
+  return result;
 }
 
 export default sendEmail;

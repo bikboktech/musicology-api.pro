@@ -3,6 +3,7 @@ import Exception from "../../common/utils/exceptions.js";
 import knex from "../../common/data/database.js";
 
 const EVENT_TYPES_TABLE = "event_types";
+const ACCOUNTS_TABLE = "accounts";
 
 const SchemaCreateQuote = object({
   email: string().required(),
@@ -32,6 +33,17 @@ const validateRequestBody = async (request, response) => {
       `Value ${eventType} is not a valid eventType option, expecting an integer`
     ).handle(request, response);
   }
+
+  const user = await knex(ACCOUNTS_TABLE)
+    .where("email", request.body.email)
+    .first();
+
+    if (user) {
+      return new Exception(
+        409,
+        `Quote already exists for user with email ${request.body.email}`
+      ).handle(request, response);
+    }
 
   try {
     return await SchemaCreateQuote.validate(request.body);
