@@ -3,6 +3,7 @@ import Exception from "../../common/utils/exceptions.js";
 import knex from "../../common/data/database.js";
 
 const EVENT_TYPES_TABLE = "event_types";
+const ACCOUNTS_TABLE = "accounts";
 const QUOTES_TABLE = "quotes";
 
 const SchemaCreateQuote = object({
@@ -35,8 +36,7 @@ const validateRequestBody = async (request, response) => {
   }
 
   const user = await knex(ACCOUNTS_TABLE)
-    .join(QUOTES_TABLE)
-    .on(`${ACCOUNTS_TABLE}.id`, `${QUOTES_TABLE}.account_id`)
+    .join(QUOTES_TABLE, `${ACCOUNTS_TABLE}.id`, "=", `${QUOTES_TABLE}.account_id`)
     .where(`${ACCOUNTS_TABLE}.email`, request.body.email)
     .first();
 
