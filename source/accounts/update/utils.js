@@ -1,6 +1,6 @@
 import knex from "../../common/data/database.js";
 import sendEmail from "../../common/utils/email.js";
-import createResetToken from "../../common/utils/resetTokens.js"
+import createResetToken from "../../common/utils/resetTokens.js";
 
 const ACCOUNTS_TABLE = "accounts";
 
@@ -17,16 +17,13 @@ const notifyAccountCreated = async (request, response, accountId) => {
   const htmlMessage = `<p>Your musicology.pro account has been verified!</p>
   <p>Please note that you will need to create your own password before you can log in.</p>
   <p>Click <a href="${CHANGE_PASSWORD_URL}?token=${token}">
-  ${CHANGE_PASSWORD_URL}?token=${token}</a> to access your account.</p>`
+  ${CHANGE_PASSWORD_URL}?token=${token}</a> to access your account.</p>`;
 
-  await sendEmail(EMAIL_SENDER, [toEmail], subject, textMessage, htmlMessage)
-    .then(function (data) {
-      response.status(204).send("OK");
-    })
-    .catch(function (err) {
-      console.error(err, err.stack);
-      response.status(502).send(err);
-    });
+  try {
+    await sendEmail(EMAIL_SENDER, [toEmail], subject, textMessage, htmlMessage);
+  } catch (err) {
+    throw new Error("Error sending email to user");
+  }
 };
 
 export default notifyAccountCreated;

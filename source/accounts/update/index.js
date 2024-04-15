@@ -10,43 +10,51 @@ const saltRounds = 12;
 
 const updateAccount = async (request, response) => {
   const validatedRequestBody = await validateRequestBody(request, response);
-  if (validatedRequestBody) {
-    let accountId;
-    if (Object.keys(request.params).includes("accountId")) {
-      const existingAccount = await knex(ACCOUNTS_TABLE).where("id", request.params.accountId).first();
-      await knex(ACCOUNTS_TABLE)
-        .update({
-          // account_type_id: validatedRequestBody.accountTypeId,
+  try {
+    if (validatedRequestBody) {
+      let accountId;
+      if (Object.keys(request.params).includes("accountId")) {
+        const existingAccount = await knex(ACCOUNTS_TABLE)
+          .where("id", request.params.accountId)
+          .first();
+        await knex(ACCOUNTS_TABLE)
+          .update({
+            // account_type_id: validatedRequestBody.accountTypeId,
+            full_name: validatedRequestBody.fullName,
+            // password: bcrypt.hash(validatedRequestBody.password, saltRounds),
+            email: validatedRequestBody.email,
+            phone: validatedRequestBody.phone,
+            active: validatedRequestBody.active,
+          })
+          .where("id", request.params.accountId);
+
+        accountId = request.params.accountId;
+        if (existingAccount.active == 0 && validatedRequestBody.active == 1) {
+          await notifyAccountCreated(request, response, accountId);
+        }
+      } else {
+        const tmpPassword = crypto.randomBytes(32).toString("hex");
+
+        [accountId] = await knex(ACCOUNTS_TABLE).insert({
+          account_type_id: validatedRequestBody.accountTypeId,
           full_name: validatedRequestBody.fullName,
-          // password: bcrypt.hash(validatedRequestBody.password, saltRounds),
+          password: await bcrypt.hash(tmpPassword, saltRounds),
           email: validatedRequestBody.email,
-          phone: validatedRequestBody.phone,
           active: validatedRequestBody.active,
-        })
-        .where("id", request.params.accountId);
-      
-      accountId = request.params.accountId;
-      if (existingAccount.active == 0 && validatedRequestBody.active == 1) {
-        await notifyAccountCreated(request, response, accountId);
+          phone: validatedRequestBody.phone,
+        });
+
+        if (validatedRequestBody.active) {
+          await notifyAccountCreated(request, response, accountId);
+        }
       }
+
+      response.status(200).end();
     } else {
-      const tmpPassword = crypto.randomBytes(32).toString('hex');
-      
-      [accountId] = await knex(ACCOUNTS_TABLE).insert({
-        account_type_id: validatedRequestBody.accountTypeId,
-        full_name: validatedRequestBody.fullName,
-        password: await bcrypt.hash(tmpPassword, saltRounds),
-        email: validatedRequestBody.email,
-        active: validatedRequestBody.active,
-        phone: validatedRequestBody.phone,
-      });
-
-      if (validatedRequestBody.active) {
-        await notifyAccountCreated(request, response, accountId);
-      }
+      throw new Error("Invalid Request");
     }
-
-    response.status(200);
+  } catch (error) {
+    next(err);
   }
 };
 

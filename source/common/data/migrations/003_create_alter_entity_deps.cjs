@@ -42,7 +42,7 @@ exports.up = async (knex) => {
       table.increments("id").primary();
       table.integer("event_id").unsigned();
       table.varchar("name", 256);
-      table.time("time");
+      table.dateTime("time", 6);
       table.varchar("spotify_track_id", 256);
       table.varchar("description", 2048);
       table.varchar("notes", 2048);
