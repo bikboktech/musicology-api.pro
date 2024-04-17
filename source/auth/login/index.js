@@ -38,6 +38,7 @@ const login = async (request, response) => {
       "accounts.full_name",
       "accounts.email",
       "accounts.password",
+      "accounts.phone",
       "account_types.id as accountTypeId",
       "account_types.name as accountTypeName"
     )
@@ -65,6 +66,7 @@ const login = async (request, response) => {
     id: user.id,
     fullName: user.full_name,
     email: user.email,
+    phone: user.phone,
     accountType: {
       id: user.accountTypeId,
       name: user.accountTypeName,

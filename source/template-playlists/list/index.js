@@ -38,8 +38,6 @@ const getTemplatePlaylistList = async (request, response, next) => {
 
     if (request.query.limit) {
       query.limit(request.query.limit);
-    } else {
-      query.limit(5);
     }
 
     if (request.query.offset) {

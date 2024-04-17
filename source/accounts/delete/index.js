@@ -25,9 +25,11 @@ const deleteAccounts = async (request, response, next) => {
       .orWhereIn("artist_id", validatedRequestBody.ids)
       .first();
 
-    await knex(TIMELINES_TABLE).where("event_id", event.id).del();
+    if (event) {
+      await knex(TIMELINES_TABLE).where("event_id", event.id).del();
 
-    await knex(PLAYLISTS_TABLE).where("event_id", event.id).del();
+      await knex(PLAYLISTS_TABLE).where("event_id", event.id).del();
+    }
 
     await knex(EVENTS_TABLE)
       .whereIn("client_id", validatedRequestBody.ids)
