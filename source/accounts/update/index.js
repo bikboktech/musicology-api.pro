@@ -8,7 +8,7 @@ const ACCOUNTS_TABLE = "accounts";
 const ACCOUNT_TYPES_TABLE = "account_types";
 const saltRounds = 12;
 
-const updateAccount = async (request, response) => {
+const updateAccount = async (request, response, next) => {
   const validatedRequestBody = await validateRequestBody(request, response);
   try {
     if (validatedRequestBody) {
@@ -55,7 +55,7 @@ const updateAccount = async (request, response) => {
           "account_types.id as accountTypeId",
           "account_types.name as accountTypeName"
         )
-        .where(`${ACCOUNTS_TABLE}.id`, request.params.accountId)
+        .where(`${ACCOUNTS_TABLE}.id`, accountId)
         .join(
           "account_types",
           `${ACCOUNTS_TABLE}.account_type_id`,
@@ -79,7 +79,7 @@ const updateAccount = async (request, response) => {
       throw new Error("Invalid Request");
     }
   } catch (error) {
-    next(err);
+    next(error);
   }
 };
 

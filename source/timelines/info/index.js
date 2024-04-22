@@ -27,7 +27,7 @@ const getTimelineInfo = async (request, response) => {
         name: timeline.name,
         time: timeline.time,
         track,
-        instructions: timeline.instructions,
+        instructions: timeline.description,
       });
     }
 

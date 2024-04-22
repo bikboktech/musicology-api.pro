@@ -33,6 +33,7 @@ const updateQuote = async (request, response, next) => {
 
       const [eventId] = await knex(EVENTS_TABLE).insert({
         client_id: quote.account_id,
+        artist_id: request.user.id,
         event_name: `${quote.full_name} - ${quote.eventTypeName}`,
         event_type_id: quote.event_type_id,
         date: quote.event_date,

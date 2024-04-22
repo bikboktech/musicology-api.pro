@@ -71,7 +71,7 @@ const updateTimeline = async (request, response, next) => {
         name: timeline.name,
         time: timeline.time,
         track,
-        instructions: timeline.instructions,
+        instructions: timeline.description,
       });
     }
 
