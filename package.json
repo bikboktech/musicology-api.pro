@@ -11,7 +11,8 @@
     "dev": "nodemon app.js",
     "start": "node app.js",
     "migrate": "knex migrate:latest --knexfile source/common/data/knexfile.js",
-    "seed": "knex seed:run --knexfile source/common/data/knexfile.js"
+    "seed": "knex seed:run --knexfile source/common/data/knexfile.js",
+    "vercel-build": "echo hello"
   },
   "author": "Bik Bok Technologies",
   "license": "ISC",
