@@ -1,8 +1,8 @@
 import { EmailClient } from "@azure/communication-email";
 
 // This code retrieves your connection string from an environment variable.
-// const connectionString = `endpoint=${process.env.AZ_EMAIL_ENDPOINT};accesskey=${process.env.AZ_EMAIL_ACCESSKEY}`;
-// const client = new EmailClient(connectionString);
+const connectionString = `endpoint=${process.env.AZ_EMAIL_ENDPOINT};accesskey=${process.env.AZ_EMAIL_ACCESSKEY}`;
+const client = new EmailClient(connectionString);
 
 const sendEmail = async (
   fromAddress,
@@ -25,10 +25,11 @@ const sendEmail = async (
     },
   };
 
-  // const poller = await client.beginSend(emailMessage);
-  // const result = await poller.pollUntilDone();
-  // return result;
-  return;
+  const poller = await client.beginSend(emailMessage);
+
+  const result = await poller.pollUntilDone();
+
+  return result;
 };
 
 export default sendEmail;
