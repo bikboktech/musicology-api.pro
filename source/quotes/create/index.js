@@ -9,7 +9,7 @@ const ACCOUNTS_TABLE = "accounts";
 const saltRounds = 12;
 
 const CLIENT_ACCOUNT_TYPE_ID = 3;
-const MAILERLITE_GROUP_NAME = "TEST - NEW LEADS";
+const MAILERLITE_GROUP_NAME = "NEW LEADS";
 
 const getAQuote = async (request, response, next) => {
   try {
@@ -56,7 +56,7 @@ const getAQuote = async (request, response, next) => {
         email: validatedRequestBody.email,
         fullName: validatedRequestBody.clientName
       };
-      await createSubscriber(MAILERLITE_GROUP_NAME, client);
+      await createSubscriber(MAILERLITE_GROUP_NAME, client, validatedRequestBody.eventDate);
       response.status(201).json(quote);
     }
   } catch (err) {

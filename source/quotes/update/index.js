@@ -1,11 +1,14 @@
 import knex from "../../common/data/database.js";
 import createContract from "../../common/utils/createContract.js";
+import createSubscriber from "../../common/utils/mailerlite.js";
+import notifyAccountCreated from "../../accounts/update/utils.js";
 import validateRequestBody from "./validateRequestBody.js";
 import { DateTime } from "luxon";
 
 const ACCOUNTS_TABLE = "accounts";
 const QUOTES_TABLE = "quotes";
 const EVENTS_TABLE = "events";
+const MAILERLITE_GROUP_NAME = "NEW CLIENTS";
 
 const updateQuote = async (request, response, next) => {
   try {
@@ -62,6 +65,9 @@ const updateQuote = async (request, response, next) => {
           active: 1,
         })
         .where("id", quote.account_id);
+      
+      await createSubscriber(MAILERLITE_GROUP_NAME, quote, quote.event_date);
+      await notifyAccountCreated(request, response, quote.accountId);
 
       response.status(200).json({
         id: quote.id,

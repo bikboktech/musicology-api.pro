@@ -3,9 +3,12 @@ import crypto from "crypto";
 import knex from "../../common/data/database.js";
 import notifyAccountCreated from "./utils.js";
 import validateRequestBody from "./validateRequestBody.js";
+import createSubscriber from "../../common/utils/mailerlite.js";
 
 const ACCOUNTS_TABLE = "accounts";
-const ACCOUNT_TYPES_TABLE = "account_types";
+const EVENTS_TABLE = "events";
+const CLIENT_ACCOUNT_TYPE_ID = 3;
+const MAILERLITE_GROUP_NAME = "NEW CLIENTS";
 const saltRounds = 12;
 
 const updateAccount = async (request, response, next) => {
@@ -13,6 +16,7 @@ const updateAccount = async (request, response, next) => {
   try {
     if (validatedRequestBody) {
       let accountId;
+
       if (Object.keys(request.params).includes("accountId")) {
         const existingAccount = await knex(ACCOUNTS_TABLE)
           .where("id", request.params.accountId)
@@ -30,6 +34,13 @@ const updateAccount = async (request, response, next) => {
 
         accountId = request.params.accountId;
         if (existingAccount.active == 0 && validatedRequestBody.active == 1) {
+          if (existingAccount.account_type_id == CLIENT_ACCOUNT_TYPE_ID) {
+            const event = await knex(EVENTS_TABLE)
+              .where("account_id", accountId)
+              .orderBy("created_at", "desc")
+              .first();
+            await createSubscriber(MAILERLITE_GROUP_NAME, validatedRequestBody, event.date);
+          }
           await notifyAccountCreated(request, response, accountId);
         }
       } else {
@@ -45,6 +56,13 @@ const updateAccount = async (request, response, next) => {
         });
 
         if (validatedRequestBody.active) {
+          if (validatedRequestBody.accountTypeId == CLIENT_ACCOUNT_TYPE_ID) {
+            const event = await knex(EVENTS_TABLE)
+              .where("account_id", accountId)
+              .orderBy("created_at", "desc")
+              .first();
+            await createSubscriber(MAILERLITE_GROUP_NAME, validatedRequestBody, event.date);
+          }
           await notifyAccountCreated(request, response, accountId);
         }
       }

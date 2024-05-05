@@ -18,12 +18,12 @@ const getGroupId = async (groupName) => {
   return response.data.data[0].id;
 };
 
-const createSubscriber = async (groupName, client) => {
+const createSubscriber = async (groupName, client, eventDate) => {
   const params = {
     email: client.email,
     fields: {
-      name: client.fullName.split(" ")[0],
-      last_name: client.fullName.split(" ").slice(1).join(" ")
+      name: client.fullName,
+      date: eventDate
     },
     groups: [await getGroupId(groupName)],
     status: "active", // possible statuses: active, unsubscribed, unconfirmed, bounced or junk.

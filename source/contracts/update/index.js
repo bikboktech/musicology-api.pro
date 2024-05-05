@@ -1,4 +1,5 @@
 import knex from "../../common/data/database.js";
+import notifyContractCreated from "./utils.js";
 import validateRequestBody from "./validateRequestBody.js";
 
 const EVENTS_TABLE = "events";
@@ -13,6 +14,12 @@ const updateContract = async (request, response, next) => {
           contract_signed: validatedRequestBody.signed,
         })
         .where("contract_id", request.params.contractId);
+      
+      const event = await knex(EVENTS_TABLE)
+        .where("contract_id", request.params.contractId).first();
+      
+      if (validatedRequestBody.signed)
+        await notifyContractCreated(request, response, event.id);
 
       response.status(200).json({
         signed: validatedRequestBody.signed,
