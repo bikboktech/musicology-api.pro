@@ -36,7 +36,7 @@ const updateAccount = async (request, response, next) => {
         if (existingAccount.active == 0 && validatedRequestBody.active == 1) {
           if (existingAccount.account_type_id == CLIENT_ACCOUNT_TYPE_ID) {
             const event = await knex(EVENTS_TABLE)
-              .where("account_id", accountId)
+              .where("client_id", accountId)
               .orderBy("created_at", "desc")
               .first();
             await createSubscriber(MAILERLITE_GROUP_NAME, validatedRequestBody, event.date);
@@ -58,7 +58,7 @@ const updateAccount = async (request, response, next) => {
         if (validatedRequestBody.active) {
           if (validatedRequestBody.accountTypeId == CLIENT_ACCOUNT_TYPE_ID) {
             const event = await knex(EVENTS_TABLE)
-              .where("account_id", accountId)
+              .where("client_id", accountId)
               .orderBy("created_at", "desc")
               .first();
             await createSubscriber(MAILERLITE_GROUP_NAME, validatedRequestBody, event.date);
