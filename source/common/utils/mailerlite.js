@@ -23,7 +23,6 @@ const createSubscriber = async (groupName, client, eventDate) => {
     email: client.email,
     fields: {
       name: client.fullName,
-      date: eventDate
     },
     groups: [await getGroupId(groupName)],
     status: "active", // possible statuses: active, unsubscribed, unconfirmed, bounced or junk.
@@ -33,6 +32,10 @@ const createSubscriber = async (groupName, client, eventDate) => {
     optin_ip: null,
     unsubscribed_at: null // yyyy-MM-dd HH:mm:ss
   };
+
+  if (eventDate !== undefined) {
+    params.fields.date = eventDate;
+  }
   
   const response = await mailerlite.subscribers.createOrUpdate(params);
   return response.data.data.id;

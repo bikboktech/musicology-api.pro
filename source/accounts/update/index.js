@@ -57,11 +57,7 @@ const updateAccount = async (request, response, next) => {
 
         if (validatedRequestBody.active) {
           if (validatedRequestBody.accountTypeId == CLIENT_ACCOUNT_TYPE_ID) {
-            const event = await knex(EVENTS_TABLE)
-              .where("client_id", accountId)
-              .orderBy("created_at", "desc")
-              .first();
-            await createSubscriber(MAILERLITE_GROUP_NAME, validatedRequestBody, event.date);
+            await createSubscriber(MAILERLITE_GROUP_NAME, validatedRequestBody, undefined);
           }
           await notifyAccountCreated(request, response, accountId);
         }
