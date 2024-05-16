@@ -55,6 +55,10 @@ const getAccountFromToken = async (token) => {
   console.log("User found")
   let hash = `${resetTokenUser.email}:${resetTokenUser.password}&token=${token}`;
   const tokenMatches = await bcrypt.compare(hash, resetTokenUser.hash);
+  await knex(RESET_TOKENS_TABLE)
+    .where("token", token)
+    .del();
+  
   if (!tokenMatches)
     return undefined;
   return resetTokenUser;
