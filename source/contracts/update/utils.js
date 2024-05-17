@@ -2,7 +2,7 @@ import sendEmail from "../../common/utils/email.js";
 
 const EMAIL_SENDER = process.env.EMAIL_SENDER;
 const EMAIL_RECEIVER = process.env.MUSICOLOGY_EMAIL_RECEIVER;
-const subject = "A new contract was signed on musicology.pro";
+const subject = "New contract was just signed";
 
 const notifyContractCreated = async (request, response, eventId) => {
   const textMessage = null;
@@ -11,7 +11,13 @@ const notifyContractCreated = async (request, response, eventId) => {
   ${process.env.MUSICOLOGY_URL}/events/${eventId}</a></p>`;
 
   try {
-    await sendEmail(EMAIL_SENDER, [EMAIL_RECEIVER], subject, textMessage, htmlMessage);
+    await sendEmail(
+      EMAIL_SENDER,
+      [EMAIL_RECEIVER],
+      subject,
+      textMessage,
+      htmlMessage
+    );
   } catch (err) {
     throw new Error("Error sending email to user");
   }
