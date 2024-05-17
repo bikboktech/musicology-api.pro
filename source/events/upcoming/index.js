@@ -45,8 +45,8 @@ const getUpcomingEvents = async (request, response, next) => {
         artist: event.artistFullName,
         location: event.location,
         hasPlaylist: Boolean(event.playlistId),
-        hasTimeline: Boolean(events.timelineId),
-        signedContract: Boolean(events.contract_signed),
+        hasTimeline: Boolean(event.timelineId),
+        signedContract: Boolean(event.contract_signed),
       }))
     );
   } catch (err) {
