@@ -3,6 +3,7 @@ import crypto from "crypto";
 import knex from "../../common/data/database.js";
 import validateRequestBody from "./validateRequestBody.js";
 import createSubscriber from "../../common/utils/mailerlite.js";
+import notifyQuoteCreated from "./utils.js";
 
 const QUOTES_TABLE = "quotes";
 const ACCOUNTS_TABLE = "accounts";
@@ -17,11 +18,11 @@ const getAQuote = async (request, response, next) => {
     if (validatedRequestBody) {
       var accountId;
       const existingUser = await knex(ACCOUNTS_TABLE)
-        .where('email', validatedRequestBody.email)
+        .where("email", validatedRequestBody.email)
         .first();
-      
+
       if (!existingUser) {
-        const tmpPassword = crypto.randomBytes(32).toString('hex');
+        const tmpPassword = crypto.randomBytes(32).toString("hex");
         [accountId] = await knex(ACCOUNTS_TABLE).insert({
           account_type_id: CLIENT_ACCOUNT_TYPE_ID,
           full_name: validatedRequestBody.clientName,
@@ -32,7 +33,7 @@ const getAQuote = async (request, response, next) => {
       } else {
         accountId = existingUser.id;
       }
-      
+
       const [quoteID] = await knex(QUOTES_TABLE).insert({
         account_id: accountId,
         event_date: validatedRequestBody.eventDate,
@@ -54,9 +55,21 @@ const getAQuote = async (request, response, next) => {
 
       const client = {
         email: validatedRequestBody.email,
-        fullName: validatedRequestBody.clientName
+        fullName: validatedRequestBody.clientName,
       };
-      await createSubscriber(MAILERLITE_GROUP_NAME, client, validatedRequestBody.eventDate);
+      await createSubscriber(
+        MAILERLITE_GROUP_NAME,
+        client,
+        validatedRequestBody.eventDate
+      );
+      await notifyQuoteCreated(
+        request,
+        response,
+        validatedRequestBody.clientName,
+        validatedRequestBody.eventDate,
+        quoteID
+      );
+
       response.status(201).json(quote);
     }
   } catch (err) {
