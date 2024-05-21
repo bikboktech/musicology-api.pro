@@ -4,7 +4,7 @@ import { EmailClient } from "@azure/communication-email";
 const connectionString = `endpoint=${process.env.AZ_EMAIL_ENDPOINT};accesskey=${process.env.AZ_EMAIL_ACCESSKEY}`;
 const client = new EmailClient(connectionString);
 
-const sendEmail = async (
+const sendEmail = (
   fromAddress,
   toAddresses,
   subject,
@@ -25,11 +25,8 @@ const sendEmail = async (
     },
   };
 
-  const poller = await client.beginSend(emailMessage);
-
-  const result = await poller.pollUntilDone();
-
-  return result;
+  client.beginSend(emailMessage);
+  return true;
 };
 
 export default sendEmail;
