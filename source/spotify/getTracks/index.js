@@ -19,7 +19,7 @@ const getTracks = async (req, res) => {
 
   const trackResults = await spotifyTrackResponse.json();
 
-  const tracks = trackResults.tracks.items;
+  const tracks = trackResults.tracks?.items ?? [];
 
   const tracksOutput = tracks.map((track) => {
     let artists = "";

@@ -208,6 +208,7 @@ const getSpotifyTrack = async (trackId, spotifyToken) => {
       imageUrl: track.album.images[track.album.images.length - 1].url,
       name: track.name,
       url: track.preview_url,
+      link: track.external_urls.spotify,
     };
   } catch (err) {
     throw new Error("Error getting Spotify track");
