@@ -13,6 +13,7 @@ const sendEmail = (
 ) => {
   const emailMessage = {
     senderAddress: fromAddress,
+    replyTo: process.env.MUSICOLOGY_EMAIL_RECEIVER,
     content: {
       subject: subject,
       plainText: textMessage,
