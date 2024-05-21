@@ -14,7 +14,10 @@ const sendEmail = (
   const emailMessage = {
     senderAddress: fromAddress,
     replyTo: [
-      { address: process.env.MUSICOLOGY_EMAIL_RECEIVER }
+      { 
+        address: process.env.MUSICOLOGY_EMAIL_RECEIVER,
+        displayName: "Musicology Team"
+      }
     ],
     content: {
       subject: subject,
