@@ -4,7 +4,7 @@ const EMAIL_SENDER = process.env.EMAIL_SENDER;
 const EMAIL_RECEIVER = process.env.MUSICOLOGY_EMAIL_RECEIVER;
 const subject = "New event questionnaire submitted";
 
-const notifyQuoteCreated = (
+const notifyQuoteCreated = async (
   request,
   response,
   clientName,
@@ -17,7 +17,7 @@ const notifyQuoteCreated = (
   ${process.env.MUSICOLOGY_URL}/quotes/${quoteId}</a></p>`;
 
   try {
-    sendEmail(
+    await sendEmail(
       EMAIL_SENDER,
       [EMAIL_RECEIVER],
       subject,

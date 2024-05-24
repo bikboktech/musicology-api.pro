@@ -62,7 +62,7 @@ const getAQuote = async (request, response, next) => {
         client,
         validatedRequestBody.eventDate
       );
-      notifyQuoteCreated(
+      await notifyQuoteCreated(
         request,
         response,
         validatedRequestBody.clientName,

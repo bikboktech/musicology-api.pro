@@ -19,7 +19,7 @@ const updateContract = async (request, response, next) => {
         .where("contract_id", request.params.contractId).first();
       
       if (validatedRequestBody.signed)
-        notifyContractCreated(request, response, event.id);
+        await notifyContractCreated(request, response, event.id);
 
       response.status(200).json({
         signed: validatedRequestBody.signed,

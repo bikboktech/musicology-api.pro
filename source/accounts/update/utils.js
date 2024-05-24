@@ -24,7 +24,7 @@ const notifyAccountCreated = async (request, response, accountId) => {
   <p>Yours, Musicology Team</p>`;
 
   try {
-    sendEmail(EMAIL_SENDER, [toEmail], subject, textMessage, htmlMessage);
+    await sendEmail(EMAIL_SENDER, [toEmail], subject, textMessage, htmlMessage);
   } catch (err) {
     throw new Error("Error sending email to user");
   }
