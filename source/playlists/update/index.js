@@ -36,7 +36,6 @@ const updatePlaylist = async (request, response, next) => {
         .where("id", request.params.playlistId);
 
       await notifyPlaylistUpdated(request.params.playlistId);
-      console.log(request.user)
       response.status(200).json({
         id: request.params.playlistId,
         spotifyPlaylistId: validatedRequestBody.spotifyPlaylistId,
