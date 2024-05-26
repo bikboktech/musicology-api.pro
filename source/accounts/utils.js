@@ -1,6 +1,6 @@
-import knex from "../../common/data/database.js";
-import sendEmail from "../../common/utils/email.js";
-import createResetToken from "../../common/utils/resetTokens.js";
+import knex from "../common/data/database.js";
+import sendEmail from "../common/utils/email.js";
+import createResetToken from "../common/utils/resetTokens.js";
 
 const ACCOUNTS_TABLE = "accounts";
 
@@ -8,7 +8,7 @@ const EMAIL_SENDER = process.env.EMAIL_SENDER;
 const CHANGE_PASSWORD_URL = process.env.CHANGE_PASSWORD_URL;
 const subject = "Welcome to musicology.pro 🎉";
 
-const notifyAccountCreated = async (request, response, accountId) => {
+const notifyAccountCreated = async (accountId) => {
   const user = await knex(ACCOUNTS_TABLE).where("id", accountId).first();
   const toEmail = user.email;
 

@@ -2,6 +2,7 @@ import { DateTime } from "luxon";
 import knex from "../../common/data/database.js";
 import { getSpotifyTrack } from "../../common/utils/spotify.js";
 import validateRequestBody from "./validateRequestBody.js";
+import notifyTimelineUpdated from "../utils.js";
 
 const TIMELINES_TABLE = "timelines";
 
@@ -75,6 +76,8 @@ const updateTimeline = async (request, response, next) => {
       });
     }
 
+    await notifyTimelineUpdated(validatedRequestBody.eventId);
+    
     response.status(200).json();
   }
 };

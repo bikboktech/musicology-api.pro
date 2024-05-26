@@ -1,18 +1,16 @@
-import sendEmail from "../../common/utils/email.js";
+import sendEmail from "../common/utils/email.js";
 
 const EMAIL_SENDER = process.env.EMAIL_SENDER;
 const EMAIL_RECEIVER = process.env.MUSICOLOGY_EMAIL_RECEIVER;
 const subject = "New event questionnaire submitted";
 
 const notifyQuoteCreated = async (
-  request,
-  response,
   clientName,
   eventDate,
   quoteId
 ) => {
   const textMessage = null;
-  const htmlMessage = `<p>Hurray 🥳</p><br><b><b>${clientName}</b> just submitted an event questionnaire for <b>${eventDate}</b>!</b>
+  const htmlMessage = `<p>Hurray 🥳</p><br><b>${clientName}</b> just submitted an event questionnaire for <b>${eventDate}</b>!
   <p>Check out the details: <a href="${process.env.MUSICOLOGY_URL}/quotes/${quoteId}">
   ${process.env.MUSICOLOGY_URL}/quotes/${quoteId}</a></p>`;
 

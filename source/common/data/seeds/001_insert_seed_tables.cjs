@@ -14,7 +14,7 @@ exports.seed = async knex => {
         {
             account_type_id: 1, 
             full_name: 'Administrator', 
-            email: 'admin@musicology.pro', 
+            email: 'info@manuellupen.com', 
             password: '$2a$12$R7FAJFvQsHSV1yksyES/jOSMA5Lxyd1zRqJY5Dvd8GO1vVRStUNii', 
             active: 1
         },

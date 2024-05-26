@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import knex from "../../common/data/database.js";
-import notifyAccountCreated from "./utils.js";
+import notifyAccountCreated from "../utils.js";
 import validateRequestBody from "./validateRequestBody.js";
 import createSubscriber from "../../common/utils/mailerlite.js";
 
@@ -41,7 +41,7 @@ const updateAccount = async (request, response, next) => {
               .first();
             await createSubscriber(MAILERLITE_GROUP_NAME, validatedRequestBody, event.date);
           }
-          await notifyAccountCreated(request, response, accountId);
+          await notifyAccountCreated(accountId);
         }
       } else {
         const tmpPassword = crypto.randomBytes(32).toString("hex");
@@ -59,7 +59,7 @@ const updateAccount = async (request, response, next) => {
           if (validatedRequestBody.accountTypeId == CLIENT_ACCOUNT_TYPE_ID) {
             await createSubscriber(MAILERLITE_GROUP_NAME, validatedRequestBody, undefined);
           }
-          await notifyAccountCreated(request, response, accountId);
+          await notifyAccountCreated(accountId);
         }
       }
 
