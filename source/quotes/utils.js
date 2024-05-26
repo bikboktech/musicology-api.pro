@@ -10,7 +10,7 @@ const notifyQuoteCreated = async (
   quoteId
 ) => {
   const textMessage = null;
-  const htmlMessage = `<p>Hurray 🥳</p><br><b>${clientName}</b> just submitted an event questionnaire for <b>${eventDate}</b>!
+  const htmlMessage = `<p>Hurray 🥳</p><br><b>${clientName}</b> just submitted an event questionnaire for <b>${eventDate.toUTCString()}</b>!
   <p>Check out the details: <a href="${process.env.MUSICOLOGY_URL}/quotes/${quoteId}">
   ${process.env.MUSICOLOGY_URL}/quotes/${quoteId}</a></p>`;
 

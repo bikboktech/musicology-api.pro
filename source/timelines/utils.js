@@ -31,7 +31,7 @@ const notifyTimelineUpdated = async (eventId) => {
 
   const textMessage = null;
   const htmlMessage = `<p><b>${notificationInfo.clientName}</b> with an upcoming event 
-  (<b>${notificationInfo.eventDate}</b>) just updated their timeline.</p>
+  (<b>${notificationInfo.eventDate.toUTCString()}</b>) just updated their timeline.</p>
   <p>Check out the details: <a href="${process.env.MUSICOLOGY_URL}/events/${eventId}">
   ${process.env.MUSICOLOGY_URL}/events/${eventId}</a></p>`;
 
