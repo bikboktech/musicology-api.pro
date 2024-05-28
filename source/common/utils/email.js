@@ -31,11 +31,7 @@ const sendEmail = async (
     },
   };
 
-  const poller = await client.beginSend(emailMessage);
-
-  const result = await poller.pollUntilDone();
-
-  return result;
+  client.beginSend(emailMessage);
 };
 
 export default sendEmail;
