@@ -9,7 +9,6 @@ const createContract = async (request, response, next) => {
   //   if (validatedRequestBody) {
   const requestData = {
     name: "Matej test", // Name your document
-    test_mode: true,
     embedded_signing: true,
     template_id: TEMPLATE_ID,
     recipients: [
@@ -69,7 +68,5 @@ const createContract = async (request, response, next) => {
   });
   //   }
 };
-
-// https://www.signwell.com/d/0c6793707c/
 
 export default createContract;

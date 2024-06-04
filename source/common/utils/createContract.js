@@ -5,7 +5,6 @@ const TEMPLATE_ID = "0f9c2897-2e3a-4f97-b529-383e94a018cb";
 const createContract = async (id, name, eventType, email) => {
   const requestData = {
     name: `${name}_${eventType}_contract`,
-    test_mode: true,
     embedded_signing: true,
     template_id: TEMPLATE_ID,
     recipients: [
