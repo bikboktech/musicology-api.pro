@@ -3,7 +3,7 @@ import crypto from "crypto";
 import knex from "../../common/data/database.js";
 import validateRequestBody from "./validateRequestBody.js";
 import createSubscriber from "../../common/utils/mailerlite.js";
-import notifyQuoteCreated from "./utils.js";
+import notifyQuoteCreated from "../utils.js";
 
 const QUOTES_TABLE = "quotes";
 const ACCOUNTS_TABLE = "accounts";
@@ -62,9 +62,7 @@ const getAQuote = async (request, response, next) => {
         client,
         validatedRequestBody.eventDate
       );
-      notifyQuoteCreated(
-        request,
-        response,
+      await notifyQuoteCreated(
         validatedRequestBody.clientName,
         validatedRequestBody.eventDate,
         quoteID

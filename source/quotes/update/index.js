@@ -1,7 +1,7 @@
 import knex from "../../common/data/database.js";
 import createContract from "../../common/utils/createContract.js";
 import createSubscriber from "../../common/utils/mailerlite.js";
-import notifyAccountCreated from "../../accounts/update/utils.js";
+import notifyAccountCreated from "../../accounts/utils.js";
 import validateRequestBody from "./validateRequestBody.js";
 import { DateTime } from "luxon";
 
@@ -67,7 +67,7 @@ const updateQuote = async (request, response, next) => {
         .where("id", quote.account_id);
       
       await createSubscriber(MAILERLITE_GROUP_NAME, quote, quote.event_date);
-      await notifyAccountCreated(request, response, quote.accountId);
+      await notifyAccountCreated(quote.accountId);
 
       response.status(200).json({
         id: quote.id,

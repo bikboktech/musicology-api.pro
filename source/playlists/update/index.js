@@ -1,5 +1,6 @@
 import knex from "../../common/data/database.js";
 import validateRequestBody from "./validateRequestBody.js";
+import notifyPlaylistUpdated from "../utils.js";
 import {
   getAuthenticationToken,
   updateSpotifyPlaylist,
@@ -34,6 +35,7 @@ const updatePlaylist = async (request, response, next) => {
         })
         .where("id", request.params.playlistId);
 
+      await notifyPlaylistUpdated(request.params.playlistId);
       response.status(200).json({
         id: request.params.playlistId,
         spotifyPlaylistId: validatedRequestBody.spotifyPlaylistId,

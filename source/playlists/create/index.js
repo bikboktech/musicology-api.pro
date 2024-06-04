@@ -1,5 +1,6 @@
 import knex from "../../common/data/database.js";
 import validateRequestBody from "./validateRequestBody.js";
+import notifyPlaylistUpdated from "../utils.js";
 import {
   addTracksToSpotifyPlaylist,
   createSpotifyPlaylist,
@@ -36,6 +37,8 @@ const createPlaylist = async (request, response, next) => {
         name: validatedRequestBody.playlistName,
         // notes: validatedRequestBody.playlistNotes,
       });
+
+      await notifyPlaylistUpdated(validatedRequestBody.eventId);
 
       response.status(201).json({
         id: id,
