@@ -31,7 +31,8 @@ const sendEmail = async (
     },
   };
 
-  client.beginSend(emailMessage);
+  await client.beginSend(emailMessage);
+  console.log("Email send started");
 };
 
 export default sendEmail;
