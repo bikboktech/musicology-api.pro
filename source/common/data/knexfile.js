@@ -3,9 +3,8 @@
  * @type { Object.<string, import("knex").Knex.Config> }
  */
 
-import dotenv from 'dotenv'
-dotenv.config({ path: '../../../.env' });
-
+import dotenv from "dotenv";
+dotenv.config({ path: "../../../.env" });
 
 export default {
   client: "mysql2",
@@ -15,6 +14,7 @@ export default {
     user: process.env.DATABASE_USER,
     password: process.env.DATABASE_PASSWORD,
     database: process.env.DATABASE_NAME,
+    dateStrings: true,
   },
   pool: {
     min: 2,

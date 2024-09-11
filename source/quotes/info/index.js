@@ -40,7 +40,9 @@ const getQuoteInfo = async (request, response, next) => {
           email: quote.email,
         },
         approved: !quote.is_active,
-        eventDate: DateTime.fromJSDate(quote.event_date).toFormat("dd/MM/yyyy"),
+        eventDate: DateTime.fromFormat(quote.event_date, "yyyy-MM-dd").toFormat(
+          "dd/MM/yyyy"
+        ),
         clientName: quote.account_full_name,
         guestCount: quote.event_guest_count,
         eventLocation: quote.event_location,

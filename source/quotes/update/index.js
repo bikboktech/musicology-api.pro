@@ -65,7 +65,7 @@ const updateQuote = async (request, response, next) => {
           active: 1,
         })
         .where("id", quote.account_id);
-      
+
       await createSubscriber(MAILERLITE_GROUP_NAME, quote, quote.event_date);
       await notifyAccountCreated(quote.accountId);
 
@@ -81,7 +81,9 @@ const updateQuote = async (request, response, next) => {
           email: quote.email,
         },
         active: quote.is_active,
-        eventDate: DateTime.fromJSDate(quote.event_date).toFormat("dd/MM/yyyy"),
+        eventDate: DateTime.fromFormat(quote.event_date, "yyyy-MM-dd").toFormat(
+          "dd/MM/yyyy"
+        ),
         clientName: quote.account_full_name,
         guestCount: quote.event_guest_count,
         eventLocation: quote.event_location,

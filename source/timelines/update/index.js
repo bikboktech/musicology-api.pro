@@ -19,9 +19,7 @@ const updateTimeline = async (request, response, next) => {
           knex(TIMELINES_TABLE)
             .update({
               event_id: validatedRequestBody.eventId,
-              time: DateTime.fromISO(timeline.time).toFormat(
-                "yyyy-MM-dd HH:mm"
-              ),
+              time: timeline.time,
               description: timeline.description,
               spotify_track_id: timeline.trackId,
               name: timeline.name,
@@ -33,7 +31,7 @@ const updateTimeline = async (request, response, next) => {
         insertPromises.push(
           knex(TIMELINES_TABLE).insert({
             event_id: validatedRequestBody.eventId,
-            time: DateTime.fromISO(timeline.time).toFormat("yyyy-MM-dd HH:mm"),
+            time: timeline.time,
             description: timeline.description,
             spotify_track_id: timeline.trackId,
             name: timeline.name,
@@ -76,8 +74,8 @@ const updateTimeline = async (request, response, next) => {
       });
     }
 
-    await notifyTimelineUpdated(validatedRequestBody.eventId);
-    
+    // await notifyTimelineUpdated(validatedRequestBody.eventId);
+
     response.status(200).json();
   }
 };

@@ -41,7 +41,9 @@ const getUpcomingEvents = async (request, response, next) => {
         eventName: event.event_name,
         eventType: event.eventTypeName,
         client: event.clientFullName,
-        eventDate: DateTime.fromJSDate(event.date).toFormat("dd/MM/yyyy"),
+        eventDate: DateTime.fromFormat(event.date, "yyyy-MM-dd").toFormat(
+          "dd/MM/yyyy"
+        ),
         artist: event.artistFullName,
         location: event.location,
         hasPlaylist: Boolean(event.playlistId),

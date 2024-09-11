@@ -68,7 +68,9 @@ const createEvent = async (request, response, next) => {
           id: event.client_id,
           fullName: event.clientFullName,
         },
-        eventDate: DateTime.fromJSDate(event.date).toFormat("dd/MM/yyyy"),
+        eventDate: DateTime.fromFormat(event.date, "yyyy-MM-dd").toFormat(
+          "dd/MM/yyyy"
+        ),
         guestCount: event.guest_count,
         artist: {
           id: event.artist_id,
