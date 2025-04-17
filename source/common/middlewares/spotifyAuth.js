@@ -21,7 +21,7 @@ const spotifyAuth = async (request, response, next) => {
         body: "grant_type=client_credentials",
       }
     );
-    console.log(spotifyResponse)
+    
     const spotifyUserSession = await spotifyResponse.json();
 
     request.context = {
