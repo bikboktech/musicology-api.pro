@@ -10,13 +10,17 @@ const getUpcomingEvents = async (request, response, next) => {
   try {
     const query = knex(EVENTS_TABLE)
       .select(
-        "events.*",
+        // "events.*",
+        "events.id as id",
+        "events.event_name as event_name",
+        "events.location as location",
+        "events.contract_signed as contract_signed",
         "client.full_name as clientFullName",
         "artist.full_name as artistFullName",
         "event_types.name as eventTypeName",
-        "playlists.id as playlistId",
-        "timelines.id as timelineId"
       )
+      .max("playlists.id as playlistId")
+      .max("timelines.id as timelineId")
       .join("accounts as client", "events.client_id", "=", "client.id")
       .join("accounts as artist", "events.artist_id", "=", "artist.id")
       .join("event_types", "events.event_type_id", "=", "event_types.id")
@@ -24,7 +28,7 @@ const getUpcomingEvents = async (request, response, next) => {
       .leftJoin("timelines", "timelines.event_id", "=", "events.id")
       .where("events.date", ">", knex.raw("now()"))
       .orderBy("events.date")
-      .groupBy("events.id")
+      .groupBy([1, 2, 3, 4, 5, 6, 7]) // Group by all selected columns
       .limit(5);
 
     if (request.user.accountType.id === ARTIST_ID) {
