@@ -1,6 +1,6 @@
 import fetch from "node-fetch";
 
-const TEMPLATE_ID = "0f9c2897-2e3a-4f97-b529-383e94a018cb";
+const TEMPLATE_ID = "0e41ca9e-9185-417d-b9df-c4caaed2fa7c";
 
 const createContract = async (id, name, eventType, email) => {
   const requestData = {
