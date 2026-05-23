@@ -38,7 +38,7 @@ const createPlaylist = async (request, response, next) => {
         // notes: validatedRequestBody.playlistNotes,
       });
 
-      await notifyPlaylistUpdated(validatedRequestBody.eventId);
+      await notifyPlaylistUpdated(id);
 
       response.status(201).json({
         id: id,
