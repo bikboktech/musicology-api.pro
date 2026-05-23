@@ -11,14 +11,10 @@ const createContract = async (id, name, eventType, email) => {
       {
         id,
         email,
-        placeholder_name: "client",
+        placeholder_name: "Client",
       },
     ],
     template_fields: [
-      {
-        api_id: "clientNameCRO",
-        value: name,
-      },
       {
         api_id: "clientNameENG",
         value: name,
@@ -35,19 +31,27 @@ const createContract = async (id, name, eventType, email) => {
     body: JSON.stringify(requestData),
   };
 
-  let contract = {};
-
   try {
     const response = await fetch(
       `https://www.signwell.com/api/v1/document_templates/documents`,
       config
     );
 
-    contract = await response.json();
+    const data = await response.json();
 
-    return contract;
+    if (!response.ok) {
+      console.error(
+        "SignWell rejected document creation:",
+        response.status,
+        data
+      );
+      return null;
+    }
+
+    return data;
   } catch (error) {
     console.error("Failed to send document for signing:", error);
+    return null;
   }
 };
 

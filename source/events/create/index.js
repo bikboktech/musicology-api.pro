@@ -80,11 +80,13 @@ const createEvent = async (request, response, next) => {
         venueName: event.venue_name,
         venueContact: event.venue_contact,
         address: event.address,
-        contract: {
-          id: contract.id,
-          url: contract.recipients[0].embedded_signing_url,
-          signed: false,
-        },
+        contract: contract
+          ? {
+              id: contract.id,
+              url: contract.recipients[0].embedded_signing_url,
+              signed: false,
+            }
+          : null,
       });
     }
   } catch (err) {
