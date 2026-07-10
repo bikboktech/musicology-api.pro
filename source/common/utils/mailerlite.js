@@ -33,12 +33,26 @@ const createSubscriber = async (groupName, client, eventDate) => {
     unsubscribed_at: null // yyyy-MM-dd HH:mm:ss
   };
 
-  if (eventDate !== undefined) {
-    params.fields.date = eventDate;
+  if (eventDate !== undefined && eventDate !== null) {
+    // MailerLite date fields expect "yyyy-MM-dd". events.date is a MySQL DATE
+    // column, which the driver returns as a JS Date object; serialise it to the
+    // expected format instead of a full ISO datetime string.
+    params.fields.date = new Date(eventDate).toISOString().slice(0, 10);
   }
-  
-  const response = await mailerlite.subscribers.createOrUpdate(params);
-  return response.data.data.id;
+
+  try {
+    const response = await mailerlite.subscribers.createOrUpdate(params);
+    return response.data.data.id;
+  } catch (error) {
+    // Surface MailerLite's actual response so failures like 413/422 are not opaque.
+    if (error.response) {
+      const { status, data } = error.response;
+      throw new Error(
+        `MailerLite createOrUpdate failed (${status}): ${JSON.stringify(data)}`
+      );
+    }
+    throw error;
+  }
 };
 
 export default createSubscriber;
