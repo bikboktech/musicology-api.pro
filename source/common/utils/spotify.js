@@ -46,6 +46,10 @@ const getAuthenticationToken = async () => {
       response.status === 400 &&
       data.error === "invalid_grant"
     ) {
+      console.error(
+        "To reauthorize, open https://<api>/spotify/login, then rotate the SPOTIFY_REFRESH_TOKEN secret with the new refresh_token and redeploy."
+      );
+
       throw new Error(
         "Spotify refresh token is invalid or expired; reauthorization is required"
       );
