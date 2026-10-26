@@ -6,59 +6,88 @@ const getSpotifyPlaylistId = (playlistUrl) => {
   return parts[parts.length - 1];
 };
 
-const getAuthenticationToken = async (req, res) => {
-  try {
-    const refreshToken = process.env.SPOTIFY_REFRESH_TOKEN;
 
-    const response = await fetch("https://accounts.spotify.com/api/token", {
+const getAuthenticationToken = async () => {
+  const refreshToken = process.env.SPOTIFY_REFRESH_TOKEN;
+  const clientId = process.env.SPOTIFY_CLIENT_ID;
+  const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
+
+  if (!refreshToken || !clientId || !clientSecret) {
+    throw new Error("Missing Spotify OAuth environment variables");
+  }
+
+  const response = await fetch(
+    "https://accounts.spotify.com/api/token",
+    {
       method: "POST",
-      body: `grant_type=refresh_token&refresh_token=${refreshToken}`,
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         Authorization:
           "Basic " +
-          new Buffer.from(
-            process.env.SPOTIFY_CLIENT_ID +
-              ":" +
-              process.env.SPOTIFY_CLIENT_SECRET
-          ).toString("base64"),
+          Buffer.from(`${clientId}:${clientSecret}`).toString("base64"),
       },
+      body: new URLSearchParams({
+        grant_type: "refresh_token",
+        refresh_token: refreshToken,
+      }).toString(),
+    }
+  );
+
+  const data = await response.json();
+
+  if (!response.ok || !data.access_token) {
+    console.error("Spotify token refresh failed:", {
+      status: response.status,
+      error: data.error,
+      description: data.error_description,
     });
 
-    const spotifyToken = await response.json();
+    if (
+      response.status === 400 &&
+      data.error === "invalid_grant"
+    ) {
+      throw new Error(
+        "Spotify refresh token is invalid or expired; reauthorization is required"
+      );
+    }
 
-    return spotifyToken.access_token;
-  } catch (err) {
-    throw new Error("Error getting Spotify token");
+    throw new Error(
+      `Spotify token refresh failed with HTTP ${response.status}`
+    );
   }
+
+  return data.access_token;
 };
 
 const createSpotifyPlaylist = async (name, authenticationToken) => {
-  try {
-    const playlistResponse = await fetch(
-      `${process.env.SPOTIFY_API_URL}/users/${process.env.SPOTIFY_USER_ID}/playlists`,
-      {
-        method: "POST",
-        body: JSON.stringify({
-          name: name,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + authenticationToken,
-        },
-      }
-    );
-
-    const playlist = await playlistResponse.json();
-
-    if (playlist.error) {
-      throw new Error(playlist.error.message);
+  const response = await fetch(
+    `${process.env.SPOTIFY_API_URL}/me/playlists`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authenticationToken}`,
+      },
+      body: JSON.stringify({ name }),
     }
+  );
 
-    return playlist;
-  } catch (err) {
-    throw new Error(`Error creating Spotify playlist: ${err}`);
+  const data = await response.json();
+
+  if (!response.ok) {
+    console.error("Spotify playlist creation failed:", {
+      status: response.status,
+      error: data.error,
+    });
+
+    throw new Error(
+      `Spotify playlist creation failed: HTTP ${response.status} - ${
+        data.error?.message ?? data.error ?? "Unknown error"
+      }`
+    );
   }
+
+  return data;
 };
 
 const addTracksToSpotifyPlaylist = async (
